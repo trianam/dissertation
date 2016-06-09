@@ -606,45 +606,40 @@ smooth.
 We can apply the concept explained in \cref{sec:lagrangianRelaxation}
 to the project.
 
-In the project the variable space $X$ is composed of all possible
+The variable space $X$ is composed of all possible
 configuration of the path, or in other words is the vector
 $\mathbf{v}=(\mathbf{v}_1,\dots,\mathbf{v}_n)$ of all $n$ ordered
 vertexes $\mathbf{v}_i=(x_i,y_i)$ of the
-path. The \cref{eq:opt} is formulated in two different
-versions in the project.
-\begin{itemize}
-\item The first one is:
-  \begin{equation*}
-    \begin{aligned}
-      & \underset{\mathbf{v}}{\text{minimize}}
-      & & length(\mathbf{v}) \\
-      & \text{subject to}
-      & & \left|bspline(\mathbf{v})\cap \bigcup_{i\in I}obstacle_i\right| = 0.
-    \end{aligned}
-  \end{equation*}
-  Where $length(\mathbf{v})$ is the sum of the length of every edge of the
-  path, that is the sum of the distances of every consecutive pair of
-  vertexes $\mathbf{v_{i-1}}$ and $\mathbf{v_i}$; $bspline(\mathbf{v})$
-  is the set of points of the \emph{B-Spline} obtained as explained in
-  \cref{sec:spline} and \cref{sec:bsplines}, using the path as
-  control polygon;
-  $obstacle_i$ is the surface of the $i^{th}$ of $m$ obstacles, and
-  $I=\{1,\dots,m\}$.
-\item The second version is similar, but the function to minimize is
-  $angle(\mathbf{v})$ instead of $length(\mathbf{v})$, where
-  \begin{equation*}
-    angle(\mathbf{v}) = \frac{\sum_{i=2}^{n-1}(1+\cos(\measuredangle \mathbf{v}_{i-1}\mathbf{v}_{i}\mathbf{v}_{i+1}))}{n-2},
-  \end{equation*}
-  and
-  \begin{equation*}
-    cos(\measuredangle
-    \mathbf{v}_{i-1}\mathbf{v}_{i}\mathbf{v}_{i+1})=\frac{(\mathbf{v}_{i-1}-\mathbf{v}_{i})\cdot
-      (\mathbf{v}_{i+1}-\mathbf{v}_{i})}{\|\mathbf{v}_{i-1}-\mathbf{v}_{i}\|\
-      \|\mathbf{v}_{i+1}-\mathbf{v}_{i})\|}.
-  \end{equation*}
-\end{itemize}
+path. The \cref{eq:opt} is formulated in the problem
+\begin{equation*}
+  \begin{aligned}
+    & \underset{\mathbf{v}}{\text{minimize}}
+    & & \alpha\cdot maxCurv(\mathbf{v})+\beta\cdot
+    maxTors(\mathbf{v})+\gamma\cdot normLen(\mathbf{v}) \\
+    & \text{subject to}
+    & & \left|bspline(\mathbf{v})\cap \bigcup_{i\in I}obstacle_i\right| = 0.
+  \end{aligned}
+\end{equation*}
+where $maxCurv(\mathbf{v})$ is the peak of curvature of the B-spline
+constructed using $\mathbf{v}$ as control polygon,
+$maxTors(\mathbf{v})$ is the peak in absolute value of the torsion of
+the B-spline constructed using $\mathbf{v}$ as control polygon and
+$normLen(\mathbf{v})$ is the length of the control polygon
+$\mathbf{v}$ normalized as percent of the length of the initial status
+after extracting the path. $\alpha$, $\beta$ and $\gamma$ are fixed
+coefficients used for giving a weight in the optimization process to
+the curvature peak, torsion peak and length. The normalization of
+length is necessary for decoupling the weight of the length from the
+length of path. Regarding the constraint, $bspline(\mathbf{v})$
+is the set of tabulated points of the \emph{B-Spline} obtained as
+explained in
+\cref{sec:spline} and \cref{sec:bsplines}, using the path as
+control polygon and
+$obstacle_i$ is the area of the $i^{th}$ of $m$ obstacles, and
+$I=\{1,\dots,m\}$.
 
-The constraint function is not negative, and is calculated as the
+We need to build now the Lagrangian function corresponding to
+\cref{eq:lagrangianFun}, the constraint function is not negative, and is calculated as the
 ratio
 \begin{equation*}
 constraint(\mathbf{v}) = \frac{|\{\mathbf{p} \in spline(\mathbf{v})\ |\ \exists i\in\{1,\dots,m\}
@@ -654,9 +649,9 @@ where the points $\mathbf{p}$ of the spline are calculated in a discrete form. T
 function is not negative, so the Lagrangian function correspondent to
 \cref{eq:lagrangianFun} is
 \begin{equation}\label{eq:lagrangianFunProj}
-    L_d(\mathbf{v},\lambda)=length(\mathbf{v})+\lambda\cdot constraint(\mathbf{v}),
+    L_d(\mathbf{v},\lambda)=\alpha\cdot maxCurv(\mathbf{v})+\beta\cdot
+    maxTors(\mathbf{v})+\gamma\cdot normLen(\mathbf{v})+\lambda\cdot constraint(\mathbf{v}).
 \end{equation}
-or, alternatively, the correspondent one that use $angle(\mathbf{v})$ instead of $length(\mathbf{v})$.
 
 \subsubsection{Annealing phase}
 The target of the simulated annealing phase is to find the minimum
@@ -690,8 +685,7 @@ The \cref{alg:annealing} is the annealing process, on
 \cref{alg:annealing:initialize} $\lambda$ and the
 temperature are initialized; the \emph{while} on
 \cref{alg:annealing:while} is the main loop and the terminating
-condition\footnote{For the animation there isn't a terminating
-  condition.} is given by a minimum temperature or a minimum variation of
+condition is given by a minimum temperature or a minimum variation of
 energy between two iterations; the \emph{for} at
 \cref{alg:annealing:for} repeat the annealing move for a certain
 number of trials, on each iteration the algorithm probabilistically
@@ -718,25 +712,13 @@ defined depending on the input
   \item for $\lambda$ move uniformly in a range $[-maxLambdaPert, maxLambdaPert]$;
   \item for path pick randomly one of the nodes, except the extremes,
     then pick an angle in $[0,2\pi]$ and a distance
-    uniformly\footnote{Or at choice with a
-      Gaussian with mean in the perpendicular direction of the two
-      neighbouring points.} in a specific range.
+    uniformly in a specific range.
 \end{itemize}
 
-The $energy$ function is equivalent of $L_d$ in the
+The $energy$ function is equivalent to $L_d$ in the
 \cref{eq:lagrangianFunProj}:
-$$energy(\mathbf{x},\lambda)=length(\mathbf{x})+\lambda\cdot
-constraints(\mathbf{x})$$
-or
-$$energy(\mathbf{x},\lambda)=angle(\mathbf{x})+\lambda\cdot
-constraints(\mathbf{x})$$
-depending of the chosen method. The function $length(\mathbf{x})$
-returns the total length of the path represented by the points
-$\mathbf{x}$, $angle(\mathbf{x})$ is the mean complementary angle between
-every pair of consecutive segments in the path $\mathbf{x}$, and
-$constraints(\mathbf{x})$ return the ratio between the points inside the
-obstacles and all the points of the
-B-spline obtained using the path $\mathbf{x}$ as control polygon.
+$$energy(\mathbf{x},\lambda)=\alpha\cdot maxCurv(\mathbf{v})+\beta\cdot
+    maxTors(\mathbf{v})+\gamma\cdot normLen(\mathbf{v})+\lambda\cdot constraint(\mathbf{v}).$$
 
 The annealing process
 find a saddle point probabilistically increasing the energy, moving
