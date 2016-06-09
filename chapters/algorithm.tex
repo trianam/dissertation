@@ -261,7 +261,7 @@ the shortest path from start to end in the graph $G$, checking later for
 collisions in the triangles formed of consecutive points in such path
 and when one is found some actions are taken for dealing with that.
 
-\subsection{First solution}\label{sec:inter1}
+\subsection{First solution: Dijkstra's algorithm in triples}\label{sec:inter1}
 The first solution of the problem exploit the graph $G_t$ obtained as
 explained in \cref{sec:trigraph}. Before applying Dijkstra's algorithm
 to $G_t$ all the triples are filtered checking if the
@@ -396,7 +396,7 @@ a reduced cost of
 \end{equation*}
 for the routing.
 
-\subsection{Second solution}\label{sec:inter2}
+\subsection{Second solution: clean path}\label{sec:inter2}
 The First solution is interesting from an algorithmic point of view,
 but is not very practical because it throws all the triples that
 intersect an obstacle. We tried another
@@ -582,6 +582,167 @@ The cost is comparable with the one of the first solution, and also in
 this case we can divide the algorithm in two parts constructing only
 once $G$ with cost $\bigO(|Ob|^2)$ and using it for different
 trials with a cost $\bigO(|P|\cdot|Ob|)$.
+
+\subsection{Third solution: simulated annealing}\label{sec:inter3}
+The others solutions of \cref{sec:inter1} and \cref{sec:inter2} have two
+problem in common: both reject configurations in a prudent way
+considering only the control polygon, and both don't optimize neither
+length nor other parameters. On this section we describe a third
+approach that we considered on the project, an approach that diverge
+from the topic of numerical analysis.
+
+We can see the problem of finding the shortest path as a constrained
+optimization problem where a certain configuration of the control
+vertexes (and
+consequently the B-spline) is the state of the system, and we want to
+minimize both the length of the control polygon (and consequently the
+B-spline) and the peak in curvature and torsion of the B-spline under
+the constraint that the B-spline must not intersect the obstacles. We
+are interested in optimizing both length and curvature and torsion
+peaks because we want a path that is short but also a path that is
+smooth.
+
+\subsubsection{Lagrangian relaxation applied to the project}
+We can apply the concept explained in \cref{sec:lagrangianRelaxation}
+to the project.
+
+In the project the variable space $X$ is composed of all possible
+configuration of the path, or in other words is the vector
+$\mathbf{v}=(\mathbf{v}_1,\dots,\mathbf{v}_n)$ of all $n$ ordered
+vertexes $\mathbf{v}_i=(x_i,y_i)$ of the
+path. The \cref{eq:opt} is formulated in two different
+versions in the project.
+\begin{itemize}
+\item The first one is:
+  \begin{equation*}
+    \begin{aligned}
+      & \underset{\mathbf{v}}{\text{minimize}}
+      & & length(\mathbf{v}) \\
+      & \text{subject to}
+      & & \left|bspline(\mathbf{v})\cap \bigcup_{i\in I}obstacle_i\right| = 0.
+    \end{aligned}
+  \end{equation*}
+  Where $length(\mathbf{v})$ is the sum of the length of every edge of the
+  path, that is the sum of the distances of every consecutive pair of
+  vertexes $\mathbf{v_{i-1}}$ and $\mathbf{v_i}$; $bspline(\mathbf{v})$
+  is the set of points of the \emph{B-Spline} obtained as explained in
+  \cref{sec:spline} and \cref{sec:bsplines}, using the path as
+  control polygon;
+  $obstacle_i$ is the surface of the $i^{th}$ of $m$ obstacles, and
+  $I=\{1,\dots,m\}$.
+\item The second version is similar, but the function to minimize is
+  $angle(\mathbf{v})$ instead of $length(\mathbf{v})$, where
+  \begin{equation*}
+    angle(\mathbf{v}) = \frac{\sum_{i=2}^{n-1}(1+\cos(\measuredangle \mathbf{v}_{i-1}\mathbf{v}_{i}\mathbf{v}_{i+1}))}{n-2},
+  \end{equation*}
+  and
+  \begin{equation*}
+    cos(\measuredangle
+    \mathbf{v}_{i-1}\mathbf{v}_{i}\mathbf{v}_{i+1})=\frac{(\mathbf{v}_{i-1}-\mathbf{v}_{i})\cdot
+      (\mathbf{v}_{i+1}-\mathbf{v}_{i})}{\|\mathbf{v}_{i-1}-\mathbf{v}_{i}\|\
+      \|\mathbf{v}_{i+1}-\mathbf{v}_{i})\|}.
+  \end{equation*}
+\end{itemize}
+
+The constraint function is not negative, and is calculated as the
+ratio
+\begin{equation*}
+constraint(\mathbf{v}) = \frac{|\{\mathbf{p} \in spline(\mathbf{v})\ |\ \exists i\in\{1,\dots,m\}
+  : \mathbf{p}\in obstacle_i \}|}{|\{\mathbf{p} \in spline(\mathbf{v})\}|}
+\end{equation*}
+where the points $\mathbf{p}$ of the spline are calculated in a discrete form. That
+function is not negative, so the Lagrangian function correspondent to
+\cref{eq:lagrangianFun} is
+\begin{equation}\label{eq:lagrangianFunProj}
+    L_d(\mathbf{v},\lambda)=length(\mathbf{v})+\lambda\cdot constraint(\mathbf{v}),
+\end{equation}
+or, alternatively, the correspondent one that use $angle(\mathbf{v})$ instead of $length(\mathbf{v})$.
+
+\subsubsection{Annealing phase}
+The target of the simulated annealing phase is to find the minimum
+saddle points in
+the curve represented by the
+\cref{eq:lagrangianFunProj}.
+\begin{algorithm}
+ \caption{Annealing}\label{alg:annealing}
+ \begin{algorithmic}[1]
+   \Procedure{annealing}{$\mathbf{x}$}
+   \State $\lambda\gets initialLambda$\label{alg:annealing:initialize}
+   \State $T\gets initialTemperature$
+   \While{not $terminationCondition()$}\label{alg:annealing:while}
+   \ForAll{number of trials}\label{alg:annealing:for}
+   \State $changeLambda\gets$ true with $changeLambdaProb$\label{alg:annealing:lambdaProb}
+   \If{$changeLambda$}
+   \State $\lambda'\gets neighbour(\lambda)$\label{alg:annealing:changeLambda}
+   \State $\lambda\gets \lambda'$ with probability $\me^{-([energy(\mathbf{x},\lambda)-energy(\mathbf{x},\lambda')]^+/T)}$
+   \Else
+   \State $\mathbf{x}'\gets neighbour(\mathbf{x})$\label{alg:annealing:changeX}
+   \State $\mathbf{x}\gets \mathbf{x}'$ with probability $\me^{-([energy(\mathbf{x}',\lambda)-energy(\mathbf{x},\lambda)]^+/T)}$
+   \EndIf
+   \EndFor
+   \State $T\gets T\cdot warmingRatio$\label{alg:annealing:cooling}
+   \EndWhile
+   \EndProcedure
+ \end{algorithmic}
+\end{algorithm}
+
+The \cref{alg:annealing} is the annealing process, on
+\cref{alg:annealing:initialize} $\lambda$ and the
+temperature are initialized; the \emph{while} on
+\cref{alg:annealing:while} is the main loop and the terminating
+condition\footnote{For the animation there isn't a terminating
+  condition.} is given by a minimum temperature or a minimum variation of
+energy between two iterations; the \emph{for} at
+\cref{alg:annealing:for} repeat the annealing move for a certain
+number of trials, on each iteration the algorithm probabilistically
+try to make a move of the state of the system, first on
+\cref{alg:annealing:lambdaProb} make a choice if moving in the
+Lagrangian space or in the space of the path, after that based on that
+choice try to move the system in a neighbouring state - in the
+Lagrangian space at
+\cref{alg:annealing:changeLambda} or in the path space at
+\cref{alg:annealing:changeX} - the choice is made
+probabilistically in the meaning that if the energy increase in the
+Lagrangian space or decrease in the path space the probability of
+choosing the new state is 1, if the energy decrease in the Lagrangian
+space or increase in the path space then the new state is accepted
+with a probability that is\footnote{Note that $[x]^+=\max(0,x)$.}:
+$$\exp(-\frac{\Delta energy}{T}).$$
+Finally at the end of every trial set,
+at \cref{alg:annealing:cooling}, the temperature $T$ is cooled by
+a certain factor.
+
+The $neighbour$ function choose a neighbour of the state and is
+defined depending on the input
+\begin{itemize}
+  \item for $\lambda$ move uniformly in a range $[-maxLambdaPert, maxLambdaPert]$;
+  \item for path pick randomly one of the nodes, except the extremes,
+    then pick an angle in $[0,2\pi]$ and a distance
+    uniformly\footnote{Or at choice with a
+      Gaussian with mean in the perpendicular direction of the two
+      neighbouring points.} in a specific range.
+\end{itemize}
+
+The $energy$ function is equivalent of $L_d$ in the
+\cref{eq:lagrangianFunProj}:
+$$energy(\mathbf{x},\lambda)=length(\mathbf{x})+\lambda\cdot
+constraints(\mathbf{x})$$
+or
+$$energy(\mathbf{x},\lambda)=angle(\mathbf{x})+\lambda\cdot
+constraints(\mathbf{x})$$
+depending of the chosen method. The function $length(\mathbf{x})$
+returns the total length of the path represented by the points
+$\mathbf{x}$, $angle(\mathbf{x})$ is the mean complementary angle between
+every pair of consecutive segments in the path $\mathbf{x}$, and
+$constraints(\mathbf{x})$ return the ratio between the points inside the
+obstacles and all the points of the
+B-spline obtained using the path $\mathbf{x}$ as control polygon.
+
+The annealing process
+find a saddle point probabilistically increasing the energy, moving
+$\lambda$ and 
+decreasing the energy moving the points.
+
 
 \section{Post processing}\label{sec:postPro}
 The purpose of the post processing phase is to try to simplify the

@@ -154,6 +154,66 @@ shape of the curve.
 
 \section{B-splines properties}\label{sec:bsplineProp}
 
+\section{Lagrangian relaxation}\label{sec:lagrangianRelaxation}
+A general constrained discrete optimization problem can be expressed in
+the form:
+\begin{equation}\label[problem]{eq:opt}
+\begin{aligned}
+& \underset{x}{\text{minimize}}
+& & f(x) \\
+& \text{subject to}
+& & g(x)=0.
+\end{aligned}
+\end{equation}
+Where $x$ is the state of the system in a discrete space $X$, $f(x)$
+is the function to
+minimize, and $g(x)=0$ is the constraint. the functions can also be
+in a multidimensional discrete space, in that case the $x$ is a vector
+$\mathbf{x}=(x_1,\dots,x_n)$ of variables.
+
+For solving this class
+of problem is necessary a \emph{Lagrange relaxation} method, that
+augment the variable space $X$ by a \emph{Lagrange multiplier} space
+$\Lambda$ of dimension equal to the number of constraints - one in the
+\cref{eq:opt}.
+
+The \emph{generalized discrete Lagrangian
+  function} corresponding to the \cref{eq:opt} is:
+\begin{equation}\label{eq:lagrangianFun}
+  L_d(x,\lambda)=f(x)+\lambda H(h(x)).
+\end{equation}
+Where $\lambda$ is a variable in $\Lambda$, and if the dimension of
+$\Lambda$ is more than one $\lambda$ must be transposed in
+~\cref{eq:lagrangianFun}; $H(x)$ is a non negative function
+with the property that $H(0)=0$, the purpose is to transform $g(x)$ in
+a non negative function - if $g(x)$ isn't already not negative - for
+instance can be $H(g(x))=|g(x)|$ or $H(g(x))=h^2(x)$.
+
+Under the previous assumptions the set of \emph{local minima}
+in \cref{eq:opt} - that respect the constraints -  coincide
+with the set of \emph{discrete saddle point}
+in the augmented space. A point $(x^*,\lambda^*)$ is a discrete saddle
+point if:
+\begin{equation*}
+  L_d(x^*,\lambda)\leq L_d(x^*,\lambda^*)\leq L_d(x,\lambda^*)
+\end{equation*}
+for all $x\in\mathcal{N}(x^*)$ and for all $\lambda\in\Lambda$, where
+$\mathcal{N}(x^*)$ is the set of all neighbours of $x^*$.
+
+For resolving the optimization \cref{eq:opt} is necessary to
+calculate all the discrete saddle points $(x^*,\lambda^*)$ using some
+optimization method (i.e. simulated annealing) on the surface
+represented by
+\cref{eq:lagrangianFun}, and then choose
+the one that minimize $f(x^*)$. $x^*$ is then the desired minimum.
+
+\section{Simulated annealing}
+
 \section{Intersections in space}\label{sec:intersections}
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../dissertation"
+%%% End:
