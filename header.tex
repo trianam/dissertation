@@ -45,21 +45,24 @@
 %--------------------------------------------------------------
 \newcommand{\myTitle}{B-Spline methods for designing smooth spatial
   path with obstacle avoidance\xspace}
+\newcommand{\mySubtitle}{Metodi B-spline per disegnare percorsi
+  regolari in ambienti tridimensionali contenenti ostacoli}
+\newcommand{\mySubsubtitle}{Tesi di Laurea Magistrale in Informatica}
 % use the right myDegree option
-\newcommand{\myDegree}{Master's degree in computer science\xspace}
+\newcommand{\myDegree}{Corso di Laurea Magistrale in Informatica \xspace}
 \newcommand{\myName}{Stefano Martina\xspace}
 \newcommand{\myMail}{stefano.martina@stud.unifi.it}
 \newcommand{\myProf}{Alessandra Sestini\xspace}
 %\newcommand{\myOtherProf}{Carlotta Giannelli\xspace}
 \newcommand{\mySupervisor}{Carlotta Giannelli\xspace}
-\newcommand{\myFaculty}{
-	School of mathematical, physical and natural sciences\xspace}
+\newcommand{\myFaculty}{Scuola di Scienze Matematiche Fisiche e Naturali\xspace}
 \newcommand{\myDepartment}{
 	Department of mathematics and computer science\xspace}
 \newcommand{\myUni}{\protect{
-	University of Florence}\xspace}
-\newcommand{\myLocation}{Florence\xspace}
+	Universit\`a degli Studi di Firenze}\xspace}
+\newcommand{\myLocation}{Firenze\xspace}
 \newcommand{\myAcademicYear}{2015/2016\xspace}
+\newcommand{\myMonth}{Luglio\xspace}
 \newcommand{\myYear}{2016\xspace}
 \newcommand{\myVersion}{Version 0.1\xspace}
 \newcommand{\mycopyright}{
@@ -319,6 +322,12 @@ shadow, minimum width=\transH, minimum height=\transW]
 \newcommand{\abs}[1]{\ensuremath{\left|#1\right|}}
 \newcommand{\mR}{\ensuremath{\mathbb{R}}}
 \newcommand{\mN}{\ensuremath{\mathbb{N}}}
+
+\makeatletter
+\newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
+\newcommand{\pushleft}[1]{\ifmeasuring@#1\else\omit$\displaystyle#1$\hfill\fi\ignorespaces}
+\makeatother
+
 
 \crefname{problem}{problem}{problems}
 
