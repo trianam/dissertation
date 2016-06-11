@@ -6,38 +6,44 @@ the different parts of the program. We do this with the help of the
 test scene in \cref{fig:empty}.
 \image{scrEmpty.png}{Initial scene.}{fig:empty}
 
-The general idea is to use a B-spline of a certain degree that use as
-control polygon a polygonal chain extracted in a graph
-derived from a Voronoi diagram method and is clamped to the extremes
-of such polygon. In \cref{sec:polChain} we explain in detail how to
+The general idea is to use an open B-spline curve of a certain degree
+interpolating the chosen starting and ending points, whose
+control polygon is a suitable modification of a polygonal chain
+extracted from a graph
+obtained with a Voronoi diagram method. In \cref{sec:polChain} we
+explain in detail how to
 build such polygonal chain. Before using the chain as a control
 polygon for the B-spline, it is refined and adjusted - as explained in
-detail in \cref{sec:obsAvoid} and \cref{sec:degreeInc} - such that is
-possible to apply a B-spline with the required degree that don't hit
-any obstacle. We implemented a method for an optional adaptive
-arrangment of the inner nodes of the B-spline partition described in
+detail in \cref{sec:obsAvoid} and \cref{sec:degreeInc} - in order to
+ensure that the associated B-spline curve has no obstacle
+collision. Also we implemented a method for an optional adaptive
+arrangment of the breakpoints of the B-spline described in
 \cref{sec:nodeSel} and an optional post processing for the
 simplification of the path described in \cref{sec:postPro}.
 \section{Polygonal chain}\label{sec:polChain}
-In the first phase the objective is to extract a polygonal chain from
+In the first phase the objective is to extract a suitable polygonal chain from
 the scene, such that the extremes coincides with the start point $s$
-and the end point $e$. For doing this we calculate the shortest path
-in a graph that is constructed using an adaptation to three
-dimensions of a well known bidimensional method (see
-\cite{bhattacharya}, \cite{ho-liu} and \cite{seda-pich}) that use
+and the end point $e$. In particular we are interested in short length
+chains. We calculate the shortest path
+in a graph that is obtained by using an adaptation to three
+dimensions of a well known bidimensional method
+\cite{bhattacharya}\cite{ho-liu}\cite{seda-pich} that use
 Voronoi diagrams as base.
+
+We choose a Voronoi method because it build a structure roughly
+equidistant from obstacles, and so we have low probability of
+collisions between the curve and the obstacles.
 
 \subsection{Base structure}
 First we
 start distributing points on the faces of the obstacles and on
 an invisible bounding box, as in \cref{fig:sites}.
 \image{scrSites.png}{Scene with Voronoi sites.}{fig:sites}
-The sites are distributes using a recursive method, for each triangle
-of the scene\footnote{The scene is composed exclusively of triangles,
-  see \cref{cha:scene} for details.} we add three points - one for each
+The sites are distributed using a recursive method, for each triangle
+of the scene we add three points - one for each
 vertex, if not already added before - and then we calculate the area
 of the triangle, if the area is bigger than a threshold we decompose
-the triangle in four triangles adding three more vertexes on the
+the triangle in four triangles adding three more vertices on the
 midpoints of the edges of the original triangle as in
 \cref{fig:triangleDec}, and repeating the process recursively for
 each new triangle.
@@ -69,11 +75,12 @@ each new triangle.
   \end{tikzpicture}
 \end{myfig}
 
-We construct the Voronoi diagram using the Fortune's algorithm on
+We construct the Voronoi diagram using the Fortune's algorithm
+\cite{fortune} on
 those points as input sites, and we build a graph
 $$G=(V,E)$$
-using the vertexes
-of the Voronoi cells as graph nodes $V$, and the edges of the cells\footnote{Ignoring the
+using the vertices
+of the Voronoi cells as graph nodes $V$, and the edges of the cells\footnote{Rejecting the
   infinite edges.} as graph edges $E$. After we prune such graph deleting every edge that
 intersect an obstacle face, using the methods explained in \cref{sec:intersections}.
 \image{scrGraph.png}{Scene with pruned graph.}{fig:graph}
@@ -93,19 +100,36 @@ the whole faces of obstacles, an alternative would be distributing
 points only along the edges of the obstacles.
 
 On the graph obtained $G$ we attach the desired start and end
-points, and we can obtain a path between the two points using an
-algorithm like Dijkstra. Before using that path as a control polygon
+points $s$ and $e$, and we can obtain a path between the two points using an
+algorithm like Dijkstra \cite{dijkstra}\cite{knuth}. For attaching $s$
+and $e$ we designed two
+alternative methods:
+\begin{itemize}
+\item the first method find the vertex $v_n\in V_{vis}\subseteq V$ such
+  that $dist(s,v_n)\leq dist(s,v_i)$, $\forall v_i\in V_{vis}$, where
+  $V_{vis}=\{v\in V |$ the segment $\overline{s v_i}$ don't intersect
+  any obstacle$\}$, then add $s$ to $V$ and the edge $(s,v_n)$ to $E$;
+  similarly for $e$;
+\item the second method add $s$ to $V$ and all the edges $(s,v_i)$
+  $\forall v_i\in V_{vis}$; similarly for $e$.
+\end{itemize}
+
+Before using that path as a control polygon
 we need to take into account the degree of the B-spline and the
 position of the obstacles, the details are in \cref{sec:obsAvoid} and
 \cref{sec:degreeInc}.
 
 \subsubsection{Complexity considerations}
-Fortune's algorithm runs in time $\bigO(|Is|\log |Is|)$ where $Is$ is
+Fortune's algorithm runs in time $\bigO(|Is|\log |Is|)$ \cite{deberg}
+where $Is$ is
 the set 
-of input sites. If we impose a maximum area for the obstacles -
-i.e. the area of an obstacle cannot be a function of the number of
-the obstacles - then $|Is|=\bigO(|Ob|)$ where $Ob$ is the set of
-obstacles.
+of input sites. If we impose a maximum area $A$ for the obstacles
+\footnote{Inserting the obstacles in a progressive order, the area of the $i$-th
+obstacle cannot be a function $f(i)$ of the number of
+the obstacles} then $|Is|=\bigO(|Ob|)$ where $Ob$ is the set of
+obstacles, because on the worst case we have that $|Is|=C\cdot A\cdot
+|Ob|$ for
+some constant $C$ that depend of the chosen density of sites per area.
 
 In conclusion the time cost for the creation of the graph
 is
@@ -113,41 +137,41 @@ is
   \label{eq:costGraph}
   \bigO(|Ob|\log |Ob|)
 \end{equation}
-and the number of the vertexes in the graph
+and the number of the vertices in the graph
 is 
 \begin{equation}
   \label{eq:numV}
   |V|=\bigO(|Is|)=\bigO(|Ob|)
 \end{equation}
-because the number of vertexes in the resulting graph is the
+because the number of vertices in the resulting graph is the
 same order of number of input sites.
 
 If we make the hypothesis of having maximum degree $k$ in $G$ -
-we have maximum $k$ neighbours for each vertex in $V$ - then we have
-that
+i.e. each vertex in $V$ is connected at most to other $k$ vertices -
+then we have that
 \begin{equation}
   \label{eq:numE}
   |E|=\bigO(k|V|)=\bigO(k|Ob|).
 \end{equation}
 In the worst case $k=|V|$ and $|E|=\bigO(|V|^2)$ but for Voronoi
 diagrams in plane there is a property that if we have $n$ input sites
-that lays in a circumference, without any other site inside the
+that lay on a circumference, without any other site inside the
 circumference, then the center of the circumference is a vertex shared
-by $n$ cells. The same property is extensible in space with
-spheres. We can make the assumption that no more than three sites can lays
-in a circumference so no vertex can have more than three neighbours,
-or the same with four vertexes in sphere, and this assumption is
+by $n$ cells \cite{deberg}. The same property is extensible in space with
+spheres. We can make the assumption that no more than three sites can lay
+on a circumference so no vertex can have more than three neighbours,
+or the same with four vertices in sphere, and this assumption is
 plausible because we use floating point numbers for the coordinates of
-the vertexes of the obstacles, and is quite improbable that more than
+the vertices of the obstacles, and is quite improbable that more than
 four points lays in a sphere. With this assumption $k$ is a constant,
 and \cref{eq:numE} become
 \begin{equation*}
   |E|=\bigO(|V|)=\bigO(|Ob|).
 \end{equation*}
 
-For pruning the graph of every edge that intersect obstacles we need
+For pruning the graph of every edge that intersects obstacles we need
 to solve a system of four unknowns in four equations for every edge
-and every obstacle's face, so we have a cost of
+and every obstacle's face\footnote{See \cref{sec:intersections}.}, so we have a cost of
 \begin{equation}
   \label{eq:costPruning}
   \bigO(|E|\cdot|Ob|)=\bigO(k|Ob|^2)
@@ -158,14 +182,15 @@ and if we make the assumption of $k$ constant
 \end{equation*}
 
 \subsection{Triple's graph}\label{sec:trigraph}
-Before calculating the shortest path with Dijkstra, we
-transform the graph of vertexes in a graph containing all the triples
-of three adjacent vertexes in the original graph. This because we want
+Before calculating the shortest path on the chosen graph with Dijkstra
+\cite{dijkstra}\cite{knuth}, we
+transform it in a graph containing all the triples
+of three adjacent vertices in the original graph. This because we want
 to filter the triples for collisions as described in
 \cref{sec:inter1}. We call the transformed graph
 $$G_t=(V_t,E_t)$$
 
-The original graph $G$ is not directed and weighted
+The original graph $G$ is not directed and it is weighted
 with the distance from vertex to vertex. The transformed graph $G_t$ is
 directed and weighted, where if in $G$ the nodes $A$
 and $B$ are
@@ -177,6 +202,41 @@ from $(A_1,B_1,C_1)$ to $(A_2,B_2,C_2)$ in $G_t$ is
 equal to
 the weight of the arc from $A_1$ to $B_1(=A_2)$ in $G$.
 
+\begin{algorithm}
+ \caption{Create triples graph $G_t$}\label{alg:createTripleGraph}
+ \begin{algorithmic}[1]
+   \Procedure{createTriplesGraph}{$G$}
+   \State $V_t\gets E_t\gets \emptyset$
+   \ForAll{$(a,b)\in E$}\label{ln:tripleFor0}
+   \State $leftOut\gets leftIn\gets rightOut\gets rightIn\gets \emptyset$
+   \ForAll{$v\in N_G(a)\setminus\{b\}$}
+   \State $leftOut = leftOut\cup \{(v,a,b)\}$
+   \State $leftIn = leftIn\cup \{(b,a,v)\}$
+   \State $V_t = V_t\cup \{(v,a,b), (b,a,v)\}$
+   \EndFor
+   \ForAll{$v\in N_G(b)\setminus\{a\}$}
+   \State $rightOut = rightOut\cup \{(v,b,a)\}$
+   \State $rightIn = rightIn\cup \{(a,b,v)\}$
+   \State $V_t = V_t\cup \{(v,b,a), (a,b,v)\}$
+   \EndFor
+   \ForAll{$o\in leftOut$}
+   \ForAll{$i\in rightIn$}
+   \State $E_t = E_t\cup (o,i)$
+   \EndFor
+   \EndFor
+   \ForAll{$o\in rightOut$}\label{ln:tripleFor1}
+   \ForAll{$i\in leftIn$}\label{ln:tripleFor2}
+   \State $E_t = E_t\cup (o,i)$
+   \EndFor
+   \EndFor
+   \EndFor
+   \State\Return $G_t=(V_t,E_t)$
+   \EndProcedure
+ \end{algorithmic}
+\end{algorithm}
+On \cref{alg:createTripleGraph} is visible the algorithm for creating
+$G_t$.
+
 The transformation of the graph is useful only for the obstacle
 avoidance algorithm of
 \cref{sec:inter1}, theoretically is possible to bypass such
@@ -185,10 +245,10 @@ transformation for the algorithm on \cref{sec:inter2}.
 \subsubsection{Complexity considerations}
 If we suppose a maximum degree $k$ for each vertex in the graph $G$ -
 i.e. each vertex in $V$ can have maximum $k$ edges attached to
-it - then the number of triples in the transformed graph $G_t$ is 
+it - then the number of vertices in the transformed graph $G_t$ is 
 \begin{equation}
   \label{eq:numTriples}
-  |V_t|=|V|\cdot k\cdot(k-1)=\bigO(k^2|V|)
+  |V_t|\leq |V|\cdot k\cdot(k-1)=\bigO(k^2|V|)
 \end{equation}
 because for each vertex $v$ in $G$ we need to
 consider all the neighbours of $v$ and the neighbours of the neighbours
@@ -201,17 +261,21 @@ $(B,C,*)$ where $*$ can be one of the $k$ neighbours
 of $C$ in $V$ excluded $B$. So the number of edges in $G_t$ is
 \begin{equation}
   \label{eq:numEdgesTriples}
-  |E_t|=|V_t|\cdot (k-1)=\bigO(k|V_t|)=\bigO(k^3|V|)
+  |E_t|\leq |V_t|\cdot (k-1)=\bigO(k|V_t|)=\bigO(k^3|V|)
 \end{equation}
 
 Also the time cost for the creation of $G_t$ is
 \begin{equation}
   \label{eq:costVt}
-  \bigO(k^2|V|)=\bigO(k^2|Ob|)
+  \bigO(k^2|E|)=\bigO(k^3|Ob|)
 \end{equation}
-because the algorithm for creating the transformed graph work in a
-straightforward method, building each triple and connecting it one by
-one.
+because the \cref{alg:createTripleGraph} for creating the transformed
+graph scan all the edges $e$ on \cref{ln:tripleFor0} and for each
+iteration
+the main cost are the two for on \cref{ln:tripleFor1} and
+\cref{ln:tripleFor2} scanning each one triples created from at most
+$k$ neighbours
+of the vertices at the extremes of $e$.
 
 \section{Obstacle avoidance}\label{sec:obsAvoid}
 Before using the polynomial chain extracted using the algorithm
@@ -234,12 +298,12 @@ the curve will be free from obstacles. This concept is expressed in \cref{fig:in
 \end{myfig}
 
 In this chapter we make the hypothesis of using
-quadratic B-splines\footnote{Degree 2, order 3.}, in
-\cref{sec:degreeInc} is explained how is possible to use curves with
+quadratic B-splines\footnote{B-splines curves with degree 2 or equivalently order 3.}, in
+\cref{sec:degreeInc} it is explained how is possible to use curves with
 higher degree. With this assumption we can exploit the convex hull
 property explained in \cref{sec:bsplineProp} and assert that the
 resulting curve is contained inside the union of all the triangles
-composed of three consecutive control vertexes of the control
+with vertices equal to three consecutive control vertices of the control
 polygon. Using that property we can resolve the problem of the
 collision maintaining all the triangles in the control polygon free
 from collision with the triangles that compose the faces of the
@@ -253,7 +317,7 @@ described in \cref{sec:intersections}.
 We designed two different algorithms for dealing with the collision
 problem. The first solution described in \cref{sec:inter1} implements
 a modified version of Dijkstra's
-algorithm that find the shortest path from start to end in the graph
+algorithm that finds the shortest path from start to end in the graph
 such that all the triangles formed of consecutive points in such path
 are free from collisions. The second solution described in
 \cref{sec:inter2} use the classical Dijkstra's algorithm for finding
@@ -265,22 +329,22 @@ and when one is found some actions are taken for dealing with that.
 The first solution of the problem exploit the graph $G_t$ obtained as
 explained in \cref{sec:trigraph}. Before applying Dijkstra's algorithm
 to $G_t$ all the triples are filtered checking if the
-triangle composed of the vertexes of a triple intersect an obstacle's
+triangle composed of the vertices of a triple intersect an obstacle's
 face. If a triple intersect an obstacle then is removed from the graph
-and so a path cannot pass from such vertexes in that order.
+and so a path cannot pass from such vertices in that order.
 
 Note that if a triple $(A,B,C)$ is removed from $V_t$ - and
 consequently also the triple $(C,B,A)$ - not necessarily this exclude
-the three vertexes $A$, $B$, $C$ from being part of the final
+the three vertices $A$, $B$, $C$ from being part of the final
 polynomial chain. For instance\footnote{In the plane, this graph cannot be
   obtained using the procedure based on Voronoi diagrams explained in
-  \cref{sec:polChain}, but a similar situation is plausible
+  \cref{sec:voronoi}, but a similar situation is plausible
   considering Voronoi cells in space.} in
 \cref{fig:exampleTriples} the triple
 $(A,B,C)$ and $(C,B,A)$ will be removed from $G_t$ because
 the corresponding triangle intersect the obstacle, and the path
 $D\rightarrow A\rightarrow B\rightarrow C\rightarrow E$ cannot be an
-admissible path. This don't preclude the nodes $A$, $B$ and $C$ to be part
+admissible path. This doesn't preclude the nodes $A$, $B$ and $C$ to be part
 of the final admissible path $D\rightarrow A\rightarrow B\rightarrow E\rightarrow C\rightarrow E$.
 \begin{myfig}{Example of triples.}{fig:exampleTriples}
   \begin{tikzpicture}
@@ -317,7 +381,7 @@ $$
 $$
  using
 an algorithm like Dijkstra, and then extracting the shortest
-path on the vertexes taking the central vertex $B_i$ of every
+path on the vertices taking the central vertex $B_i$ of every
 triple $(A_i,B_i,C_i)$ of the path plus the extremes $A_0$ and $C_n$
 of the first and last triples, obtaining
 $$
@@ -327,14 +391,14 @@ $$
 \imageDouble{scrSolution1a.png}{scrSolution1b.png}{Effects of application of solution one.}{fig:sol11}
 \imageDouble{scrSolution1a2.png}{scrSolution1b2.png}{Effects of
   application of solution one, other view point.}{fig:sol12}
-In \cref{fig:sol11} and \cref{fig:sol12} is shown the effect of the
-application of the first solution. The triangle formed by the second,
+In \cref{fig:sol11} and \cref{fig:sol12} the effect of the
+application of the first solution is shown. The triangle formed by the second,
 the third and the
-fourth vertexes from the right on the left figure of \cref{fig:sol11}
+fourth vertices from the right on the left figure of \cref{fig:sol11}
 is colliding with the obstacle in the back, on the right figure there
 is the path obtained applying the solution, where no triangles in the
 path collides with obstacles. On \cref{fig:sol12} is visible another
-point of view of the three vertexes that collides.
+point of view of the three vertices that collides.
 
 \subsubsection{Complexity considerations}
 For each triple and each obstacle we need to solve a $4\times 4$
@@ -405,9 +469,9 @@ shortest path obtained
 from the Voronoi's graph $G$ directly using Dijkstra's algorithm,
 without removing any triple. On that path
 - that we call $P$ in this section - we
-check every triple of consecutive vertexes, and if it collides with an
+check every triple of consecutive vertices, and if it collides with an
 obstacle's face then we take countermeasures. For instance if the path
-is composed from the vertexes:
+is composed from the vertices:
 \begin{equation*}
   P=V_0,V_1,\dots,V_n
 \end{equation*}
@@ -423,13 +487,13 @@ T_{n-2} &=& \triangle V_{n-2}V_{n-1}V_n
 \end{eqnarray*}
 intersect one of the triangles that compose the faces of the
 obstacles, where $\triangle V_iV_jV_k$ denotes the triangle with
-vertexes the points $V_i$, $V_j$ and $V_k$.
+vertices the points $V_i$, $V_j$ and $V_k$.
 
 In \cref{sec:intersections} we explain how to measure if a triangle
 collides with another triangle and that when a collision is found we
 obtain also the barycentric coordinates of the point were one of the
 segment of a triangle intersect the other triangle express in the
-vertexes of the second one.
+vertices of the second one.
 
 Consider also that $G$ is pruned from all the edges that intersect any
 obstacle, so none of the edges of the triangles $T_i$ can intersect
@@ -488,7 +552,7 @@ intersected by obstacles in the points
   O = \{O_1,O_2,O_3\}.
 \end{equation*}
 where each one of the points in $O$ is expressed in barycentric
-coordinates of the vertexes $V_i$, $V_{i+1}$ and $V_{i+2}$ of the
+coordinates of the vertices $V_i$, $V_{i+1}$ and $V_{i+2}$ of the
 triangle:
 \begin{eqnarray*}
   O_1&=&\alpha_1 V_i+\beta_1 V_{i+1}+\gamma_1 V_{i+2}\\
@@ -497,7 +561,7 @@ triangle:
 \end{eqnarray*}
 where $\alpha_i+\beta_i+\gamma_i=1$ for $i=1,2,3$.
 
-We want to deal with the collision adding vertexes in the control
+We want to deal with the collision adding vertices in the control
 polygon such that consecutive triangles are free from obstacles. We
 obtain this adding a control vertex $W_1$ between $V_i$ and $V_{i+1}$
 and $W_2$ between $V_{i+1}$ and $V_{i+2}$. Also we add those two
@@ -530,11 +594,11 @@ polygon is on the left image and, on \cref{fig:sol22}, is composed of
 the lower
 visible vertex corresponding to $V_i$, the
 upper visible vertex corresponding to $V_{i+2}$, and the one in
-the middle on the left corresponding to $V_{i+1}$. The same vertexes
+the middle on the left corresponding to $V_{i+1}$. The same vertices
 in the other \cref{fig:sol21} are the second, the third and the fourth
 from the right. The triangle
-composed of those vertexes
-collide with the obstacle on the right and the two new vertexes $W_1$
+composed of those vertices
+collide with the obstacle on the right and the two new vertices $W_1$
 and $W_2$ are the second visible from below and the second visible
 from above on the right figure.
 
@@ -593,7 +657,7 @@ from the topic of numerical analysis.
 
 We can see the problem of finding the shortest path as a constrained
 optimization problem where a certain configuration of the control
-vertexes (and
+vertices (and
 consequently the B-spline) is the state of the system, and we want to
 minimize both the length of the control polygon (and consequently the
 B-spline) and the peak in curvature and torsion of the B-spline under
@@ -609,7 +673,7 @@ to the project.
 The variable space $X$ is composed of all possible
 configuration of the path, or in other words is the vector
 $\mathbf{v}=(\mathbf{v}_1,\dots,\mathbf{v}_n)$ of all $n$ ordered
-vertexes $\mathbf{v}_i=(x_i,y_i)$ of the
+vertices $\mathbf{v}_i=(x_i,y_i)$ of the
 path. The \cref{eq:opt} is formulated in the problem
 \begin{equation*}
   \begin{aligned}
@@ -728,7 +792,7 @@ decreasing the energy moving the points.
 
 \section{Post processing}\label{sec:postPro}
 The purpose of the post processing phase is to try to simplify the
-path obtained in the previous phase removing useless vertexes.
+path obtained in the previous phase removing useless vertices.
 \section{Degree increase}\label{sec:degreeInc}
 \section{Nodes selection}\label{sec:nodeSel}
 \section{Complexity}

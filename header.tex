@@ -114,72 +114,6 @@
 \newcommand{\cods}[1]{\dims\unicocodet{#1}}
 %  \lstinline[basicstyle=\dims\ttfamily\bfseries,breaklines=true]|#1|
 
-\NewDocumentEnvironment{myfig}{mm}{
-  \begin{figure}
-    \begin{center}
-    }{
-    \end{center}
-    \caption{#1}
-    \label{#2}
-  \end{figure}
-}
-
-%comando per inserire una immagine
-\NewDocumentCommand{\image}{ommm}{
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}
-        \node [rectangle, rounded corners=2pt, inner sep = 0.3cm, drop shadow, draw=black!50, fill=white] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[width=.9\textwidth]{#2}}
-                      {\includegraphics[width=#1]{#2}}
-        };
-      \end{tikzpicture}
-    \end{center}
-    \caption{#3}
-    \label{#4}
-  \end{figure}
-}
-
-\NewDocumentCommand{\imageDouble}{ommmm}{
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}
-        \node [rectangle, rounded corners=2pt, inner sep = 0.3cm, drop shadow, draw=black!50, fill=white] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[width=.42\textwidth]{#2}}
-                      {\includegraphics[width=#1]{#2}}
-        };
-      \end{tikzpicture}
-      \begin{tikzpicture}
-        \node [rectangle, rounded corners=2pt, inner sep = 0.3cm, drop shadow, draw=black!50, fill=white] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[width=.42\textwidth]{#3}}
-                      {\includegraphics[width=#1]{#3}}
-        };
-      \end{tikzpicture}
-    \end{center}
-    \caption{#4}
-    \label{#5}
-  \end{figure}
-}
-
-\NewDocumentCommand{\imager}{ommm}{
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}
-        \node [rectangle, rounded corners=2pt, inner sep = 0.3cm, drop shadow, draw=black!50, fill=white, rotate = 90] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[height=13cm]{#2}}
-                      {\includegraphics[height=#1]{#2}}
-        };
-      \end{tikzpicture}
-    \end{center}
-    \caption{#3}
-    \label{#4}
-  \end{figure}
-}
-
 %comando per inserire un link
 \newcommand{\link}[1]{\unicocode{#1}}
 
@@ -192,7 +126,8 @@
 \def\transW{8mm}
 \def\transH{2mm}
 
-\tikzstyle{obstacle}=[fill=green, draw=black]
+\tikzstyle{figureFrame}=[rectangle, rounded corners=2pt, inner sep = 0.3cm, drop shadow, draw=black!50, fill=white]
+\tikzstyle{obstacle}=[fill=yellow, draw=black]
 \tikzstyle{convexHull}=[fill=blue!30]
 \tikzstyle{convexHullBord}=[color=black, dash pattern=on 3pt off 3pt]
 \tikzstyle{controlPoly}=[color=black, line width=0.25mm]
@@ -249,6 +184,73 @@ shadow, minimum width=\transH, minimum height=\transW]
 \tikzstyle{preN}=[<-, very thick, >=o, draw=drawColor]
 \tikzstyle{post}=[->, very thick, >=stealth', draw=drawColor]
 \tikzstyle{highlight}=[draw=red]
+
+\NewDocumentEnvironment{myfig}{mm}{
+  \begin{figure}
+    \begin{center}
+    }{
+    \end{center}
+    \caption{#1}
+    \label{#2}
+  \end{figure}
+}
+
+%comando per inserire una immagine
+\NewDocumentCommand{\image}{ommm}{
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \node [figureFrame] {
+          \IfNoValueTF{#1}
+                      {\includegraphics[width=.9\textwidth]{#2}}
+                      {\includegraphics[width=#1]{#2}}
+        };
+      \end{tikzpicture}
+    \end{center}
+    \caption{#3}
+    \label{#4}
+  \end{figure}
+}
+
+\NewDocumentCommand{\imageDouble}{ommmm}{
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \node [figureFrame] {
+          \IfNoValueTF{#1}
+                      {\includegraphics[width=.42\textwidth]{#2}}
+                      {\includegraphics[width=#1]{#2}}
+        };
+      \end{tikzpicture}
+      \begin{tikzpicture}
+        \node [figureFrame] {
+          \IfNoValueTF{#1}
+                      {\includegraphics[width=.42\textwidth]{#3}}
+                      {\includegraphics[width=#1]{#3}}
+        };
+      \end{tikzpicture}
+    \end{center}
+    \caption{#4}
+    \label{#5}
+  \end{figure}
+}
+
+\NewDocumentCommand{\imager}{ommm}{
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \node [figureFrame, rotate = 90] {
+          \IfNoValueTF{#1}
+                      {\includegraphics[height=13cm]{#2}}
+                      {\includegraphics[height=#1]{#2}}
+        };
+      \end{tikzpicture}
+    \end{center}
+    \caption{#3}
+    \label{#4}
+  \end{figure}
+}
+
 \lstdefinestyle{customPython}{
    language=Python,
    % basicstyle=\small\ttfamily\bfseries,
