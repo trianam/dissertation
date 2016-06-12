@@ -151,7 +151,7 @@ The elements of the classic splines space can be expressed in the form
 \end{equation}
 
 \subsection{Spline curves}
-A parametric spline \emph{curve} $\mathbf{S}(t)$ is a curve in a certain
+A parametric spline \emph{curve} $\ve{S}(t)$ is a curve in a certain
 dimension $dim$ obtained applying a spline function to a set of points
 in the same dimension $dim$
 called \emph{control vertices}. We can apply the control vertices to a
@@ -159,14 +159,14 @@ spline expressed with the truncated powers as in
 \cref{eq:classicSplineElement} replacing the coefficients $c_i$ and
 $d_i$ with points
 \begin{equation}\label{eq:classicSplineCurve}
-  \mathbf{S}(t)=\sum_{i=0}^m \mathbf{c_i}\cdot t^i\, +\, \sum_{j=1}^{l-1} \mathbf{d_i}\cdot (t-\tau_j)_+^m  
+  \ve{S}(t)=\sum_{i=0}^m \ve{c_i}\cdot t^i\, +\, \sum_{j=1}^{l-1} \ve{d_i}\cdot (t-\tau_j)_+^m  
 \end{equation}
 
 this form obtained with the truncated-powers base is not a practical
 representation of a curve because
 there isn't an intuitive correlation between the points
-$\mathbf{c_i}$, $\mathbf{d_j}$ and the curve itself. Moreover
-calculating $\mathbf{S}(t)$ is not a well conditioned problem.
+$\ve{c_i}$, $\ve{d_j}$ and the curve itself. Moreover
+calculating $\ve{S}(t)$ is not a well conditioned problem.
  For resolving those problems we
 defined the \emph{B-splines base} in \cref{sec:bsplines}.
 
@@ -174,12 +174,12 @@ We can apply control vertices to a spline expressed with the B-spline
 base as in \cref{eq:bsplineElement} replacing the coefficients $v_i$
 with points
 \begin{equation}\label{eq:bsplineCurve}
-  \mathbf{S}(t)=\sum_{i=0}^n\mathbf{v_i}\cdot N_{i,k}(t).
+  \ve{S}(t)=\sum_{i=0}^n\ve{v_i}\cdot N_{i,k}(t).
 \end{equation}
 The representation of \cref{eq:bsplineCurve} is more convenient
 respect to the one of 
-\cref{eq:classicSplineCurve} because the curve $\mathbf{S}(t)$ roughly
-follow the shape given by the points $\mathbf{v_i}$. Those points are
+\cref{eq:classicSplineCurve} because the curve $\ve{S}(t)$ roughly
+follow the shape given by the points $\ve{v_i}$. Those points are
 called \emph{control vertices} and the polygon defined by them is
 called \emph{control polygon} and they can be used to control the
 shape of the curve.
@@ -201,7 +201,7 @@ Where $x$ is the state of the system in a discrete space $X$, $f(x)$
 is the function to
 minimize, and $g(x)=0$ is the constraint. the functions can also be
 in a multidimensional discrete space, in that case the $x$ is a vector
-$\mathbf{x}=(x_1,\dots,x_n)$ of variables.
+$\ve{x}=(x_1,\dots,x_n)$ of variables.
 
 For solving this class
 of problem is necessary a \emph{Lagrange relaxation} method, that
@@ -245,8 +245,8 @@ the one that minimize $f(x^*)$. $x^*$ is then the desired minimum.
 \subsection{Segment-triangle in space}
 \subsection{Triangle-triangle in space}\label{sec:intersectionsTriangleTriangle}
 
-\begin{myfig}{Example of type 1 intersection between $\triangle A_1B_1C_1$
-    and $\triangle A_2B_2C_2$.}{fig:trianglesIntersection1}
+\begin{myfig}{Example of type 1 intersection between $\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
+    and $\triangle \ve{a_2}\ve{b_2}\ve{c_2}$.}{fig:trianglesIntersection1}
   \begin{tikzpicture}
     \coordinate (A1) at (0,0);
     \coordinate (B1) at (4,5);
@@ -276,19 +276,19 @@ the one that minimize $f(x^*)$. $x^*$ is then the desired minimum.
     \filldraw[intersection] (X1) circle (2pt);
     \filldraw[intersection] (X2) circle (2pt);
 
-    \node[below=0.5em] at (A1) {$A_1$};
-    \node[above=0.5em] at (B1) {$B_1$};
-    \node[below=0.5em] at (C1) {$C_1$};
-    \node[left=0.5em] at (A2) {$A_2$};
-    \node[above=0.5em] at (B2) {$B_2$};
-    \node[right=0.5em] at (C2) {$C_2$};
-    \node[below=0.2em] at (X1) {$X_1$};
-    \node[right=0.2em] at (X2) {$X_2$};
+    \node[below=0.5em] at (A1) {$\ve{a_1}$};
+    \node[above=0.5em] at (B1) {$\ve{b_1}$};
+    \node[below=0.5em] at (C1) {$\ve{c_1}$};
+    \node[left=0.5em] at (A2) {$\ve{a_2}$};
+    \node[above=0.5em] at (B2) {$\ve{b_2}$};
+    \node[right=0.5em] at (C2) {$\ve{c_2}$};
+    \node[below=0.2em] at (X1) {$\ve{x_1}$};
+    \node[right=0.2em] at (X2) {$\ve{x_2}$};
   \end{tikzpicture}
 \end{myfig}
 
-\begin{myfig}{Example of type 2 intersection between $\triangle A_1B_1C_1$
-    and $\triangle A_2B_2C_2$.}{fig:trianglesIntersection2}
+\begin{myfig}{Example of type 2 intersection between $\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
+    and $\triangle \ve{a_2}\ve{b_2}\ve{c_2}$.}{fig:trianglesIntersection2}
   \begin{tikzpicture}
     \coordinate (A1) at (0,0);
     \coordinate (B1) at (4,5);
@@ -317,14 +317,14 @@ the one that minimize $f(x^*)$. $x^*$ is then the desired minimum.
     \filldraw[intersection] (X1) circle (2pt);
     \filldraw[intersection] (X2) circle (2pt);
 
-    \node[below=0.5em] at (A1) {$A_1$};
-    \node[above=0.5em] at (B1) {$B_1$};
-    \node[below=0.5em] at (C1) {$C_1$};
-    \node[left=0.5em] at (A2) {$A_2$};
-    \node[above=0.5em] at (B2) {$B_2$};
-    \node[right=0.5em] at (C2) {$C_2$};
-    \node[below=0.2em] at (X1) {$X_1$};
-    \node[right=0.2em] at (X2) {$X_2$};
+    \node[below=0.5em] at (A1) {$\ve{a_1}$};
+    \node[above=0.5em] at (B1) {$\ve{b_1}$};
+    \node[below=0.5em] at (C1) {$\ve{c_1}$};
+    \node[left=0.5em] at (A2) {$\ve{a_2}$};
+    \node[above=0.5em] at (B2) {$\ve{b_2}$};
+    \node[right=0.5em] at (C2) {$\ve{c_2}$};
+    \node[below=0.2em] at (X1) {$\ve{x_1}$};
+    \node[right=0.2em] at (X2) {$\ve{x_2}$};
   \end{tikzpicture}
 \end{myfig}
 

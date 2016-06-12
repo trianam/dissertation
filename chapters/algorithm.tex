@@ -22,8 +22,8 @@ arrangment of the breakpoints of the B-spline described in
 simplification of the path described in \cref{sec:postPro}.
 \section{Polygonal chain}\label{sec:polChain}
 In the first phase the objective is to extract a suitable polygonal chain from
-the scene, such that the extremes coincides with the start point $s$
-and the end point $e$. In particular we are interested in short length
+the scene, such that the extremes coincides with the start point $\ve{s}$
+and the end point $\ve{e}$. In particular we are interested in short length
 chains. We calculate the shortest path
 in a graph that is obtained by using an adaptation to three
 dimensions of a well known bidimensional method
@@ -80,8 +80,8 @@ We construct the Voronoi diagram using the Fortune's algorithm
 those points as input sites, and we build a graph
 $$G=(V,E)$$
 using the vertices
-of the Voronoi cells as graph nodes $V$, and the edges of the cells\footnote{Rejecting the
-  infinite edges.} as graph edges $E$. After we prune such graph deleting every edge that
+of the Voronoi cells as graph nodes in $V$, and the edges of the cells\footnote{Rejecting the
+  infinite edges.} as graph edges in $E$. After we prune such graph deleting every edge that
 intersect an obstacle face, using the methods explained in \cref{sec:intersections}.
 \image{scrGraph.png}{Scene with pruned graph.}{fig:graph}
 
@@ -100,18 +100,18 @@ the whole faces of obstacles, an alternative would be distributing
 points only along the edges of the obstacles.
 
 On the graph obtained $G$ we attach the desired start and end
-points $s$ and $e$, and we can obtain a path between the two points using an
-algorithm like Dijkstra \cite{dijkstra}\cite{knuth}. For attaching $s$
-and $e$ we designed two
+points $\ve{s}$ and $\ve{e}$, and we can obtain a path between the two points using an
+algorithm like Dijkstra \cite{dijkstra}\cite{knuth}. For attaching $\ve{s}$
+and $\ve{e}$ we designed two
 alternative methods:
 \begin{itemize}
-\item the first method find the vertex $v_n\in V_{vis}\subseteq V$ such
-  that $dist(s,v_n)\leq dist(s,v_i)$, $\forall v_i\in V_{vis}$, where
-  $V_{vis}=\{v\in V |$ the segment $\overline{s v_i}$ don't intersect
-  any obstacle$\}$, then add $s$ to $V$ and the edge $(s,v_n)$ to $E$;
-  similarly for $e$;
-\item the second method add $s$ to $V$ and all the edges $(s,v_i)$
-  $\forall v_i\in V_{vis}$; similarly for $e$.
+\item the first method find the vertex $\ve{v_n}\in V_{vis}\subseteq V$ such
+  that $dist(\ve{s},\ve{v_n})\leq dist(\ve{s},\ve{v_i})$, $\forall \ve{v_i}\in V_{vis}$, where
+  $V_{vis}=\{\ve{v}\in V |$ the segment $\overline{\ve{s} \ve{v_i}}$ don't intersect
+  any obstacle$\}$, then add $\ve{s}$ to $V$ and the edge $(\ve{s},\ve{v_n})$ to $E$;
+  similarly for $\ve{e}$;
+\item the second method add $\ve{s}$ to $V$ and all the edges $(\ve{s},\ve{v_i})$
+  $\forall \ve{v_i}\in V_{vis}$; similarly for $\ve{e}$.
 \end{itemize}
 
 Before using that path as a control polygon
@@ -192,44 +192,45 @@ of three adjacent vertices in the original graph. This because we want
 to filter the triples for collisions as described in
 \cref{sec:inter1}. We call the transformed graph
 $$G_t=(V_t,E_t)$$
+where we have triples of vertexes of $G$ in $V_t$.
 
 The original graph $G$ is not directed and it is weighted
 with the distance from vertex to vertex. The transformed graph $G_t$ is
-directed and weighted, where if in $G$ the nodes $A$
-and $B$ are
-neighbouring, and the nodes $B$ and $C$ are neighbouring, then $G_t$
-have the two nodes $(A,B,C)$ and $(C,B,A)$. In
-$G_t$ a node $(A_1,B_1,C_1)$ is a predecessor of
-$(A_2,B_2,C_2)$ if $B_1=A_2$ and $C_1=B_2$, and the weight of the arc
-from $(A_1,B_1,C_1)$ to $(A_2,B_2,C_2)$ in $G_t$ is
+directed and weighted, where if in $G$ the nodes $\ve{a}$
+and $\ve{b}$ are
+neighbouring, and the nodes $\ve{b}$ and $\ve{c}$ are neighbouring, then $G_t$
+have the two nodes $(\ve{a},\ve{b},\ve{c})$ and $(\ve{c},\ve{b},\ve{a})$. In
+$G_t$ a node $(\ve{a_1},\ve{b_1},\ve{c_1})$ is a predecessor of
+$(\ve{a_2},\ve{b_2},\ve{c_2})$ if $\ve{b_1}=\ve{a_2}$ and $\ve{c_1}=\ve{b_2}$, and the weight of the arc
+from $(\ve{a_1},\ve{b_1},\ve{c_1})$ to $(\ve{a_2},\ve{b_2},\ve{c_2})$ in $G_t$ is
 equal to
-the weight of the arc from $A_1$ to $B_1(=A_2)$ in $G$.
+the weight of the arc from $\ve{a_1}$ to $\ve{b_1}(=\ve{a_2})$ in $G$.
 
 \begin{algorithm}
  \caption{Create triples graph $G_t$}\label{alg:createTripleGraph}
  \begin{algorithmic}[1]
    \Procedure{createTriplesGraph}{$G$}
    \State $V_t\gets E_t\gets \emptyset$
-   \ForAll{$(a,b)\in E$}\label{ln:tripleFor0}
+   \ForAll{$(\ve{a},\ve{b})\in E$}\label{ln:tripleFor0}
    \State $leftOut\gets leftIn\gets rightOut\gets rightIn\gets \emptyset$
-   \ForAll{$v\in N_G(a)\setminus\{b\}$}
-   \State $leftOut = leftOut\cup \{(v,a,b)\}$
-   \State $leftIn = leftIn\cup \{(b,a,v)\}$
-   \State $V_t = V_t\cup \{(v,a,b), (b,a,v)\}$
+   \ForAll{$\ve{v}\in N_G(\ve{a})\setminus\{\ve{b}\}$}
+   \State $leftOut = leftOut\cup \{(\ve{v},\ve{a},\ve{b})\}$
+   \State $leftIn = leftIn\cup \{(\ve{b},\ve{a},\ve{v})\}$
+   \State $V_t = V_t\cup \{(\ve{v},\ve{a},\ve{b}), (\ve{b},\ve{a},\ve{v})\}$
    \EndFor
-   \ForAll{$v\in N_G(b)\setminus\{a\}$}
-   \State $rightOut = rightOut\cup \{(v,b,a)\}$
-   \State $rightIn = rightIn\cup \{(a,b,v)\}$
-   \State $V_t = V_t\cup \{(v,b,a), (a,b,v)\}$
+   \ForAll{$\ve{v}\in N_G(\ve{b})\setminus\{\ve{a}\}$}
+   \State $rightOut = rightOut\cup \{(\ve{v},\ve{b},\ve{a})\}$
+   \State $rightIn = rightIn\cup \{(\ve{a},\ve{b},\ve{v})\}$
+   \State $V_t = V_t\cup \{(\ve{v},\ve{b},\ve{a}), (\ve{a},\ve{b},\ve{v})\}$
    \EndFor
-   \ForAll{$o\in leftOut$}
-   \ForAll{$i\in rightIn$}
-   \State $E_t = E_t\cup (o,i)$
+   \ForAll{$\ve{o}\in leftOut$}
+   \ForAll{$\ve{i}\in rightIn$}
+   \State $E_t = E_t\cup (\ve{o},\ve{i})$
    \EndFor
    \EndFor
-   \ForAll{$o\in rightOut$}\label{ln:tripleFor1}
-   \ForAll{$i\in leftIn$}\label{ln:tripleFor2}
-   \State $E_t = E_t\cup (o,i)$
+   \ForAll{$\ve{o}\in rightOut$}\label{ln:tripleFor1}
+   \ForAll{$\ve{i}\in leftIn$}\label{ln:tripleFor2}
+   \State $E_t = E_t\cup (\ve{o},\ve{i})$
    \EndFor
    \EndFor
    \EndFor
@@ -253,15 +254,15 @@ it - then the number of vertices in the transformed graph $G_t$ is
   \label{eq:numTriples}
   |V_t|\leq |V|\cdot k\cdot(k-1)=\bigO(k^2|V|)
 \end{equation}
-because for each vertex $v$ in $G$ we need to
-consider all the neighbours of $v$ and the neighbours of the neighbours
-of $v$ (excluded $v$).
+because for each vertex $\ve{v}$ in $G$ we need to
+consider all the neighbours of $\ve{v}$ and the neighbours of the neighbours
+of $\ve{v}$ (excluded $\ve{v}$).
 
 For how we defined the triples neighbour rule in $G_t$ we have
 that each triple is a predecessor of maximum $k-1$ other triples, for
-instance $(A,B,C)$ in $V_t$ is the predecessor of all the triples
-$(B,C,*)$ where $*$ can be one of the $k$ neighbours
-of $C$ in $V$ excluded $B$. So the number of edges in $G_t$ is
+instance $(\ve{a},\ve{b},\ve{c})$ in $V_t$ is the predecessor of all the triples
+$(\ve{b},\ve{c},*)$ where $*$ can be one of the $k$ neighbours
+of $\ve{c}$ in $V$ excluded $\ve{b}$. So the number of edges in $G_t$ is
 \begin{equation}
   \label{eq:numEdgesTriples}
   |E_t|\leq |V_t|\cdot (k-1)=\bigO(k|V_t|)=\bigO(k^3|V|)
@@ -337,19 +338,19 @@ triangle composed of the vertices of a triple intersect an obstacle's
 face. If a triple intersect an obstacle then is removed from the graph
 and so a path cannot pass from such vertices in that order.
 
-Note that if a triple $(A,B,C)$ is removed from $V_t$ - and
-consequently also the triple $(C,B,A)$ - not necessarily this exclude
-the three vertices $A$, $B$, $C$ from being part of the final
+Note that if a triple $(\ve{a},\ve{b},\ve{c})$ is removed from $V_t$ - and
+consequently also the triple $(\ve{c},\ve{b},\ve{a})$ - not necessarily this exclude
+the three vertices $\ve{a}$, $\ve{b}$, $\ve{c}$ from being part of the final
 polynomial chain. For instance\footnote{In the plane, this graph cannot be
   obtained using the procedure based on Voronoi diagrams explained in
   \cref{sec:voronoi}, but a similar situation is plausible
   considering Voronoi cells in space.} in
 \cref{fig:exampleTriples} the triple
-$(A,B,C)$ and $(C,B,A)$ will be removed from $G_t$ because
+$(\ve{a},\ve{b},\ve{c})$ and $(\ve{c},\ve{b},\ve{a})$ will be removed from $G_t$ because
 the corresponding triangle intersect the obstacle, and the path
-$D\rightarrow A\rightarrow B\rightarrow C\rightarrow E$ cannot be an
-admissible path. This doesn't preclude the nodes $A$, $B$ and $C$ to be part
-of the final admissible path $D\rightarrow A\rightarrow B\rightarrow E\rightarrow C\rightarrow E$.
+$\ve{d}\rightarrow \ve{a}\rightarrow \ve{b}\rightarrow \ve{c}\rightarrow \ve{e}$ cannot be an
+admissible path. This doesn't preclude the nodes $\ve{a}$, $\ve{b}$ and $\ve{c}$ to be part
+of the final admissible path $\ve{d}\rightarrow \ve{a}\rightarrow \ve{b}\rightarrow \ve{e}\rightarrow \ve{c}\rightarrow \ve{e}$.
 \begin{myfig}{Example of triples.}{fig:exampleTriples}
   \begin{tikzpicture}
     \coordinate (D) at (-1,1);
@@ -369,43 +370,43 @@ of the final admissible path $D\rightarrow A\rightarrow B\rightarrow E\rightarro
     \filldraw[controlVert] (E) circle (2pt);
     \filldraw[controlVert] (F) circle (2pt);
 
-    \node[above=0.5em] at (D) {$D$};
-    \node[below=0.5em] at (A) {$A$};
-    \node[above=0.5em] at (B) {$B$};
-    \node[below=0.5em] at (C) {$C$};
-    \node[above=0.5em] at (E) {$E$};
-    \node[above=0.5em] at (F) {$F$};
+    \node[above=0.5em] at (D) {$\ve{d}$};
+    \node[below=0.5em] at (A) {$\ve{a}$};
+    \node[above=0.5em] at (B) {$\ve{b}$};
+    \node[below=0.5em] at (C) {$\ve{c}$};
+    \node[above=0.5em] at (E) {$\ve{e}$};
+    \node[above=0.5em] at (F) {$\ve{f}$};
   \end{tikzpicture}
 \end{myfig}
 
 On the cleaned transformed graph is possible to find the shortest path on the
 triples
 $$
-(A_0,B_0,C_0), (A_1,B_1,C_1),\dots,(A_i,B_i,C_i),\dots,(A_n,B_n,C_n)
+(\ve{a_0},\ve{b_0},\ve{c_0}), (\ve{a_1},\ve{b_1},\ve{c_1}),\dots,(\ve{a_i},\ve{b_i},\ve{c_i}),\dots,(\ve{a_n},\ve{b_n},\ve{c_n})
 $$
  using
 an algorithm like Dijkstra, and then extracting the shortest
-path on the vertices taking the central vertex $B_i$ of every
-triple $(A_i,B_i,C_i)$ of the path plus the extremes $A_0$ and $C_n$
+path on the vertices taking the central vertex $\ve{b_i}$ of every
+triple $(\ve{a_i},\ve{b_i},\ve{c_i})$ of the path plus the extremes $\ve{a_0}$ and $\ve{c_n}$
 of the first and last triples, obtaining
 $$
-A_0,B_0,B_1,\dots,B_i,\dots,B_{n-1},B_n,C_n.
+\ve{a_0},\ve{b_0},\ve{b_1},\dots,\ve{b_i},\dots,\ve{b_{n-1}},\ve{b_n},\ve{c_n}.
 $$
 
 \imageDouble{scrSolution1a.png}{scrSolution1b.png}{Effects of
   application of solution one.}{fig:sol11}[
-\node[imageLabel] at (0.7,0.62) {$A_1$};
-\node[imageLabel] (B) at (0.35,0.4) {$B_1$};
-\node[imageLabel] (C) at (0.2,0.4) {$C_1$};
+\node[imageLabel] at (0.7,0.62) {$\ve{a_1}$};
+\node[imageLabel] (B) at (0.35,0.4) {$\ve{b_1}$};
+\node[imageLabel] (C) at (0.2,0.4) {$\ve{c_1}$};
 \node[imageLabel] (O) at (0.8,0.2) {$Obs$};
 \path[imageArrow] (B) -- (0.36,0.555);
 \path[imageArrow] (C) -- (0.3,0.585);
 \path[imageArrow] (O) -- (0.6,0.3);
 ][
-\node[imageLabel] (A) at (0.7,0.7) {$A_2$};
-\node[imageLabel] (B) at (0.5,0.4) {$B_2$};
-\node[imageLabel] (C) at (0.35,0.4) {$C_2$};
-\node[imageLabel] (D) at (0.2,0.4) {$D_2$};
+\node[imageLabel] (A) at (0.7,0.7) {$\ve{a_2}$};
+\node[imageLabel] (B) at (0.5,0.4) {$\ve{b_2}$};
+\node[imageLabel] (C) at (0.35,0.4) {$\ve{c_2}$};
+\node[imageLabel] (D) at (0.2,0.4) {$\ve{d_2}$};
 \node[imageLabel] (O) at (0.8,0.2) {$Obs$};
 \path[imageArrow] (A) -- (0.58,0.61);
 \path[imageArrow] (B) -- (0.44,0.52);
@@ -415,23 +416,23 @@ $$
 ]
 \imageDouble{scrSolution1a2.png}{scrSolution1b2.png}{Effects of
   application of solution one, other view point.}{fig:sol12}[
-\node[imageLabel] at (0.2,0.1) {$A_1$};
-\node[imageLabel] at (0.45,0.6) {$B_1$};
-\node[imageLabel] at (0.65,0.85) {$C_1$};
+\node[imageLabel] at (0.2,0.1) {$\ve{a_1}$};
+\node[imageLabel] at (0.45,0.6) {$\ve{b_1}$};
+\node[imageLabel] at (0.65,0.85) {$\ve{c_1}$};
 \node[imageLabel] at (0.8,0.2) {$Obs$};
 ][
-\node[imageLabel] at (0.15,0.2) {$A_2$};
-\node[imageLabel] at (0.3,0.4) {$B_2$};
-\node[imageLabel] at (0.45,0.6) {$C_2$};
-\node[imageLabel] at (0.65,0.85) {$D_2$};
+\node[imageLabel] at (0.15,0.2) {$\ve{a_2}$};
+\node[imageLabel] at (0.3,0.4) {$\ve{b_2}$};
+\node[imageLabel] at (0.45,0.6) {$\ve{c_2}$};
+\node[imageLabel] at (0.65,0.85) {$\ve{d_2}$};
 \node[imageLabel] at (0.8,0.2) {$Obs$};
 ]
 In \cref{fig:sol11} and \cref{fig:sol12} the effect of the
 application of the first solution is shown. The triangle formed by the
-vertices $A_1$, $B_1$, $C_1$ on the left picture of \cref{fig:sol11}
+vertices $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$ on the left picture of \cref{fig:sol11}
 is colliding with the obstacle $Obs$ in the back, on the right picture
 there
-is the path $A_2,B_2,C_2,D_2$ obtained applying the solution, where no
+is the path $\ve{a_2},\ve{b_2},\ve{c_2},\ve{d_2}$ obtained applying the solution, where no
 triangles in the
 path collides with obstacles. On \cref{fig:sol12} is visible another
 point of view of pictures shown in \cref{fig:sol11}.
@@ -529,42 +530,42 @@ check every triple of consecutive vertices, and if it collides with a
 \ac{OTF} then we take countermeasures. For instance if the path
 is composed from the vertices:
 \begin{equation*}
-  P=V_0,V_1,\dots,V_n
+  P=\ve{v_0},\ve{v_1},\dots,\ve{v_n}
 \end{equation*}
 then we check if every one of the triangles 
 \begin{eqnarray*}
-T_0 &=& \triangle V_0V_1V_2\\
-T_1 &=& \triangle V_1V_2V_3\\
+T_0 &=& \triangle \ve{v_0}\ve{v_1}\ve{v_2}\\
+T_1 &=& \triangle \ve{v_1}\ve{v_2}\ve{v_3}\\
 &\cdots&\\
-T_i &=& \triangle V_iV_{i+1}V_{i+2}\\
+T_i &=& \triangle \ve{v_i}\ve{v_{i+1}}\ve{v_{i+2}}\\
 &\cdots&\\
-T_{n-3} &=& \triangle V_{n-3}V_{n-2}V_{n-1}\\
-T_{n-2} &=& \triangle V_{n-2}V_{n-1}V_n
+T_{n-3} &=& \triangle \ve{v_{n-3}}\ve{v_{n-2}}\ve{v_{n-1}}\\
+T_{n-2} &=& \triangle \ve{v_{n-2}}\ve{v_{n-1}}\ve{v_n}
 \end{eqnarray*}
-intersect one of the \ac{OTF}, where $\triangle V_iV_jV_k$ denotes the
+intersect one of the \ac{OTF}, where $\triangle \ve{v_i}\ve{v_j}\ve{v_k}$ denotes the
 triangle with
-vertices the points $V_i$, $V_j$ and $V_k$.
+vertices the points $\ve{v_i}$, $\ve{v_j}$ and $\ve{v_k}$.
 
 In \cref{sec:intersectionsTriangleTriangle} we explain how to measure
-if a triangle $T_1=\triangle A_1B_1C_1$
-collides with another triangle $T_2=\triangle A_2B_2C_2$ and, when a
+if a triangle $T_1=\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
+collides with another triangle $T_2=\triangle \ve{a_2}\ve{b_2}\ve{c_2}$ and, when a
 collision is found, how to 
-obtain also the barycentric coordinates on $A_2,B_2,C_2$ of the points
+obtain also the barycentric coordinates on $\ve{a_2},\ve{b_2},\ve{c_2}$ of the points
 where the 
-edges of $T_1$ intersect $T_2$ (or the coordinates on $A_1,B_1,C_1$ of
+edges of $T_1$ intersect $T_2$ (or the coordinates on $\ve{a_1},\ve{b_1},\ve{c_1}$ of
 the points where $T_2$ intersect $T_1$).
 
 Consider also that $G$ is pruned from all the edges that intersect any
 obstacle, so none of the edges of the triangles $T_i$ can intersect
 an \ac{OTF}, and the only possibility is that an edge or
 more\footnote{At most two edges for each \ac{OTF} if we ignore special
-  cases} of the
+  cases.} of the
 obstacles intersect a
 triangle $T_i$. So for each $T_i$ we have a (possibly empty) set of points
 of intersection between it and the edges of each \ac{OTF} - we call
 that set $O$.
-\begin{myfig}{$T_i$($=\triangle V_iV_{i+1}V_{i+2}$) and the points
-    $O_1,O_2,O_3$ of intersection between it and the edges of some \ac{OTF}.}{fig:triangleIntersection}
+\begin{myfig}{$T_i$($=\triangle \ve{v_i}\ve{v_{i+1}}\ve{v_{i+2}}$) and the points
+    $\ve{o_1},\ve{o_2},\ve{o_3}$ of intersection between it and the edges of some \ac{OTF}.}{fig:triangleIntersection}
   \begin{tikzpicture}
     \coordinate (P) at (-1,0);
     \coordinate (A) at (0,0);
@@ -592,72 +593,72 @@ that set $O$.
     \filldraw[controlVertHigh] (W1) circle (2pt);
     \filldraw[controlVertHigh] (W2) circle (2pt);
 
-    \node[below=0.5em] at (A) {$V_i$};
-    \node[above=0.5em] at (B) {$V_{i+1}$};
-    \node[below=0.5em] at (C) {$V_{i+2}$};
-    \node[below right=0.2em] (O1n) at (O1) {$O_1$};
-    \node[below=0.2em] at (O1n) {$\scriptscriptstyle(\equiv O_{near})$};
-    \node[left=0.2em] at (O2) {$O_2$};
-    \node[below=0.2em] at (O3) {$O_3$};
-    \node[left=0.5em] at (W1) {$W_1$};
-    \node[right=0.5em] at (W2) {$W_2$};
+    \node[below=0.5em] at (A) {$\ve{v_i}$};
+    \node[above=0.5em] at (B) {$\ve{v_{i+1}}$};
+    \node[below=0.5em] at (C) {$\ve{v_{i+2}}$};
+    \node[below right=0.2em] (O1n) at (O1) {$\ve{o_1}$};
+    \node[below=0.2em] at (O1n) {$\scriptstyle(\equiv \ve{o_{near}})$};
+    \node[left=0.2em] at (O2) {$\ve{o_2}$};
+    \node[below=0.2em] at (O3) {$\ve{o_3}$};
+    \node[left=0.5em] at (W1) {$\ve{w_1}$};
+    \node[right=0.5em] at (W2) {$\ve{w_2}$};
   \end{tikzpicture}
 \end{myfig}
 
 In \cref{fig:triangleIntersection} we have an example of the triangle
 \begin{equation*}
-  T_i = \triangle V_iV_{i+1}V_{i+2} 
+  T_i = \triangle \ve{v_i}\ve{v_{i+1}}\ve{v_{i+2}} 
 \end{equation*}
 that is
 intersected by obstacles in the points
 \begin{equation*}
-  O = \{O_1,O_2,O_3\}.
+  O = \{\ve{o_1},\ve{o_2},\ve{o_3}\}.
 \end{equation*}
 where each one of the points in $O$ is expressed in barycentric
-coordinates of the vertices $V_i$, $V_{i+1}$ and $V_{i+2}$ of the
+coordinates of the vertices $\ve{v_i}$, $\ve{v_{i+1}}$ and $\ve{v_{i+2}}$ of the
 triangle:
 \begin{eqnarray*}
-  O_1&=&\alpha_1 V_i+\beta_1 V_{i+1}+\gamma_1 V_{i+2}\\
-  O_2&=&\alpha_2 V_i+\beta_2 V_{i+1}+\gamma_2 V_{i+2}\\
-  O_3&=&\alpha_3 V_i+\beta_3 V_{i+1}+\gamma_3 V_{i+2}
+  O_1&=&\alpha_1 \ve{v_i}+\beta_1 \ve{v_{i+1}}+\gamma_1 \ve{v_{i+2}}\\
+  O_2&=&\alpha_2 \ve{v_i}+\beta_2 \ve{v_{i+1}}+\gamma_2 \ve{v_{i+2}}\\
+  O_3&=&\alpha_3 \ve{v_i}+\beta_3 \ve{v_{i+1}}+\gamma_3 \ve{v_{i+2}}
 \end{eqnarray*}
 where $\alpha_i+\beta_i+\gamma_i=1$ for $i=1,2,3$.
 
 We want to deal with the collision adding vertices in the control
 polygon such that consecutive triangles are free from obstacles. We
-obtain this adding a control vertex $W_1$ between $V_i$ and $V_{i+1}$
-and $W_2$ between $V_{i+1}$ and $V_{i+2}$. Also we add those two
-points in a manner such that the segment $\overline{W_1W_2}$ is
-parallel to the segment $\overline{V_iV_{i+2}}$ and such that
-$\overline{W_1W_2}$ pass through the obstacle point $O_{near}$ nearest
-to $V_{i+1}$ ($O_1$ in \cref{fig:triangleIntersection}) keeping the
-triangle $\triangle W_1V_{i+1}W_2$ - and also
-the degenerated triangles $\triangle V_iW_1V_{i+1}$ and $\triangle
-V_{i+1}W_2V_{i+2}$ - free from obstacles.
+obtain this adding a control vertex $\ve{w_1}$ between $\ve{v_i}$ and $\ve{v_{i+1}}$
+and $\ve{w_2}$ between $\ve{v_{i+1}}$ and $\ve{v_{i+2}}$. Also we add those two
+points in a manner such that the segment $\overline{\ve{w_1}\ve{w_2}}$ is
+parallel to the segment $\overline{\ve{v_i}\ve{v_{i+2}}}$ and such that
+$\overline{\ve{w_1}\ve{w_2}}$ pass through the obstacle point $\ve{o_{near}}$ nearest
+to $\ve{v_{i+1}}$ ($\ve{o_1}$ in \cref{fig:triangleIntersection}) keeping the
+triangle $\triangle \ve{w_1}\ve{v_{i+1}}\ve{w_2}$ - and also
+the degenerated triangles $\triangle \ve{v_i}\ve{w_1}\ve{v_{i+1}}$ and $\triangle
+\ve{v_{i+1}}\ve{w_2}\ve{v_{i+2}}$ - free from obstacles.
 
 When we check for collisions between a segment and a triangle we
 resolve a system of four unknowns in
 four equations and from the solutions we extract the barycentric
 coordinates of
-the point of collision, when we have all the coordinates of the points
-in $O$ we can obtain $O_{near}$ picking the one with the biggest $\beta$
+the point of collision. When we have all the coordinates of the points
+in $O$ we can obtain $\ve{o_{near}}$ picking the one with the biggest $\beta$
 and then, using the corresponding $\beta_{near}$, we can obtain
 \begin{eqnarray*}
-  W_1&=&\beta_{near} V_{i+1}+(1-\beta_{near})V_i\\
-  W_2&=&\beta_{near} V_{i+1}+(1-\beta_{near})V_{i+2}.
+  W_1&=&\beta_{near} \ve{v_{i+1}}+(1-\beta_{near})\ve{v_i}\\
+  W_2&=&\beta_{near} \ve{v_{i+1}}+(1-\beta_{near})\ve{v_{i+2}}.
 \end{eqnarray*}
 
 \imageDouble{scrSolution2a.png}{scrSolution2b.png}{Effects of application of solution two.}{fig:sol21}[
-\node[imageLabel] at (0.7,0.62) {$V_i$};
-\node[imageLabel] (B) at (0.45,0.4) {$V_{i+1}$};
-\node[imageLabel] (C) at (0.2,0.4) {$V_{i+2}$};
+\node[imageLabel] at (0.7,0.62) {$\ve{v_i}$};
+\node[imageLabel] (B) at (0.45,0.4) {$\ve{v_{i+1}}$};
+\node[imageLabel] (C) at (0.2,0.4) {$\ve{v_{i+2}}$};
 \node[imageLabel] (O) at (0.8,0.2) {$Obs$};
 \path[imageArrow] (B) -- (0.36,0.555);
 \path[imageArrow] (C) -- (0.3,0.585);
 \path[imageArrow] (O) -- (0.6,0.3);
 ][
-\node[imageLabel] (W1) at (0.75,0.7) {$W_1$};
-\node[imageLabel] (W2) at (0.2,0.4) {$W_2$};
+\node[imageLabel] (W1) at (0.75,0.7) {$\ve{w_1}$};
+\node[imageLabel] (W2) at (0.2,0.4) {$\ve{w_2}$};
 \node[imageLabel] (O) at (0.8,0.2) {$Obs$};
 \path[imageArrow] (W1) -- (0.61,0.6);
 \path[imageArrow] (W2) -- (0.31,0.58);
@@ -665,17 +666,17 @@ and then, using the corresponding $\beta_{near}$, we can obtain
 ]
 \imageDouble{scrSolution2a2.png}{scrSolution2b2.png}{Effects of
   application of solution two, other view point.}{fig:sol22}[
-\node[imageLabel] at (0.2,0.1) {$V_i$};
-\node[imageLabel] at (0.43,0.6) {$V_{i+1}$};
-\node[imageLabel] at (0.62,0.85) {$V_{i+2}$};
+\node[imageLabel] at (0.2,0.1) {$\ve{v_i}$};
+\node[imageLabel] at (0.43,0.6) {$\ve{v_{i+1}}$};
+\node[imageLabel] at (0.62,0.85) {$\ve{v_{i+2}}$};
 \node[imageLabel] at (0.8,0.2) {$Obs$};
 ][
-\node[imageLabel] at (0.2,0.1) {$V_i$};
-\node[imageLabel] at (0.43,0.6) {$V_{i+1}$};
-\node[imageLabel] at (0.62,0.85) {$V_{i+2}$};
+\node[imageLabel] at (0.2,0.1) {$\ve{v_i}$};
+\node[imageLabel] at (0.43,0.6) {$\ve{v_{i+1}}$};
+\node[imageLabel] at (0.62,0.85) {$\ve{v_{i+2}}$};
 \node[imageLabel] at (0.8,0.2) {$Obs$};
-\node[imageLabel] (W1) at (0.25,0.3) {$W_1$};
-\node[imageLabel] (W2) at (0.5,0.75) {$W_2$};
+\node[imageLabel] (W1) at (0.25,0.3) {$\ve{w_1}$};
+\node[imageLabel] (W2) at (0.5,0.75) {$\ve{w_2}$};
 \path[imageArrow] (W1) -- (0.3,0.15);
 \path[imageArrow] (W2) -- (0.66,0.79);
 \node[imageLabel] at (0.8,0.2) {$Obs$};
@@ -685,8 +686,8 @@ application of this
 solution to a tract of the curve. The original tract of control
 polygon are on the left pictures and, the triangle
 composed of those vertices
-collide with the obstacle on the back. The two new vertices $W_1$
-and $W_2$ are added to avoid the collision.
+collide with the obstacle on the back. The two new vertices $\ve{w_1}$
+and $\ve{w_2}$ are added to avoid the collision.
 
 \subsubsection{Complexity considerations}
 For this solution we have still the cost for
@@ -707,14 +708,12 @@ and if we make the assumption of $k$ constant we have a cost
 
 For checking and removing the collisions in the path we need to
 consider every face of obstacle in $Ob$ for every
-triangle in $P$ and\footnote{if the
-  number of \ac{OTF} of the obstacle $i$ is not a function $f(i)$ that
-  grows with $i$.} the cost for doing this is
-\begin{equation*}
-  \bigO(|P|\cdot|Ob|).
-\end{equation*}
-where in the worst case $|P|=\bigO(|V|)=\bigO(|Ob|)$ so the cost is
-\newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|Ob|)\leq\bigO(|Ob|^2)}}
+triangle in $P$ and the cost for doing this is\footnote{If
+  $\#\ac{OTF}=\bigO(|Ob|)$ - i.e. the
+  number of \ac{OTF} don't grow faster than the number of obstacles.}
+$\bigO(|P|\cdot|Ob|)$ where in the worst case
+$|P|=\bigO(|V|)=\bigO(|Ob|)$ so in total 
+\newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)}}
 \begin{equation}\label{eq:costCleanPath}
   \eqCostCleanPath
 \end{equation}
@@ -782,29 +781,29 @@ to the project.
 
 The variable space $X$ is composed of all possible
 configuration of the path, or in other words is the vector
-$\mathbf{v}=(\mathbf{v}_1,\dots,\mathbf{v}_n)$ of all $n$ ordered
-vertices $\mathbf{v}_i=(x_i,y_i)$ of the
+$\ve{v}=(\ve{v_1},\dots,\ve{v_n})$ of all $n$ ordered
+vertices $\ve{v_i}=(x_i,y_i)$ of the
 path. The \cref{eq:opt} is formulated in the problem
 \begin{equation*}
   \begin{aligned}
-    & \underset{\mathbf{v}}{\text{minimize}}
-    & & \alpha\cdot maxCurv(\mathbf{v})+\beta\cdot
-    maxTors(\mathbf{v})+\gamma\cdot normLen(\mathbf{v}) \\
+    & \underset{\ve{v}}{\text{minimize}}
+    & & \alpha\cdot maxCurv(\ve{v})+\beta\cdot
+    maxTors(\ve{v})+\gamma\cdot normLen(\ve{v}) \\
     & \text{subject to}
-    & & \left|bspline(\mathbf{v})\cap \bigcup_{i\in I}obstacle_i\right| = 0.
+    & & \left|bspline(\ve{v})\cap \bigcup_{i\in I}obstacle_i\right| = 0.
   \end{aligned}
 \end{equation*}
-where $maxCurv(\mathbf{v})$ is the peak of curvature of the B-spline
-constructed using $\mathbf{v}$ as control polygon,
-$maxTors(\mathbf{v})$ is the peak in absolute value of the torsion of
-the B-spline constructed using $\mathbf{v}$ as control polygon and
-$normLen(\mathbf{v})$ is the length of the control polygon
-$\mathbf{v}$ normalized as percent of the length of the initial status
+where $maxCurv(\ve{v})$ is the peak of curvature of the B-spline
+constructed using $\ve{v}$ as control polygon,
+$maxTors(\ve{v})$ is the peak in absolute value of the torsion of
+the B-spline constructed using $\ve{v}$ as control polygon and
+$normLen(\ve{v})$ is the length of the control polygon
+$\ve{v}$ normalized as percent of the length of the initial status
 after extracting the path. $\alpha$, $\beta$ and $\gamma$ are fixed
 coefficients used for giving a weight in the optimization process to
 the curvature peak, torsion peak and length. The normalization of
 length is necessary for decoupling the weight of the length from the
-length of path. Regarding the constraint, $bspline(\mathbf{v})$
+length of path. Regarding the constraint, $bspline(\ve{v})$
 is the set of tabulated points of the \emph{B-Spline} obtained as
 explained in
 \cref{sec:spline} and \cref{sec:bsplines}, using the path as
@@ -816,15 +815,15 @@ We need to build now the Lagrangian function corresponding to
 \cref{eq:lagrangianFun}, the constraint function is not negative, and is calculated as the
 ratio
 \begin{equation*}
-constraint(\mathbf{v}) = \frac{|\{\mathbf{p} \in spline(\mathbf{v})\ |\ \exists i\in\{1,\dots,m\}
-  : \mathbf{p}\in obstacle_i \}|}{|\{\mathbf{p} \in spline(\mathbf{v})\}|}
+constraint(\ve{v}) = \frac{|\{\ve{p} \in spline(\ve{v})\ |\ \exists i\in\{1,\dots,m\}
+  : \ve{p}\in obstacle_i \}|}{|\{\ve{p} \in spline(\ve{v})\}|}
 \end{equation*}
-where the points $\mathbf{p}$ of the spline are calculated in a discrete form. That
+where the points $\ve{p}$ of the spline are calculated in a discrete form. That
 function is not negative, so the Lagrangian function correspondent to
 \cref{eq:lagrangianFun} is
 \begin{equation}\label{eq:lagrangianFunProj}
-    L_d(\mathbf{v},\lambda)=\alpha\cdot maxCurv(\mathbf{v})+\beta\cdot
-    maxTors(\mathbf{v})+\gamma\cdot normLen(\mathbf{v})+\lambda\cdot constraint(\mathbf{v}).
+    L_d(\ve{v},\lambda)=\alpha\cdot maxCurv(\ve{v})+\beta\cdot
+    maxTors(\ve{v})+\gamma\cdot normLen(\ve{v})+\lambda\cdot constraint(\ve{v}).
 \end{equation}
 
 \subsubsection{Annealing phase}
@@ -835,7 +834,7 @@ the curve represented by the
 \begin{algorithm}
  \caption{Annealing}\label{alg:annealing}
  \begin{algorithmic}[1]
-   \Procedure{annealing}{$\mathbf{x}$}
+   \Procedure{annealing}{$\ve{x}$}
    \State $\lambda\gets initialLambda$\label{alg:annealing:initialize}
    \State $T\gets initialTemperature$
    \While{not $terminationCondition()$}\label{alg:annealing:while}
@@ -843,10 +842,10 @@ the curve represented by the
    \State $changeLambda\gets$ true with $changeLambdaProb$\label{alg:annealing:lambdaProb}
    \If{$changeLambda$}
    \State $\lambda'\gets neighbour(\lambda)$\label{alg:annealing:changeLambda}
-   \State $\lambda\gets \lambda'$ with probability $\me^{-([energy(\mathbf{x},\lambda)-energy(\mathbf{x},\lambda')]^+/T)}$
+   \State $\lambda\gets \lambda'$ with probability $\me^{-([energy(\ve{x},\lambda)-energy(\ve{x},\lambda')]^+/T)}$
    \Else
-   \State $\mathbf{x}'\gets neighbour(\mathbf{x})$\label{alg:annealing:changeX}
-   \State $\mathbf{x}\gets \mathbf{x}'$ with probability $\me^{-([energy(\mathbf{x}',\lambda)-energy(\mathbf{x},\lambda)]^+/T)}$
+   \State $\ve{x}'\gets neighbour(\ve{x})$\label{alg:annealing:changeX}
+   \State $\ve{x}\gets \ve{x}'$ with probability $\me^{-([energy(\ve{x}',\lambda)-energy(\ve{x},\lambda)]^+/T)}$
    \EndIf
    \EndFor
    \State $T\gets T\cdot warmingRatio$\label{alg:annealing:cooling}
@@ -891,8 +890,8 @@ defined depending on the input
 
 The $energy$ function is equivalent to $L_d$ in the
 \cref{eq:lagrangianFunProj}:
-$$energy(\mathbf{x},\lambda)=\alpha\cdot maxCurv(\mathbf{v})+\beta\cdot
-    maxTors(\mathbf{v})+\gamma\cdot normLen(\mathbf{v})+\lambda\cdot constraint(\mathbf{v}).$$
+$$energy(\ve{x},\lambda)=\alpha\cdot maxCurv(\ve{v})+\beta\cdot
+    maxTors(\ve{v})+\gamma\cdot normLen(\ve{v})+\lambda\cdot constraint(\ve{v}).$$
 
 The annealing process
 find a saddle point probabilistically increasing the energy, moving
