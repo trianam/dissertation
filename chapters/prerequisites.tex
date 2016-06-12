@@ -242,6 +242,91 @@ the one that minimize $f(x^*)$. $x^*$ is then the desired minimum.
 \section{Simulated annealing}
 
 \section{Intersections in space}\label{sec:intersections}
+\subsection{Segment-triangle in space}
+\subsection{Triangle-triangle in space}\label{sec:intersectionsTriangleTriangle}
+
+\begin{myfig}{Example of type 1 intersection between $\triangle A_1B_1C_1$
+    and $\triangle A_2B_2C_2$.}{fig:trianglesIntersection1}
+  \begin{tikzpicture}
+    \coordinate (A1) at (0,0);
+    \coordinate (B1) at (4,5);
+    \coordinate (C1) at (8,1);
+
+    \coordinate (cut1) at (barycentric cs:A1=0.8,B1=0.,C1=0.2);
+    \coordinate (cut2) at (barycentric cs:A1=0.,B1=0.8,C1=0.2);
+
+    \coordinate (A2) at (0,3);
+    \coordinate (B2) at (2,5);    
+    \coordinate (C2) at (4.5,1.5);
+
+    \coordinate (Xs1) at (intersection of A1--B1 and C2--A2);
+    \coordinate (Xs2) at (intersection of A1--B1 and C2--B2);
+    \coordinate (X1) at (intersection of cut1--cut2 and C2--A2);
+    \coordinate (X2) at (intersection of cut1--cut2 and C2--B2);
+
+    \draw[poly] (Xs1) -- (A1) -- (C1) -- (B1) -- (Xs2);
+    \draw[polyTract] (Xs1) -- (Xs2);
+    \draw[poly] (X1) -- (A2) -- (B2) -- (X2);
+    \draw[polyTract] (X1) -- (C2) -- (X2);
+    \draw[cutting] (X1) -- (X2);
+
+    \foreach \p in {A1,B1,C1,A2,B2,C2}
+    \filldraw[vertex] (\p) circle (2pt);
+
+    \filldraw[intersection] (X1) circle (2pt);
+    \filldraw[intersection] (X2) circle (2pt);
+
+    \node[below=0.5em] at (A1) {$A_1$};
+    \node[above=0.5em] at (B1) {$B_1$};
+    \node[below=0.5em] at (C1) {$C_1$};
+    \node[left=0.5em] at (A2) {$A_2$};
+    \node[above=0.5em] at (B2) {$B_2$};
+    \node[right=0.5em] at (C2) {$C_2$};
+    \node[below=0.2em] at (X1) {$X_1$};
+    \node[right=0.2em] at (X2) {$X_2$};
+  \end{tikzpicture}
+\end{myfig}
+
+\begin{myfig}{Example of type 2 intersection between $\triangle A_1B_1C_1$
+    and $\triangle A_2B_2C_2$.}{fig:trianglesIntersection2}
+  \begin{tikzpicture}
+    \coordinate (A1) at (0,0);
+    \coordinate (B1) at (4,5);
+    \coordinate (C1) at (8,1);
+
+    \coordinate (cut) at (barycentric cs:A1=0.8,B1=0.,C1=0.2);
+    \coordinate (X2) at (barycentric cs:A1=0.,B1=0.8,C1=0.2);
+
+    \coordinate (A2) at (0,6);
+    \coordinate (B2) at (8,7);    
+    \coordinate (C2) at (4.5,1.5);
+
+    \coordinate (Xs1) at (intersection of A1--B1 and C2--A2);
+    \coordinate (Xs2) at (intersection of C1--B1 and C2--B2);
+    \coordinate (X1) at (intersection of cut--X2 and C2--A2);
+
+    \draw[poly] (Xs1) -- (A1) -- (C1) -- (X2);
+    \draw[polyTract] (Xs1) -- (B1) -- (X2);
+    \draw[poly] (X1) -- (A2) -- (B2) -- (Xs2);
+    \draw[polyTract] (X1) -- (C2) -- (Xs2);
+    \draw[cutting] (X1) -- (X2);
+
+    \foreach \p in {A1,B1,C1,A2,B2,C2}
+    \filldraw[vertex] (\p) circle (2pt);
+
+    \filldraw[intersection] (X1) circle (2pt);
+    \filldraw[intersection] (X2) circle (2pt);
+
+    \node[below=0.5em] at (A1) {$A_1$};
+    \node[above=0.5em] at (B1) {$B_1$};
+    \node[below=0.5em] at (C1) {$C_1$};
+    \node[left=0.5em] at (A2) {$A_2$};
+    \node[above=0.5em] at (B2) {$B_2$};
+    \node[right=0.5em] at (C2) {$C_2$};
+    \node[below=0.2em] at (X1) {$X_1$};
+    \node[right=0.2em] at (X2) {$X_2$};
+  \end{tikzpicture}
+\end{myfig}
 
 \end{document}
 

@@ -133,9 +133,10 @@ some constant $C$ that depend of the chosen density of sites per area.
 
 In conclusion the time cost for the creation of the graph
 is
+\newcommand{\eqCostGraph}{\ensuremath{\bigO(|Ob|\log |Ob|)}}
 \begin{equation}
   \label{eq:costGraph}
-  \bigO(|Ob|\log |Ob|)
+  \eqCostGraph
 \end{equation}
 and the number of the vertices in the graph
 is 
@@ -171,10 +172,12 @@ and \cref{eq:numE} become
 
 For pruning the graph of every edge that intersects obstacles we need
 to solve a system of four unknowns in four equations for every edge
-and every obstacle's face\footnote{See \cref{sec:intersections}.}, so we have a cost of
+and every obstacle's face\footnote{See \cref{sec:intersections}.}, so
+we have a cost of
+\newcommand{\eqCostPruning}{\ensuremath{\bigO(k|Ob|^2)}}
 \begin{equation}
   \label{eq:costPruning}
-  \bigO(|E|\cdot|Ob|)=\bigO(k|Ob|^2)
+  \bigO(|E|\cdot|Ob|)=\eqCostPruning
 \end{equation}
 and if we make the assumption of $k$ constant
 \begin{equation*}
@@ -265,9 +268,10 @@ of $C$ in $V$ excluded $B$. So the number of edges in $G_t$ is
 \end{equation}
 
 Also the time cost for the creation of $G_t$ is
+\newcommand{\eqCostVt}{\ensuremath{\bigO(k^3|Ob|)}}
 \begin{equation}
   \label{eq:costVt}
-  \bigO(k^2|E|)=\bigO(k^3|Ob|)
+  \bigO(k^2|E|)=\eqCostVt
 \end{equation}
 because the \cref{alg:createTripleGraph} for creating the transformed
 graph scan all the edges $e$ on \cref{ln:tripleFor0} and for each
@@ -325,7 +329,7 @@ the shortest path from start to end in the graph $G$, checking later for
 collisions in the triangles formed of consecutive points in such path
 and when one is found some actions are taken for dealing with that.
 
-\subsection{First solution: Dijkstra's algorithm in triples}\label{sec:inter1}
+\subsection{First solution: Dijkstra's algorithm in $G_t$}\label{sec:inter1}
 The first solution of the problem exploit the graph $G_t$ obtained as
 explained in \cref{sec:trigraph}. Before applying Dijkstra's algorithm
 to $G_t$ all the triples are filtered checking if the
@@ -388,44 +392,79 @@ $$
 A_0,B_0,B_1,\dots,B_i,\dots,B_{n-1},B_n,C_n.
 $$
 
-\imageDouble{scrSolution1a.png}{scrSolution1b.png}{Effects of application of solution one.}{fig:sol11}
+\imageDouble{scrSolution1a.png}{scrSolution1b.png}{Effects of
+  application of solution one.}{fig:sol11}[
+\node[imageLabel] at (0.7,0.62) {$A_1$};
+\node[imageLabel] (B) at (0.35,0.4) {$B_1$};
+\node[imageLabel] (C) at (0.2,0.4) {$C_1$};
+\node[imageLabel] (O) at (0.8,0.2) {$Obs$};
+\path[imageArrow] (B) -- (0.36,0.555);
+\path[imageArrow] (C) -- (0.3,0.585);
+\path[imageArrow] (O) -- (0.6,0.3);
+][
+\node[imageLabel] (A) at (0.7,0.7) {$A_2$};
+\node[imageLabel] (B) at (0.5,0.4) {$B_2$};
+\node[imageLabel] (C) at (0.35,0.4) {$C_2$};
+\node[imageLabel] (D) at (0.2,0.4) {$D_2$};
+\node[imageLabel] (O) at (0.8,0.2) {$Obs$};
+\path[imageArrow] (A) -- (0.58,0.61);
+\path[imageArrow] (B) -- (0.44,0.52);
+\path[imageArrow] (C) -- (0.36,0.555);
+\path[imageArrow] (D) -- (0.3,0.585);
+\path[imageArrow] (O) -- (0.6,0.3);
+]
 \imageDouble{scrSolution1a2.png}{scrSolution1b2.png}{Effects of
-  application of solution one, other view point.}{fig:sol12}
+  application of solution one, other view point.}{fig:sol12}[
+\node[imageLabel] at (0.2,0.1) {$A_1$};
+\node[imageLabel] at (0.45,0.6) {$B_1$};
+\node[imageLabel] at (0.65,0.85) {$C_1$};
+\node[imageLabel] at (0.8,0.2) {$Obs$};
+][
+\node[imageLabel] at (0.15,0.2) {$A_2$};
+\node[imageLabel] at (0.3,0.4) {$B_2$};
+\node[imageLabel] at (0.45,0.6) {$C_2$};
+\node[imageLabel] at (0.65,0.85) {$D_2$};
+\node[imageLabel] at (0.8,0.2) {$Obs$};
+]
 In \cref{fig:sol11} and \cref{fig:sol12} the effect of the
-application of the first solution is shown. The triangle formed by the second,
-the third and the
-fourth vertices from the right on the left figure of \cref{fig:sol11}
-is colliding with the obstacle in the back, on the right figure there
-is the path obtained applying the solution, where no triangles in the
+application of the first solution is shown. The triangle formed by the
+vertices $A_1$, $B_1$, $C_1$ on the left picture of \cref{fig:sol11}
+is colliding with the obstacle $Obs$ in the back, on the right picture
+there
+is the path $A_2,B_2,C_2,D_2$ obtained applying the solution, where no
+triangles in the
 path collides with obstacles. On \cref{fig:sol12} is visible another
-point of view of the three vertices that collides.
+point of view of pictures shown in \cref{fig:sol11}.
 
 \subsubsection{Complexity considerations}
-For each triple and each obstacle we need to solve a $4\times 4$
-linear system for the
-collision check, so in total the cost is
+For each triple and each \ac{OTF} we need to solve three $4\times 4$
+linear systems for the
+collision check\footnote{See \cref{sec:intersections}.}, so in total
+the cost is
 \begin{equation*}
   \bigO(|V_t|\cdot |Ob|)
 \end{equation*}
 and for \cref{eq:numV} and \cref{eq:numTriples} this is equal to
+\newcommand{\eqCostColl}{\ensuremath{\bigO(|Ob|^2 k^2)}}
 \begin{equation}
   \label{eq:costColl}
-  \bigO(|Ob|^2 k^2).
+  \eqCostColl .
 \end{equation}
 
 The cost of applying Dijkstra's algorithm\footnote{In the worst case
   where no triples are removed in the cleaning phase.} in $G_t$ is
+\newcommand{\eqCostDijkstraTriples}{\ensuremath{\bigO(k^3|V|+k^2|V|\log(k^2|V|)}}
 \begin{equation}
   \label{eq:costDijkstraTriples}
-  \bigO(|E_t|+|V_t|\log |V_t|) = \bigO(k^3|V|+k^2|V|\log(k^2|V|)
+  \bigO(|E_t|+|V_t|\log |V_t|) = \eqCostDijkstraTriples .
 \end{equation}
-This cost have two special cases, if $G$ is a clique - i.e. each
-node in $V$ is connected to every other node - then $k=|V|-1$ and the
+This cost has two special cases, if $G$ is a \emph{clique} - i.e. each
+node in $V$ is connected to every other node \cite{bondy} - then $k=|V|-1$ and the
 cost is
 \begin{equation*}
   \bigO(|V|^4);
 \end{equation*}
-if $k$ is constant - i.e. don't grow with the growing of $|V|$ - the
+if $k$ is constant - i.e. doesn't grow with $|V|$ - the
 cost is
 \begin{equation*}
   \bigO(|V|\log|V|).
@@ -434,43 +473,60 @@ The latter case is the more plausible if we assume the hypothesis that
 no more than four input sites in space (three in plane) can be on the
 same sphere in space (circumference in plane), in fact in that case
 every Voronoi cell cannot have a vertex with more than four edges
-connected in space (three in plane).
+connected in space (three in plane) \cite{deberg}.
 
-If we sum all the costs \cref{eq:costGraph}, \cref{eq:costPruning},
-\cref{eq:costVt},
-\cref{eq:costColl} and
-\cref{eq:costDijkstraTriples} we obtain:
-\begin{equation*}
-  \bigO(k^2|Ob|^2+k^3|Ob|)
-\end{equation*}
-where all the other factors are absorbed in those two. If we have $k$
+If we sum all the costs resumed in we obtain:
+\newcommand{\eqCostTotalOne}{\ensuremath{\bigO(k^2|Ob|^2+k^3|Ob|)}}
+\begin{equation}\label{eq:costTotalOne}
+  \eqCostTotalOne
+\end{equation}
+where all the other terms are absorbed in those two. If we have $k$
 constant as we said before then we have an overall cost of
-\begin{equation*}
-  \bigO(|Ob|^2)
-\end{equation*}
-That derive from the collision check control.
-
-We can improve this result if we divide the algorithm in two parts, we
+\newcommand{\eqCostTotalOneK}{\ensuremath{\bigO(|Ob|^2)}}
+\begin{equation}\label{eq:costTotalOneK}
+  \eqCostTotalOneK
+\end{equation}
+That derive from the collision check control\footnote{We can improve
+  this result if we divide the algorithm in two parts, we 
 can construct the graph only once with the heavy cost $\bigO(|Ob|^2)$
 and then using
 it in different trials with different starting and ending points with
-a reduced cost of
-\begin{equation*}
-  \bigO(|Ob|\log |Ob|)
-\end{equation*}
-for the routing.
+a reduced cost of $\bigO(|Ob|\log |Ob|)$
+for the routing.}.
 
-\subsection{Second solution: clean path}\label{sec:inter2}
+\begin{table}
+  \centering
+  \begin{tabular}{|l|c|r|}
+    \hline
+    Description&Cost&Reference\\
+    \hline
+    \hline
+    Creation of $G$&\eqCostGraph&\cref{eq:costGraph}\\
+    Pruning of $G$&\eqCostPruning&\cref{eq:costPruning}\\
+    Creation of $G_t$&\eqCostVt&\cref{eq:costVt}\\
+    Pruning of $G_t$&\eqCostColl&\cref{eq:costColl}\\
+    Routing in $G_t$& \eqCostDijkstraTriples&\cref{eq:costDijkstraTriples}\\
+    \hline
+    Total&\eqCostTotalOne&\cref{eq:costTotalOne}\\
+    Total ($k$ constant)&\eqCostTotalOneK&\cref{eq:costTotalOneK}\\
+    \hline
+  \end{tabular}
+  \caption{Resume of the costs for solution one}
+  \label{tab:costsSol1}
+\end{table}
+On \cref{tab:costsSol1} we resumed all the terms that contributes to
+the total costs, and the total cost itself.
+
+\subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}
 The First solution is interesting from an algorithmic point of view,
 but is not very practical because it throws all the triples that
 intersect an obstacle. We tried another
-solution that use another approach, the second solution use the
-shortest path obtained
+solution that uses another approach: obtain the shortest path 
 from the Voronoi's graph $G$ directly using Dijkstra's algorithm,
 without removing any triple. On that path
 - that we call $P$ in this section - we
-check every triple of consecutive vertices, and if it collides with an
-obstacle's face then we take countermeasures. For instance if the path
+check every triple of consecutive vertices, and if it collides with a
+\ac{OTF} then we take countermeasures. For instance if the path
 is composed from the vertices:
 \begin{equation*}
   P=V_0,V_1,\dots,V_n
@@ -485,25 +541,30 @@ T_i &=& \triangle V_iV_{i+1}V_{i+2}\\
 T_{n-3} &=& \triangle V_{n-3}V_{n-2}V_{n-1}\\
 T_{n-2} &=& \triangle V_{n-2}V_{n-1}V_n
 \end{eqnarray*}
-intersect one of the triangles that compose the faces of the
-obstacles, where $\triangle V_iV_jV_k$ denotes the triangle with
+intersect one of the \ac{OTF}, where $\triangle V_iV_jV_k$ denotes the
+triangle with
 vertices the points $V_i$, $V_j$ and $V_k$.
 
-In \cref{sec:intersections} we explain how to measure if a triangle
-collides with another triangle and that when a collision is found we
-obtain also the barycentric coordinates of the point were one of the
-segment of a triangle intersect the other triangle express in the
-vertices of the second one.
+In \cref{sec:intersectionsTriangleTriangle} we explain how to measure
+if a triangle $T_1=\triangle A_1B_1C_1$
+collides with another triangle $T_2=\triangle A_2B_2C_2$ and, when a
+collision is found, how to 
+obtain also the barycentric coordinates on $A_2,B_2,C_2$ of the points
+where the 
+edges of $T_1$ intersect $T_2$ (or the coordinates on $A_1,B_1,C_1$ of
+the points where $T_2$ intersect $T_1$).
 
 Consider also that $G$ is pruned from all the edges that intersect any
 obstacle, so none of the edges of the triangles $T_i$ can intersect
-an obstacle, and the only possibility is that a segment or more - two
-segments for each obstacle face if we ignore special cases - of the
+an \ac{OTF}, and the only possibility is that an edge or
+more\footnote{At most two edges for each \ac{OTF} if we ignore special
+  cases} of the
 obstacles intersect a
-triangle $T_i$. So for each $T_i$ we have a possibly empty set of point
-of intersection with the edges of the obstacles - we call it $O$.
-\begin{myfig}{$T_i$ and obstacles
-    represented by the points of intersection.}{fig:triangleIntersection}
+triangle $T_i$. So for each $T_i$ we have a (possibly empty) set of points
+of intersection between it and the edges of each \ac{OTF} - we call
+that set $O$.
+\begin{myfig}{$T_i$($=\triangle V_iV_{i+1}V_{i+2}$) and the points
+    $O_1,O_2,O_3$ of intersection between it and the edges of some \ac{OTF}.}{fig:triangleIntersection}
   \begin{tikzpicture}
     \coordinate (P) at (-1,0);
     \coordinate (A) at (0,0);
@@ -534,7 +595,8 @@ of intersection with the edges of the obstacles - we call it $O$.
     \node[below=0.5em] at (A) {$V_i$};
     \node[above=0.5em] at (B) {$V_{i+1}$};
     \node[below=0.5em] at (C) {$V_{i+2}$};
-    \node[below=0.2em] at (O1) {$O_1\equiv O_n$};
+    \node[below right=0.2em] (O1n) at (O1) {$O_1$};
+    \node[below=0.2em] at (O1n) {$\scriptscriptstyle(\equiv O_{near})$};
     \node[left=0.2em] at (O2) {$O_2$};
     \node[below=0.2em] at (O3) {$O_3$};
     \node[left=0.5em] at (W1) {$W_1$};
@@ -567,53 +629,77 @@ obtain this adding a control vertex $W_1$ between $V_i$ and $V_{i+1}$
 and $W_2$ between $V_{i+1}$ and $V_{i+2}$. Also we add those two
 points in a manner such that the segment $\overline{W_1W_2}$ is
 parallel to the segment $\overline{V_iV_{i+2}}$ and such that
-$\overline{W_1W_2}$ pass through the obstacle point $O_n$ nearer to
-$V_{i+1}$ ($O_1$ in \cref{fig:triangleIntersection}) keeping the
+$\overline{W_1W_2}$ pass through the obstacle point $O_{near}$ nearest
+to $V_{i+1}$ ($O_1$ in \cref{fig:triangleIntersection}) keeping the
 triangle $\triangle W_1V_{i+1}W_2$ - and also
 the degenerated triangles $\triangle V_iW_1V_{i+1}$ and $\triangle
 V_{i+1}W_2V_{i+2}$ - free from obstacles.
 
 When we check for collisions between a segment and a triangle we
 resolve a system of four unknowns in
-four equations and the solutions are the barycentric coordinates of
+four equations and from the solutions we extract the barycentric
+coordinates of
 the point of collision, when we have all the coordinates of the points
-in $O$ we can obtain $O_n$ picking the one with the biggest $\beta$
-and then, using the corresponding $\beta_n$, we can obtain
+in $O$ we can obtain $O_{near}$ picking the one with the biggest $\beta$
+and then, using the corresponding $\beta_{near}$, we can obtain
 \begin{eqnarray*}
-  W_1&=&\beta_n V_{i+1}+(1-\beta_n)V_i\\
-  W_2&=&\beta_n V_{i+1}+(1-\beta_n)V_{i+2}.
+  W_1&=&\beta_{near} V_{i+1}+(1-\beta_{near})V_i\\
+  W_2&=&\beta_{near} V_{i+1}+(1-\beta_{near})V_{i+2}.
 \end{eqnarray*}
 
-\imageDouble{scrSolution2a.png}{scrSolution2b.png}{Effects of application of solution two.}{fig:sol21}
+\imageDouble{scrSolution2a.png}{scrSolution2b.png}{Effects of application of solution two.}{fig:sol21}[
+\node[imageLabel] at (0.7,0.62) {$V_i$};
+\node[imageLabel] (B) at (0.45,0.4) {$V_{i+1}$};
+\node[imageLabel] (C) at (0.2,0.4) {$V_{i+2}$};
+\node[imageLabel] (O) at (0.8,0.2) {$Obs$};
+\path[imageArrow] (B) -- (0.36,0.555);
+\path[imageArrow] (C) -- (0.3,0.585);
+\path[imageArrow] (O) -- (0.6,0.3);
+][
+\node[imageLabel] (W1) at (0.75,0.7) {$W_1$};
+\node[imageLabel] (W2) at (0.2,0.4) {$W_2$};
+\node[imageLabel] (O) at (0.8,0.2) {$Obs$};
+\path[imageArrow] (W1) -- (0.61,0.6);
+\path[imageArrow] (W2) -- (0.31,0.58);
+\path[imageArrow] (O) -- (0.6,0.3);
+]
 \imageDouble{scrSolution2a2.png}{scrSolution2b2.png}{Effects of
-  application of solution two, other view point.}{fig:sol22}
+  application of solution two, other view point.}{fig:sol22}[
+\node[imageLabel] at (0.2,0.1) {$V_i$};
+\node[imageLabel] at (0.43,0.6) {$V_{i+1}$};
+\node[imageLabel] at (0.62,0.85) {$V_{i+2}$};
+\node[imageLabel] at (0.8,0.2) {$Obs$};
+][
+\node[imageLabel] at (0.2,0.1) {$V_i$};
+\node[imageLabel] at (0.43,0.6) {$V_{i+1}$};
+\node[imageLabel] at (0.62,0.85) {$V_{i+2}$};
+\node[imageLabel] at (0.8,0.2) {$Obs$};
+\node[imageLabel] (W1) at (0.25,0.3) {$W_1$};
+\node[imageLabel] (W2) at (0.5,0.75) {$W_2$};
+\path[imageArrow] (W1) -- (0.3,0.15);
+\path[imageArrow] (W2) -- (0.66,0.79);
+\node[imageLabel] at (0.8,0.2) {$Obs$};
+]
 In \cref{fig:sol21} and \cref{fig:sol22} we can see the effects of the
-application of the
-solution two to a tract of the curve. The original tract of control
-polygon is on the left image and, on \cref{fig:sol22}, is composed of
-the lower
-visible vertex corresponding to $V_i$, the
-upper visible vertex corresponding to $V_{i+2}$, and the one in
-the middle on the left corresponding to $V_{i+1}$. The same vertices
-in the other \cref{fig:sol21} are the second, the third and the fourth
-from the right. The triangle
+application of this
+solution to a tract of the curve. The original tract of control
+polygon are on the left pictures and, the triangle
 composed of those vertices
-collide with the obstacle on the right and the two new vertices $W_1$
-and $W_2$ are the second visible from below and the second visible
-from above on the right figure.
+collide with the obstacle on the back. The two new vertices $W_1$
+and $W_2$ are added to avoid the collision.
 
 \subsubsection{Complexity considerations}
-For this solution we have still the cost of \cref{eq:costGraph} and
-the cost of \cref{eq:costPruning} for
+For this solution we have still the cost for
 the creation and pruning of the graph $G$, then we need to apply Dijkstra's
-algorithm in $G$ for obtaining $P$ with a cost
+algorithm in $G$ for obtaining $P$ with a cost \cite{bondy}
 \begin{equation*}
   \bigO(|E|+|V|\log |V|).
 \end{equation*}
 For \cref{eq:numV} \cref{eq:numE} that cost is equal to
-\begin{equation*}
-  \bigO(k|Ob|+|Ob|\log |Ob|)
-\end{equation*}
+\newcommand{\eqCostDijkstraG}{\ensuremath{\bigO(k|Ob|+|Ob|\log |Ob|)}}
+\begin{equation}\label{eq:costDijkstraG}
+  \eqCostDijkstraG
+\end{equation}
 and if we make the assumption of $k$ constant we have a cost
 \begin{equation*}
   \bigO(|Ob|\log |Ob|).
@@ -622,29 +708,53 @@ and if we make the assumption of $k$ constant we have a cost
 For checking and removing the collisions in the path we need to
 consider every face of obstacle in $Ob$ for every
 triangle in $P$ and\footnote{if the
-  number of faces of the obstacles don't grow with the number of
-  obstacles.} the cost for doing this is
+  number of \ac{OTF} of the obstacle $i$ is not a function $f(i)$ that
+  grows with $i$.} the cost for doing this is
 \begin{equation*}
   \bigO(|P|\cdot|Ob|).
 \end{equation*}
-where in the worst case $|P|=\bigO(|V|)=\bigO(|Ob|)$ and the cost
-became
-\begin{equation*}
-  \bigO(|Ob|^2)
-\end{equation*}
+where in the worst case $|P|=\bigO(|V|)=\bigO(|Ob|)$ so the cost is
+\newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|Ob|)\leq\bigO(|Ob|^2)}}
+\begin{equation}\label{eq:costCleanPath}
+  \eqCostCleanPath
+\end{equation}
 
 Summing up all the costs we have 
-\begin{equation*}
-  \bigO(|Ob|\log|Ob|+k|Ob|^2)
-\end{equation*}
+\newcommand{\eqCostTotalTwo}{\ensuremath{\bigO(k|Ob|^2+|Ob|\log|Ob|)}}
+\begin{equation}\label{eq:costTotalTwo}
+  \eqCostTotalTwo
+\end{equation}
 and if we consider $k$ constant
-\begin{equation*}
-  \bigO(|Ob|^2).
-\end{equation*}
+\newcommand{\eqCostTotalTwoK}{\ensuremath{\bigO(|Ob|^2)}}
+\begin{equation}\label{eq:costTotalTwoK}
+  \eqCostTotalTwoK .
+\end{equation}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|l|c|r|}
+    \hline
+    Description&Cost&Reference\\
+    \hline
+    \hline
+    Creation of $G$&\eqCostGraph&\cref{eq:costGraph}\\
+    Pruning of $G$&\eqCostPruning&\cref{eq:costPruning}\\
+    Routing in $G$&\eqCostDijkstraG&\cref{eq:costDijkstraG}\\
+    Clean path&\eqCostCleanPath&\cref{eq:costCleanPath}\\
+    \hline
+    Total&\eqCostTotalTwo&\cref{eq:costTotalTwo}\\
+    Total ($k$ costant)&\eqCostTotalTwoK&\cref{eq:costTotalTwoK}\\
+    \hline
+  \end{tabular}
+  \caption{Resume of the costs for solution two}
+  \label{tab:costsSol2}
+\end{table}
+On \cref{tab:costsSol2} we resumed all the terms that contributes to
+the total costs, and the total cost itself.
 
 The cost is comparable with the one of the first solution, and also in
 this case we can divide the algorithm in two parts constructing only
-once $G$ with cost $\bigO(|Ob|^2)$ and using it for different
+once $G$ with cost $\bigO(|Ob|^2)$ and then using it for different
 trials with a cost $\bigO(|P|\cdot|Ob|)$.
 
 \subsection{Third solution: simulated annealing}\label{sec:inter3}

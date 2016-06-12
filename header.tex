@@ -1,5 +1,5 @@
 \documentclass[twoside,openright,titlepage,fleqn,
-	headinclude,11pt,a4paper,BCOR5mm,footinclude
+	headinclude,12pt,a4paper,BCOR5mm,footinclude
 	]{scrbook}
 %\documentclass[a4paper,11pt]{book}
 \usepackage[utf8]{inputenc}
@@ -40,6 +40,7 @@
   decorations.pathmorphing, calc, mindmap, petri}
 
 \usepackage{cleveref}
+\usepackage{acronym}
 
 %comandi per modello
 %--------------------------------------------------------------
@@ -126,7 +127,9 @@
 \def\transW{8mm}
 \def\transH{2mm}
 
-\tikzstyle{figureFrame}=[rectangle, rounded corners=2pt, inner sep = 0.3cm, drop shadow, draw=black!50, fill=white]
+\tikzstyle{figureFrame}=[rectangle, rounded corners=2pt, inner sep = 0.3cm, drop shadow, draw=black!50, fill=white, anchor=south west, inner sep=0]
+\tikzstyle{imageLabel}=[text=red]
+\tikzstyle{imageArrow}=[draw=red, line width=0.5mm, ->]
 \tikzstyle{obstacle}=[fill=yellow, draw=black]
 \tikzstyle{convexHull}=[fill=blue!30]
 \tikzstyle{convexHullBord}=[color=black, dash pattern=on 3pt off 3pt]
@@ -141,6 +144,11 @@
 \tikzstyle{site}=[color=blue, draw=black]
 \tikzstyle{siteHigh}=[color=red, draw=black]
 \tikzstyle{textArrow}=[draw=red, line width=0.5mm, ->]
+\tikzstyle{vertex}=[color=green, draw=black]
+\tikzstyle{intersection}=[color=red, draw=black]
+\tikzstyle{poly}=[color=black, line width=0.25mm]
+\tikzstyle{polyTract}=[color=black, line width=0.25mm, dash pattern=on 3pt off 3pt]
+\tikzstyle{cutting}=[color=red, line width=0.25mm]
 
 \colorlet{mmcb}{black!70}
 \colorlet{mmc1}{red!80}
@@ -196,15 +204,47 @@ shadow, minimum width=\transH, minimum height=\transW]
 }
 
 %comando per inserire una immagine
-\NewDocumentCommand{\image}{ommm}{
+\NewDocumentCommand{\image}{mmmo}{
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}
-        \node [figureFrame] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[width=.9\textwidth]{#2}}
-                      {\includegraphics[width=#1]{#2}}
-        };
+        \node [figureFrame] (image) at (0,0) {\includegraphics[width=.9\textwidth]{#1}};
+        \IfNoValueTF{#4}
+        {}
+        {
+          \begin{scope}[x={(image.south east)},y={(image.north west)}]
+            #4
+          \end{scope}
+        }
+      \end{tikzpicture}
+    \end{center}
+    \caption{#2}
+    \label{#3}
+  \end{figure}
+}
+
+\NewDocumentCommand{\imageDouble}{mmmmoo}{
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \node [figureFrame] (imageL) at (0,0) {\includegraphics[width=.45\textwidth]{#1}};
+        \IfNoValueTF{#5}
+        {}
+        {
+          \begin{scope}[x={(imageL.south east)},y={(imageL.north west)}]
+            #5
+          \end{scope}
+        }
+      \end{tikzpicture}\rule{5mm}{0mm}
+      \begin{tikzpicture}
+        \node [figureFrame] (imageR) at (0,0) {\includegraphics[width=.45\textwidth]{#2}};
+        \IfNoValueTF{#6}
+        {}
+        {
+          \begin{scope}[x={(imageR.south east)},y={(imageR.north west)}]
+            #6
+          \end{scope}
+        }
       \end{tikzpicture}
     \end{center}
     \caption{#3}
@@ -212,42 +252,22 @@ shadow, minimum width=\transH, minimum height=\transW]
   \end{figure}
 }
 
-\NewDocumentCommand{\imageDouble}{ommmm}{
+\NewDocumentCommand{\imager}{mmmo}{
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}
-        \node [figureFrame] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[width=.42\textwidth]{#2}}
-                      {\includegraphics[width=#1]{#2}}
-        };
-      \end{tikzpicture}
-      \begin{tikzpicture}
-        \node [figureFrame] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[width=.42\textwidth]{#3}}
-                      {\includegraphics[width=#1]{#3}}
-        };
+        \node [figureFrame, rotate = 90] (image) at (0,0) {\includegraphics[height=.9\textwidth]{#1}};
+        \IfNoValueTF{#4}
+        {}
+        {
+          \begin{scope}[x={(image.south east)},y={(image.north west)}]
+            #4
+          \end{scope}
+        }
       \end{tikzpicture}
     \end{center}
-    \caption{#4}
-    \label{#5}
-  \end{figure}
-}
-
-\NewDocumentCommand{\imager}{ommm}{
-  \begin{figure}
-    \begin{center}
-      \begin{tikzpicture}
-        \node [figureFrame, rotate = 90] {
-          \IfNoValueTF{#1}
-                      {\includegraphics[height=13cm]{#2}}
-                      {\includegraphics[height=#1]{#2}}
-        };
-      \end{tikzpicture}
-    \end{center}
-    \caption{#3}
-    \label{#4}
+    \caption{#2}
+    \label{#3}
   \end{figure}
 }
 
@@ -332,6 +352,10 @@ shadow, minimum width=\transH, minimum height=\transW]
 
 
 \crefname{problem}{problem}{problems}
+
+\newacro{OTF}{Obstacle Triangular Face}
+\acrodefplural{OTF}[OTFs]{Obstacle Triangular Faces}
+
 
 %%% Local Variables:
 %%% mode: latex
