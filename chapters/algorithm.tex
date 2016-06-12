@@ -171,8 +171,8 @@ and \cref{eq:numE} become
 \end{equation*}
 
 For pruning the graph of every edge that intersects obstacles we need
-to solve a system of four unknowns in four equations for every edge
-and every obstacle's face\footnote{See \cref{sec:intersections}.}, so
+to solve a system of three unknowns in thre equations for every edge
+and every obstacle's face\footnote{See \cref{sec:intersectionST}.}, so
 we have a cost of
 \newcommand{\eqCostPruning}{\ensuremath{\bigO(k|Ob|^2)}}
 \begin{equation}
@@ -206,38 +206,36 @@ from $(\ve{a_1},\ve{b_1},\ve{c_1})$ to $(\ve{a_2},\ve{b_2},\ve{c_2})$ in $G_t$ i
 equal to
 the weight of the arc from $\ve{a_1}$ to $\ve{b_1}(=\ve{a_2})$ in $G$.
 
-\begin{algorithm}
- \caption{Create triples graph $G_t$}\label{alg:createTripleGraph}
- \begin{algorithmic}[1]
-   \Procedure{createTriplesGraph}{$G$}
-   \State $V_t\gets E_t\gets \emptyset$
-   \ForAll{$(\ve{a},\ve{b})\in E$}\label{ln:tripleFor0}
-   \State $leftOut\gets leftIn\gets rightOut\gets rightIn\gets \emptyset$
-   \ForAll{$\ve{v}\in N_G(\ve{a})\setminus\{\ve{b}\}$}
-   \State $leftOut = leftOut\cup \{(\ve{v},\ve{a},\ve{b})\}$
-   \State $leftIn = leftIn\cup \{(\ve{b},\ve{a},\ve{v})\}$
-   \State $V_t = V_t\cup \{(\ve{v},\ve{a},\ve{b}), (\ve{b},\ve{a},\ve{v})\}$
-   \EndFor
-   \ForAll{$\ve{v}\in N_G(\ve{b})\setminus\{\ve{a}\}$}
-   \State $rightOut = rightOut\cup \{(\ve{v},\ve{b},\ve{a})\}$
-   \State $rightIn = rightIn\cup \{(\ve{a},\ve{b},\ve{v})\}$
-   \State $V_t = V_t\cup \{(\ve{v},\ve{b},\ve{a}), (\ve{a},\ve{b},\ve{v})\}$
-   \EndFor
-   \ForAll{$\ve{o}\in leftOut$}
-   \ForAll{$\ve{i}\in rightIn$}
-   \State $E_t = E_t\cup (\ve{o},\ve{i})$
-   \EndFor
-   \EndFor
-   \ForAll{$\ve{o}\in rightOut$}\label{ln:tripleFor1}
-   \ForAll{$\ve{i}\in leftIn$}\label{ln:tripleFor2}
-   \State $E_t = E_t\cup (\ve{o},\ve{i})$
-   \EndFor
-   \EndFor
-   \EndFor
-   \State\Return $G_t=(V_t,E_t)$
-   \EndProcedure
- \end{algorithmic}
-\end{algorithm}
+\begin{algo}{Create triples graph $G_t$}{alg:createTripleGraph}
+  \Function{createTriplesGraph}{$G$}
+  \State $V_t\Ass E_t\Ass \emptyset$
+  \ForAll{$(\ve{a},\ve{b})\in E$}\label{ln:tripleFor0}
+  \State $leftOut\Ass leftIn\Ass rightOut\Ass rightIn\Ass \emptyset$
+  \ForAll{$\ve{v}\in N_G(\ve{a})\setminus\{\ve{b}\}$}
+  \State $leftOut \Ass leftOut\cup \{(\ve{v},\ve{a},\ve{b})\}$
+  \State $leftIn \Ass leftIn\cup \{(\ve{b},\ve{a},\ve{v})\}$
+  \State $V_t \Ass V_t\cup \{(\ve{v},\ve{a},\ve{b}), (\ve{b},\ve{a},\ve{v})\}$
+  \EndFor
+  \ForAll{$\ve{v}\in N_G(\ve{b})\setminus\{\ve{a}\}$}
+  \State $rightOut \Ass rightOut\cup \{(\ve{v},\ve{b},\ve{a})\}$
+  \State $rightIn \Ass rightIn\cup \{(\ve{a},\ve{b},\ve{v})\}$
+  \State $V_t \Ass V_t\cup \{(\ve{v},\ve{b},\ve{a}), (\ve{a},\ve{b},\ve{v})\}$
+  \EndFor
+  \ForAll{$\ve{o}\in leftOut$}
+  \ForAll{$\ve{i}\in rightIn$}
+  \State $E_t \Ass E_t\cup (\ve{o},\ve{i})$
+  \EndFor
+  \EndFor
+  \ForAll{$\ve{o}\in rightOut$}\label{ln:tripleFor1}
+  \ForAll{$\ve{i}\in leftIn$}\label{ln:tripleFor2}
+  \State $E_t \Ass E_t\cup (\ve{o},\ve{i})$
+  \EndFor
+  \EndFor
+  \EndFor
+  \State $G_t\Ass(V_t,E_t)$
+  \State\Return $G_t$
+  \EndFunction
+\end{algo}
 On \cref{alg:createTripleGraph} is visible the algorithm for creating
 $G_t$.
 
@@ -438,9 +436,10 @@ path collides with obstacles. On \cref{fig:sol12} is visible another
 point of view of pictures shown in \cref{fig:sol11}.
 
 \subsubsection{Complexity considerations}
-For each triple and each \ac{OTF} we need to solve three $4\times 4$
+For each triple and each \ac{OTF} we need to solve three $3\times 3$
 linear systems for the
-collision check\footnote{See \cref{sec:intersections}.}, so in total
+collision check\footnote{See
+  \cref{sec:intersectionsTriangleTriangle}.}, so in total
 the cost is
 \begin{equation*}
   \bigO(|V_t|\cdot |Ob|)
@@ -637,8 +636,8 @@ the degenerated triangles $\triangle \ve{v_i}\ve{w_1}\ve{v_{i+1}}$ and $\triangl
 \ve{v_{i+1}}\ve{w_2}\ve{v_{i+2}}$ - free from obstacles.
 
 When we check for collisions between a segment and a triangle we
-resolve a system of four unknowns in
-four equations and from the solutions we extract the barycentric
+resolve a system of three unknowns in
+three equations and from the solutions we extract the barycentric
 coordinates of
 the point of collision. When we have all the coordinates of the points
 in $O$ we can obtain $\ve{o_{near}}$ picking the one with the biggest $\beta$
@@ -831,28 +830,25 @@ The target of the simulated annealing phase is to find the minimum
 saddle points in
 the curve represented by the
 \cref{eq:lagrangianFunProj}.
-\begin{algorithm}
- \caption{Annealing}\label{alg:annealing}
- \begin{algorithmic}[1]
-   \Procedure{annealing}{$\ve{x}$}
-   \State $\lambda\gets initialLambda$\label{alg:annealing:initialize}
-   \State $T\gets initialTemperature$
-   \While{not $terminationCondition()$}\label{alg:annealing:while}
-   \ForAll{number of trials}\label{alg:annealing:for}
-   \State $changeLambda\gets$ true with $changeLambdaProb$\label{alg:annealing:lambdaProb}
-   \If{$changeLambda$}
-   \State $\lambda'\gets neighbour(\lambda)$\label{alg:annealing:changeLambda}
-   \State $\lambda\gets \lambda'$ with probability $\me^{-([energy(\ve{x},\lambda)-energy(\ve{x},\lambda')]^+/T)}$
-   \Else
-   \State $\ve{x}'\gets neighbour(\ve{x})$\label{alg:annealing:changeX}
-   \State $\ve{x}\gets \ve{x}'$ with probability $\me^{-([energy(\ve{x}',\lambda)-energy(\ve{x},\lambda)]^+/T)}$
-   \EndIf
-   \EndFor
-   \State $T\gets T\cdot warmingRatio$\label{alg:annealing:cooling}
-   \EndWhile
-   \EndProcedure
- \end{algorithmic}
-\end{algorithm}
+\begin{algo}{Annealing}{alg:annealing}
+  \Procedure{annealing}{$\ve{x}$}
+  \State $\lambda\Ass initialLambda$\label{alg:annealing:initialize}
+  \State $T\Ass initialTemperature$
+  \While{not $terminationCondition()$}\label{alg:annealing:while}
+  \ForAll{number of trials}\label{alg:annealing:for}
+  \State $changeLambda\Ass\True$ with $changeLambdaProb$\label{alg:annealing:lambdaProb}
+  \If{$changeLambda$}
+  \State $\lambda'\Ass neighbour(\lambda)$\label{alg:annealing:changeLambda}
+  \State $\lambda\Ass \lambda'$ with probability $\me^{-([energy(\ve{x},\lambda)-energy(\ve{x},\lambda')]^+/T)}$
+  \Else
+  \State $\ve{x}'\Ass neighbour(\ve{x})$\label{alg:annealing:changeX}
+  \State $\ve{x}\Ass \ve{x}'$ with probability $\me^{-([energy(\ve{x}',\lambda)-energy(\ve{x},\lambda)]^+/T)}$
+  \EndIf
+  \EndFor
+  \State $T\Ass T\cdot warmingRatio$\label{alg:annealing:cooling}
+  \EndWhile
+  \EndProcedure
+\end{algo}
 
 The \cref{alg:annealing} is the annealing process, on
 \cref{alg:annealing:initialize} $\lambda$ and the

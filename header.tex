@@ -353,10 +353,27 @@ shadow, minimum width=\transH, minimum height=\transW]
 
 
 \crefname{problem}{problem}{problems}
+\crefname{case}{case}{cases}
+\crefname{system}{system}{systems}
 
 \newacro{OTF}{Obstacle Triangular Face}
 \acrodefplural{OTF}[OTFs]{Obstacle Triangular Faces}
 
+%comando per inserire algoritmo
+\NewDocumentEnvironment{algo}{mm}{
+\begin{algorithm}
+  \caption{#1}\label{#2}
+  \begin{algorithmic}[1]
+}{
+ \end{algorithmic}
+\end{algorithm}
+}
+
+%algorithmicx keywords
+\algnewcommand\Ass{\ensuremath{\gets}}
+\algnewcommand\True{\ensuremath{True}}
+\algnewcommand\False{\ensuremath{False}}
+\algnewcommand\Break{\textbf{break}}
 
 %%% Local Variables:
 %%% mode: latex
