@@ -184,9 +184,324 @@ called \emph{control vertices} and the polygon defined by them is
 called \emph{control polygon} and they can be used to control the
 shape of the curve.
 
-\section{B-splines properties}\label{sec:bsplineProp}
+\section{B-splines curves properties}\label{sec:bsplineProp}
+In this section we describe some properties of B-spline curves that we
+used for the development of the project.
 
-\section{Lagrangian relaxation}\label{sec:lagrangianRelaxation}
+\subsection{Convex hull}
+A B-spline curve $\ve{S}(t)$ of order $m$ defined by the control polygon
+$\ve{v_0},\ve{v_1},\dots,\ve{v_n}$ is contained inside the union of the
+convex hulls composed of $m+1$ vertices of the control polygon. If we
+call $\conv(\ve{w_0},\ve{w_1},\dots,\ve{w_j})$ the convex hull of the
+vertices $\ve{w_0},\ve{w_1},\dots,\ve{w_j}$ then we have
+\begin{eqnarray*}
+  C_0&=&\conv(\ve{v_0},\ve{v_1},\dots,\ve{v_{m}})\\
+  C_1&=&\conv(\ve{v_1},\ve{v_2},\dots,\ve{v_{m+1}})\\
+  &\cdots&\\
+  C_{n-m}&=&\conv(\ve{v_{n-m}},\ve{v_{n-m+1}},\dots,\ve{v_{n}})\\
+\end{eqnarray*}
+and the area where $\ve{S}(t)$ is contained is
+\begin{equation*}
+  C=C_0\cup C_1\cup C_{n-m}
+\end{equation*}
+or in other words must be true
+\begin{equation*}
+  \ve{S}(t)\cap C =\ve{S}(t)\qquad \forall t\in[a,b]
+\end{equation*}
+whatever is the partition vector.
+
+\begin{myfig}{Convex hull containing B-spline of grade 2}{fig:convexHull}
+  \begin{tikzpicture}
+    \coordinate (a) at (0,0);
+    \coordinate (b) at (0.5,1.7);
+    \coordinate (c) at (2,3);
+    \coordinate (d) at (4,3);
+    \coordinate (e) at (5.5,1.7);
+    \coordinate (f) at (6,0);
+    
+    \path[convexHull] (a) -- (b) -- (c) -- (a);
+    \path[convexHull] (b) -- (c) -- (d) -- (b);
+    \path[convexHull] (c) -- (d) -- (e) -- (c);
+    \path[convexHull] (d) -- (e) -- (f) -- (d);
+    
+    \draw[convexHullBord] (a) -- (c);
+    \draw[convexHullBord] (b) -- (d);
+    \draw[convexHullBord] (c) -- (e);
+    \draw[convexHullBord] (d) -- (f);
+    
+    \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e) -- (f);
+    \foreach \p in {a,b,c,d,e,f}
+    \filldraw[controlVert] (\p) circle (2pt);
+
+    \node[above left] at (a) {$\ve{v_0}$};
+    \node[above left] at (b) {$\ve{v_1}$};
+    \node[above] at (c) {$\ve{v_2}$};
+    \node[above] at (d) {$\ve{v_3}$};
+    \node[above right] at (e) {$\ve{v_4}$};
+    \node[above right] at (f) {$\ve{v_5}$};
+  \end{tikzpicture}  
+\end{myfig}
+On \cref{fig:convexHull} is visible an example of a control polygon
+and the surface where a quadratic B-spline applied to
+it can be contained. Note that the convex hull property holds also in
+3-dimensional
+space - i.e. a quadratic B-spline in 3-dimensional space is contained
+inside a flat surface composed by the union of triangles. From grade 3
+the area where $\ve{S}(t)$ can be contained is not anymore plane
+because is composed of union of solid polyhedrons.
+
+\subsection{Continuity}
+\subsection{Aligned vertices}
+\subsection{Curvature and torsion}
+
+\section{Statistical methods}
+On this section we make a short introduction to \ac{MCM}
+\cite{metropolis}\cite{sobol}\cite{newman} and \ac{SA} \cite{kirkpatrick}\cite{ho},
+two statistical methods for calculating unknown quantities and finding
+minimum of functions. Also we introduce \ac{LR} \cite{benjamin} a
+method for transforming a constrained optimization problem in an
+unconstrained optimization problem increasing the state space
+dimension.
+\subsection{Notes on probabilities}
+\subsubsection{ac{PE}}
+For a random variable $X$ normally distributed with
+\begin{itemize}
+\item mean $\mu$;
+\item variance $\sigma$;
+\end{itemize}
+for
+\begin{equation*}
+  r=0.6745\sigma
+\end{equation*}
+we have that
+\begin{eqnarray*}
+  \prob{\mu-r<X<\mu+r} &=& 0.5\\
+  \prob{\abs{X-\mu}<r} &=& 0.5\\
+  \prob{\abs{X-\mu}>r} &=& 0.5.
+\end{eqnarray*}
+So values of $X$ that deviate from $\mu$ approximately by $r$ have the
+same probability, and $r$ identifies the most \ac{PE} in a
+normal distribution.
+\subsubsection{\acf{PCLT}}
+Consider $N$ independent and identically distributed random variables
+$X_1,X_2,\dots,X_N$, with same mean and same variance
+\begin{eqnarray*}
+  \expected{X_1}=\expected{X_2}=\dots=\expected{X_N}&=&m\\
+  \variance{X_1}=\variance{X_2}=\dots=\variance{X_N}&=&b^2.
+\end{eqnarray*}
+
+Consider the sum of those random variables:
+\begin{equation*}
+  Y = X_1+X_2+\cdots+X_N
+\end{equation*}
+we have that
+\begin{eqnarray*}
+  \expected{Y}&=&\expected{X_1+X_2+\cdots+X_N}=Nm\\
+  \variance{Y}&=&\variance{X_1+X_2+\cdots+X_N}=Nb^2.
+\end{eqnarray*}
+
+Consider now a normally distributed random variable $Z$ with
+parameters:
+\begin{eqnarray*}
+  \mu&=&Nm\\
+  \sigma&=&b\sqrt{N}
+\end{eqnarray*}
+with \ac{PDF} $p_Z(x)$.
+
+The \emph{\ac{PCLT}} affirm that for $N$ big
+enough, and for every interval $(x_1,x_2)$:
+\begin{equation}\label{eq:tcl}
+  \prob{x_1<Y<x_2}\approx\int_{x_1}^{x_2}p_Z(x) \md x.
+\end{equation}
+So the sum of an elevate number of identically distributed random
+variables is a normal distribution with mean $Nm$ and variance $Nb^2$
+equals to mean and variance of $Y=X_1+X_2+\dots+X_N$ - even if
+$X_1,X_2,\dots,X_N$ aren't normally distributed.
+
+\subsection{\acf{MCM}}
+Suppose that you need to calculate an unknown quantity $m$, you need
+to find a random variable $X$ such that:
+\begin{equation*}
+  \expected{X} = m.
+\end{equation*}
+If you have such distribution with variance:
+\begin{equation*}
+  \variance{X} = b^2
+\end{equation*}
+is possible to formalize the following passages.
+
+Consider $N$ random variables $X_1,X_2,\dots,X_N$ that have
+distribution identical to the distribution of $X$. For the \ac{PCLT}
+\cref{eq:tcl} we have that, for $N$ big enough, that the sum
+\begin{equation*}
+  Y=X_1+X_2+\cdots+X_N
+\end{equation*}
+is normally distributed with parameters
+\begin{eqnarray*}
+  \mu &=& Nm\\
+  \sigma&=&b\sqrt{N}.
+\end{eqnarray*}
+
+For the \emph{three sigma rule} we have that:
+\begin{eqnarray*}
+  \prob{\mu-3\sigma < Y <\mu +3\sigma}&\approx& 0.997\\
+  \prob{Nm-3b\sqrt{N} < Y < Nm+3b\sqrt{N}}&\approx& 0.997
+\end{eqnarray*}
+dividing by $N$:
+\begin{eqnarray*}
+  \prob{m-\frac{3b}{\sqrt{N}} < \frac{Y}{N} <
+    m+\frac{3b}{\sqrt{N}}}&\approx& 0.997\\
+  \prob{\abs{\frac{Y}{N}-m} <\frac{3b}{\sqrt{N}}}&\approx& 0.997
+\end{eqnarray*}
+and so:
+\begin{equation}\label{eq:mc}
+  \prob{\abs{\frac{1}{N}\sum_{i=1}^NX_i-m} <\frac{3b}{\sqrt{N}}}\approx 0.997.
+\end{equation}
+
+\Cref{eq:mc} assert that, if you extract a sample for each random
+variable $X_i$, the arithmetic mean of those values is approximately
+equal to $m$. Moreover the error of such approximation is equal to
+$3b/\sqrt{N}$, that tend to $0$ increasing $N$. Is possible to further
+reduce the uncertainty ($1-0.997=0.003$) increasing the number $k$ of
+sigma used for the
+approximation and evaluating the error $kb/\sqrt{N}$.
+
+In reality, since the random variables $X_i$ have the same
+distribution of $X$, is enough to extract $N$ samples from $X$ for
+reaching to the same conclusions.
+
+The \ac{MCM} is constituted by the following procedure, to be adapted
+according to the problems:
+\begin{enumerate}
+\item find the distribution $X$ with mean the desired quantity $m$ and
+  variance $b^2$;
+\item extract $N$ samples from $X$, with $N$ big enough to have an
+  error small as desired;
+\item the arithmetic mean of those $N$ samples is the approximation of
+  the desired value $m$.
+\end{enumerate}
+Basically we moved the problem from \emph{calculate $m$} to \emph{find
+  the distribution $X$}, or anyway the $N$ samples distributed
+accordingly to $X$.
+
+If we want to characterize more in detail the error committed taking
+$N$ samples, we can recur to \ac{PE}. If we set $k=0.6745$ then we
+have that
+\begin{equation*}
+  \prob{\abs{\frac{1}{N}\sum_{i=1}^NX_i-m} <\frac{0.6745\cdot b}{\sqrt{N}}}\approx 0.5
+\end{equation*}
+and so
+\begin{equation*}
+  r_N = \frac{0.6745\cdot b}{\sqrt{N}}
+\end{equation*}
+indicate how deviate in average the value $\frac{1}{N}\sum_{i=1}^NX_i$
+from the desired value $m$. Such value characterize the absolute error
+\begin{equation*}
+\abs{\frac{1}{N}\sum_{i=1}^NX_i-m}  
+\end{equation*}
+committed taking $N$ samples.
+
+\ac{MCM} is useful for simulate events that have an high degree of
+uncertainty in the inputs or an high degree of liberty in the
+state. For instance integrating numerically a function with many
+dimensions or \ac{SA}.
+
+\subsection{\acf{SA}}
+The \ac{SA} is a method used for finding the global optimum - i.e. the
+maximum or the minimum - of a function. It is inspired by a method
+used in metallurgy that consists in heating and then cooling slowly a
+material for augmenting the dimensions of the crystals and improving
+the chemico-physical properties. The function to optimize can be
+defined in a multiple-dimensional space.
+
+\subsubsection{Statistical thermodynamic}
+For describing the base principles of statistical thermodynamic we
+consider an example system. In a one-dimensional lattice every point
+is a particle with a value of spin that can be \emph{up} or
+\emph{down}. If the lattice have $N$ points then the system can be in
+$2^N$ different configurations, for each one of those configurations
+corresponds a value of energy, for instance:
+\begin{equation*}
+  E=B(n_+-n_-)
+\end{equation*}
+where $B$ is some constant, $n_+$ is the number of particles with spin
+\emph{up} and $n_-$ is the number of particles with spin \emph{down}.
+
+The probability $P(\sigma)$ of finding the system in a certain
+configuration $\sigma$ is given by the distribution of
+\emph{Boltzmann-Gibbs}:
+\begin{equation}\label{eq:distBoltz}
+  P(\sigma) = C \me^{-E_\sigma/T}
+\end{equation}
+where $E_\sigma$ is the energy of the configuration, $T$ is the
+temperature\footnote{The real Boltzmann-Gibbs distribution is
+  $P(\sigma) = C \me^{-E_\sigma/kT}$ where $k$ is the \emph{Boltzmann
+    constant} and $T$ is the thermodynamic temperature, but for the
+  example the temperature is a parameter not correlated to the
+  physical world, so is possible to ignore $k$.} and $C$ is a
+normalization constant.
+
+The average energy of the system is then:
+\begin{eqnarray*}
+  \bar{E} &=& \frac{\sum_\sigma E_\sigma P(\sigma)}{\sum_\sigma
+    P(\sigma)}\\
+  &=& \frac{\sum_\sigma E_\sigma \me^{-E_\sigma/T}}{\sum_\sigma \me^{-E_\sigma/T}}.
+\end{eqnarray*}
+Compute the value of $\bar{E}$ can be difficult with an high number of
+states, but is possible to create a \ac{MCM} that simulate the random
+fluctuation between the states such that the distribution given by
+\cref{eq:distBoltz} is respected. Starting from an arbitrary initial
+configuration, after a certain number of \emph{Monte Carlo trials},
+the method converge to the equilibrium status $\bar{E}$ and continue
+to fluctuate around it. \ac{SA} is a method of this kind.
+
+\subsubsection{\acf{SA} algorithm}
+\ac{SA} operates on a system starting from a certain initial state
+$s_0$, then execute a series of iterations where is evaluated a
+neighbour of the state and, with a certain distribution of
+probability, the system is moved in the new state or not.
+
+\begin{algo}{\acf{SA}}{alg:sa}
+  \Function{anneal}{$s_0$}
+  \State $s\Ass s_0$
+  \For{$k\Ass 0,kMax$}
+  \State $T\Ass temp(\frac{k}{kMax})$
+  \State $sNew\Ass neighbour(s)$
+  \If{$uniform(0,1)<P(E(s), E(sNew), T)$}
+  \State $s\Ass sNew$
+  \EndIf
+  \EndFor
+  \State\Return $s$
+  \EndFunction
+\end{algo}
+A possible algorithm for a \ac{SA} method is \cref{alg:sa}. $s_0$ is
+the initial state; $temp$ is the function that assign a
+temperature based on the current iteration number such that for low
+$k$ the returned temperature is high and for high $k$ the returned temperature
+is low; $neighbour$ is the function that return a random neighbour of
+the current state; $uniform$ returns an uniformly-randomly chosen
+number in $[0,1]$; $P$ is the distribution of accepting probability,
+that depends on the energy of the current state, on the energy of the
+neighbour, and on the current temperature. In case of acceptation the
+neighbour become the current state and the process continue.
+
+The relation with the statistical thermodynamic is that $P$ is chosen
+such that holds\footnote{A similar distribution is enough.}
+\cref{eq:distBoltz}, moreover $temp$ returns decreasing values of
+temperature with the succession of iterations, this is why the
+comparison with the metallurgy annealing.
+
+Initially $P$ was chosen such that
+\begin{equation*}
+  P(E(s), E(sNew), T)=
+  \begin{cases}
+    1,& \text{if }E(sNew)<E(s)\\
+    \me^{-(E(sNew)-E(s))/T},& \text{otherwise}
+  \end{cases}
+\end{equation*}
+but this isn't strictly necessary for developing a \ac{SA} method.
+
+\subsection{\acf{LR}}\label{sec:lagrangianRelaxation}
 A general constrained discrete optimization problem can be expressed in
 the form:
 \begin{equation}\label[problem]{eq:opt}
@@ -239,8 +554,6 @@ represented by
 \cref{eq:lagrangianFun}, and then choose
 the one that minimize $f(x^*)$. $x^*$ is then the desired minimum.
 
-\section{Simulated annealing}
-
 \section{Intersections in space}\label{sec:intersections}
 In the project we need to deal with three kind of collision detection
 methods in 3-dimension euclidean space:
@@ -292,17 +605,17 @@ We need to deal with the intersection between a segment
 $S=\overline{\ve{a_2}\ve{b_2}}$ and a triangle
 $T=\triangle\ve{a_1}\ve{b_1}\ve{c_1}$. $S$ and $T$ can be in one of
 the cases:
-\begin{enumerate}
-\item\label[case]{en:ist:nc:ni} $S$ and $T$ don't intersect and the plane containing
+\begin{enumerate}[label=\textbf{case \arabic*}]
+\item\label[void]{en:ist:nc:ni} $S$ and $T$ don't intersect and the plane containing
   $T$ is not in the sheaf of planes generated by the line
   containing $S$;
-\item\label[case]{en:ist:c:ni} $S$ and $T$ don't intersect and the plane containing
+\item\label[void]{en:ist:c:ni} $S$ and $T$ don't intersect and the plane containing
   $T$ is in the sheaf of planes generated by the line
   containing $S$;
-\item\label[case]{en:ist:nc:i} $S$ and $T$ intersect in only one point and the plane containing
+\item\label[void]{en:ist:nc:i} $S$ and $T$ intersect in only one point and the plane containing
   $T$ is not in the sheaf of planes generated by the line
   containing $S$;
-\item\label[case]{en:ist:c:i} $S$ and $T$ intersect in one or infinite points and the plane
+\item\label[void]{en:ist:c:i} $S$ and $T$ intersect in one or infinite points and the plane
   containing $T$ is in the sheaf of planes generated by the line
   containing $S$.
 \end{enumerate}
@@ -448,16 +761,39 @@ and then on checking if the solution is admissible. The condition of
 \cref{eq:segmentTriangleIntersection2} have solution and if that
 is unique.
 
-We have as a positive secondary effect that from the solution
+We have also the positive secondary effect that from the solution
 $(\alpha,\beta,\gamma)$ of \cref{eq:segmentTriangleIntersection2} we
 can extract the barycentric coordinates $(\beta, \gamma,
 1-(\beta+\gamma))$ of the intersection point $\ve{x}$ on the system of
 the vertices $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$ of $T$.
 
 \subsection{Triangle-triangle in 3-d space}\label{sec:intersectionsTriangleTriangle}
+We are interested in detecting collisions between two triangles
+$T_1=\triangle \ve{a_1}\ve{b_1}\ve{c_1}$ and $T_2=\triangle\ve{a_2}\ve{b_2}\ve{c_2}$ in 3-dimensional
+space. First of all consider the coplanarity relation between the two
+triangles, we have the cases:
+\begin{enumerate}[label=\textbf{case \arabic*}]
+\item\label[void]{en:itt:c} $T_1$ and $T_2$ are contained by the same plane;
+\item\label[void]{en:itt:nc} $T_1$ and $T_2$ are contained by different planes.
+\end{enumerate}
+To simplify the problem we decided - analogously to the case of
+intersection between segment and triangle - that when we are on \cref{en:itt:c}
+we consider $T_1$ and $T_2$ not intersecting in any case, also if from a
+geometrical point of view they share points. After this premise we can
+assert that the possible relation between $T_1$ and $T_2$ can be
+exclusively one
+of the types \cite{schneider}:
+\begin{enumerate}[label=\textbf{type \arabic*}, start=0]
+\item\label[void]{en:itt:i0} $T_1$ and $T_2$ don't intersect;
+\item\label[void]{en:itt:i1} two segments of $T_1$ intersect the plane
+  section delimited by $T_2$, or vice versa;
+\item\label[void]{en:itt:i2} one segment of $T_1$ intersect the plane
+  section delimited by $T_2$ and one segment of $T_2$ intersect the
+  plane section delimited by $T_1$.
+\end{enumerate}
 
-\begin{myfig}{Example of type 1 intersection between a triangle $\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
-    and another triangle $\triangle \ve{a_2}\ve{b_2}\ve{c_2}$.}{fig:trianglesIntersection1}
+\begin{myfig}{Example of \cref{en:itt:i1} intersection between a triangle $T_1=\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
+    and another triangle $T_2=\triangle \ve{a_2}\ve{b_2}\ve{c_2}$.}{fig:trianglesIntersection1}
   \begin{tikzpicture}
     \coordinate (A1) at (0,0);
     \coordinate (B1) at (4,5);
@@ -497,9 +833,8 @@ the vertices $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$ of $T$.
     \node[right=0.2em] at (X2) {$\ve{x_2}$};
   \end{tikzpicture}
 \end{myfig}
-
-\begin{myfig}{Example of type 2 intersection between a triangle $\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
-    and another triangle $\triangle \ve{a_2}\ve{b_2}\ve{c_2}$.}{fig:trianglesIntersection2}
+\begin{myfig}{Example of \cref{en:itt:i2} intersection between a triangle $T_1=\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
+    and another triangle $T_2=\triangle \ve{a_2}\ve{b_2}\ve{c_2}$.}{fig:trianglesIntersection2}
   \begin{tikzpicture}
     \coordinate (A1) at (0,0);
     \coordinate (B1) at (4,5);
@@ -538,6 +873,31 @@ the vertices $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$ of $T$.
     \node[right=0.2em] at (X2) {$\ve{x_2}$};
   \end{tikzpicture}
 \end{myfig}
+\begin{algo}{Find intersection between triangle $T_1$ and triangle $T_2$}{alg:intersectTriangles}
+  \Function{intersect}{$T_1, T_2$}
+  \ForAll{$S\in \{\overline{\ve{a_1}\ve{b_1}},\ \overline{\ve{b_1}\ve{c_1}},\ \overline{\ve{c_1}\ve{a_1}}\}$}
+  \If{$intersect(S,T_2)$}\label{ln:intersectTriangles1}
+  \State\Return $\True$
+  \EndIf
+  \EndFor
+  \ForAll{$S\in \{\overline{\ve{a_2}\ve{b_2}},\ \overline{\ve{b_2}\ve{c_2}},\ \overline{\ve{c_2}\ve{a_2}}\}$}
+  \If{$intersect(S,T_1)$}\label{ln:intersectTriangles2}
+  \State\Return $\True$
+  \EndIf
+  \EndFor
+  \State\Return $\False$
+  \EndFunction
+\end{algo}
+On \cref{fig:trianglesIntersection1} and
+\cref{fig:trianglesIntersection2} we can see two examples of
+\cref{en:itt:i1} and \cref{en:itt:i2}. For finding if $T_1$ and $T_2$
+intersects we need to check if every segment of $T_1$ intersect $T_2$
+and every segment of $T_2$ intersect $T_1$. If we found at least one
+segment that intersect with one triangle then $T_1$ and $T_2$
+intersect. \Cref{alg:intersectTriangles} do exactly that, the function
+$intersect$ on \cref{ln:intersectTriangles1} and
+\cref{ln:intersectTriangles2} is the intersection between a segment
+and a triangle described on \cref{alg:intersectSegmentTriangle}.
 
 \end{document}
 

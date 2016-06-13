@@ -9,6 +9,7 @@
 \usepackage[T1]{fontenc}
 %\usepackage[italian]{babel}
 %\usepackage{graphicx}
+\usepackage{enumitem}
 \usepackage{subfiles}
 \usepackage{listings}
 \usepackage{algorithm}
@@ -344,6 +345,7 @@ shadow, minimum width=\transH, minimum height=\transW]
 \newcommand{\abs}[1]{\ensuremath{\left|#1\right|}}
 \newcommand{\mR}{\ensuremath{\mathbb{R}}}
 \newcommand{\mN}{\ensuremath{\mathbb{N}}}
+\newcommand{\conv}{\ensuremath{\mathbf{Conv}}}
 \newcommand{\ve}[1]{\ensuremath{\boldsymbol{#1}}}
 
 \makeatletter
@@ -353,11 +355,18 @@ shadow, minimum width=\transH, minimum height=\transW]
 
 
 \crefname{problem}{problem}{problems}
-\crefname{case}{case}{cases}
+\crefname{void}{}{}
 \crefname{system}{system}{systems}
 
+\newacro{MCM}{Monte Carlo Method}
+\acrodefplural{MCM}{Monte Carlo Methods}
+\newacro{SA}{Simulated Annealing}
 \newacro{OTF}{Obstacle Triangular Face}
 \acrodefplural{OTF}[OTFs]{Obstacle Triangular Faces}
+\newacro{PDF}{Probability Density Function}
+\newacro{PCLT}{Probability central limit theorem}
+\newacro{PE}{Probable Error}
+\newacro{LR}{Lagrangian Relaxation}
 
 %comando per inserire algoritmo
 \NewDocumentEnvironment{algo}{mm}{
