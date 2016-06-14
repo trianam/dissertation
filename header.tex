@@ -7,6 +7,7 @@
 \usepackage{lmodern}
 \usepackage{microtype}
 \usepackage[T1]{fontenc}
+\usepackage{makeidx}
 %\usepackage[italian]{babel}
 %\usepackage{graphicx}
 \usepackage{enumitem}
@@ -347,6 +348,10 @@ shadow, minimum width=\transH, minimum height=\transW]
 \newcommand{\mN}{\ensuremath{\mathbb{N}}}
 \newcommand{\conv}{\ensuremath{\mathbf{Conv}}}
 \newcommand{\ve}[1]{\ensuremath{\boldsymbol{#1}}}
+\newcommand{\overmath}[2]{\ensuremath{\stackrel{#1}{#2}}}
+
+\newcommand{\bs}{B-spline\xspace}
+\newcommand{\bss}{B-splines\xspace}
 
 \makeatletter
 \newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
@@ -357,16 +362,6 @@ shadow, minimum width=\transH, minimum height=\transW]
 \crefname{problem}{problem}{problems}
 \crefname{void}{}{}
 \crefname{system}{system}{systems}
-
-\newacro{MCM}{Monte Carlo Method}
-\acrodefplural{MCM}{Monte Carlo Methods}
-\newacro{SA}{Simulated Annealing}
-\newacro{OTF}{Obstacle Triangular Face}
-\acrodefplural{OTF}[OTFs]{Obstacle Triangular Faces}
-\newacro{PDF}{Probability Density Function}
-\newacro{PCLT}{Probability central limit theorem}
-\newacro{PE}{Probable Error}
-\newacro{LR}{Lagrangian Relaxation}
 
 %comando per inserire algoritmo
 \NewDocumentEnvironment{algo}{mm}{
@@ -383,6 +378,8 @@ shadow, minimum width=\transH, minimum height=\transW]
 \algnewcommand\True{\ensuremath{True}}
 \algnewcommand\False{\ensuremath{False}}
 \algnewcommand\Break{\textbf{break}}
+
+\makeindex
 
 %%% Local Variables:
 %%% mode: latex

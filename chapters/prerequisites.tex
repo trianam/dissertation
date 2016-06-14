@@ -2,11 +2,11 @@
 \begin{document}
 \chapter{Prerequisites}
 \section{Voronoi diagrams}\label{sec:voronoi}
-\section{Splines and B-splines}\label{sec:spline}
+\section{Splines and \bss}\label{sec:spline}
 A \emph{spline} is a piecewise polynomial function with prescribed
 regularity on its domain.
 
-More formally we define a spline
+More formally we define a spline \cite{deboor}\cite{farin}
 $$S:[a,b]\subset\mR\rightarrow\mR$$
 as follows.
 We have a partition of that interval defined by the \emph{breakpoints}
@@ -33,14 +33,14 @@ in each interval $I_i$ of the partition, formally:
 where $\Pi_m$ is the space of the polynomials of degree $\le m$. The
 dimension of $P_{m,\tau}$ is $l(m+1)$ because the dimension of $\Pi_m$
 is $m+1$.
-\paragraph{Classic spline space} $S_{m,\tau}$ is the space of
+\paragraph{Classic spline space}\index{Classic splines} $S_{m,\tau}$ is the space of
 the piecewise polynomial functions that have continuity $C^{m-1}$ in
 the junctions of the intervals, formally:
 $$
 S_{m,\tau}=P_{m,\tau}\cap C^{m-1}[a,b].
 $$
 The dimension of this space is $l(m+1)-(l-1)\cdot m\,=\,l+m$.
-\paragraph{Generalized spline space} $S_{m,\tau,M}$ is the
+\paragraph{Generalized spline space}\index{Generalized splines} $S_{m,\tau,M}$ is the
 space of piecewise polynomial function of degree $m$ with a prescribed
 regularity at each breakpoint ranging from $-1$ to $m-1$. The
 regularity is prescribed by the multiplicity vector
@@ -72,7 +72,8 @@ in particular:
     $S_{m,\tau,M}=P_{m,\tau}$.
 \end{itemize}
 
-\subsection{Truncated-powers base for classic splines}\label{sec:truncpow}
+\subsection{Truncated-powers base for classic
+  splines}\label{sec:truncpow}\index{Classic splines!truncated-powers base}
 A truncated power $(t-\tau_i)_+^m$ is
 defined by
 $$
@@ -90,30 +91,32 @@ are linearly independents, and that
 $$
 1,t,t^2,\dots,t^m,(t-\tau_1)_+^m,\dots,(t-\tau_{l-1})_+^m
 $$
-form a base for the classic spline functions space. A generic element
+form a base for the classic spline functions space \cite{deboor}. A
+generic element
 from this space can be expressed like
 \begin{equation}\label{eq:classicSplineElement}
   S(t)=\sum_{i=0}^m c_i t^i\, +\, \sum_{j=1}^{l-1} d_i (t-\tau_j)_+^m.
 \end{equation}
 
-\subsection{B-splines base for classic splines}\label{sec:bsplines}
-\emph{B-splines} are a specific base wich can be alternatively used to
-represent any generalized spline. In this
+\subsection{\bss base for classic
+  splines}\label{sec:bsplines}\index{\bss}\index{Classic splines!\bss base}
+\emph{\bss} are a specific base wich can be alternatively used to
+represent any generalized spline \cite{deboor}\cite{farin}. In this
 paragraph we consider only the classic splines $S_{m,\tau}$ and not
-the generalized splines $S_{m,\tau,M}$, furthermore we consider the
-\emph{order}: $k=m+1$.
+the generalized splines $S_{m,\tau,M}$, in some textbook sometime is
+considered the
+\emph{order}$=m+1$.
 
-For defining the B-splines we need to extend the partition vector
+For defining the \bss we need to extend the partition vector
 $\tau=\{\tau_0,\cdots,\tau_l\}$ with $m$ nodes to the left and $m$ to
 the right, so we define a new vector
 $$
 T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
 $$
 such that
-$$
-t_0\leq\dots\leq t_{m-1}\leq \{t_{m}\equiv\tau_0\equiv a\}<\dots<
-\{t_{n+1}\equiv\tau_l\equiv b\}\leq t_{n+2}\leq\dots\leq t_{n+m+1}.
-$$
+\begin{equation*}
+  t_0\leq\dots\leq t_{m-1}\leq \overmath{\equiv\tau_0\equiv a}{t_{m}}<\dots<\overmath{\equiv\tau_l\equiv b}{t_{n+1}}\leq t_{n+2}\leq\dots\leq t_{n+m+1}.    
+\end{equation*}
 $\tau$ have $l+1$ elements, so we can calculate the value of
 $$
 n=l+m-1,
@@ -124,7 +127,7 @@ l+m=n+1
 $$
 that is the number of necessary bases for the space.
 
-The $n+1$ basis $N_{i,m+1}(t)$ of the B-splines of degree $m$ for
+The $n+1$ basis $N_{i,m+1}(t)$ of the \bss of degree $m$ for
 $i=0,\dots,n$ are defined by the 
 recursive formula:
 \begin{align*}
@@ -147,10 +150,10 @@ $$
 
 The elements of the classic splines space can be expressed in the form
 \begin{equation}\label{eq:bsplineElement}
-  S(t)=\sum_{i=0}^nv_i N_{i,k}(t).
+  S(t)=\sum_{i=0}^nv_i N_{i,m+1}(t).
 \end{equation}
 
-\subsection{Spline curves}
+\subsection{Spline curves}\index{Spline curves}
 A parametric spline \emph{curve} $\ve{S}(t)$ is a curve in a certain
 dimension $dim$ obtained applying a spline function to a set of points
 in the same dimension $dim$
@@ -166,15 +169,16 @@ this form obtained with the truncated-powers base is not a practical
 representation of a curve because
 there isn't an intuitive correlation between the points
 $\ve{c_i}$, $\ve{d_j}$ and the curve itself. Moreover
-calculating $\ve{S}(t)$ is not a well conditioned problem.
+calculating $\ve{S}(t)$ is not a well conditioned problem
+\cite{deboor}.
  For resolving those problems we
-defined the \emph{B-splines base} in \cref{sec:bsplines}.
+defined the \emph{\bss base} in \cref{sec:bsplines}.
 
-We can apply control vertices to a spline expressed with the B-spline
+We can apply control vertices to a spline expressed with the \bs
 base as in \cref{eq:bsplineElement} replacing the coefficients $v_i$
 with points
 \begin{equation}\label{eq:bsplineCurve}
-  \ve{S}(t)=\sum_{i=0}^n\ve{v_i}\cdot N_{i,k}(t).
+  \ve{S}(t)=\sum_{i=0}^n\ve{v_i}\cdot N_{i,m+1}(t).
 \end{equation}
 The representation of \cref{eq:bsplineCurve} is more convenient
 respect to the one of 
@@ -184,14 +188,15 @@ called \emph{control vertices} and the polygon defined by them is
 called \emph{control polygon} and they can be used to control the
 shape of the curve.
 
-\section{B-splines curves properties}\label{sec:bsplineProp}
-In this section we describe some properties of B-spline curves that we
+\section{\bss curves properties}\label{sec:bsplineProp}\index{\bss!properties}
+In this section we describe some properties of \bs curves that we
 used for the development of the project.
 
-\subsection{Convex hull}
-A B-spline curve $\ve{S}(t)$ of order $m$ defined by the control polygon
+\subsection{Convex hull}\index{\bss!convex hull}
+A \bs curve $\ve{S}(t)$ of order $m$ defined by the control polygon
 $\ve{v_0},\ve{v_1},\dots,\ve{v_n}$ is contained inside the union of the
-convex hulls composed of $m+1$ vertices of the control polygon. If we
+convex hulls composed of $m+1$ vertices of the control polygon
+\cite{farin}. If we
 call $\conv(\ve{w_0},\ve{w_1},\dots,\ve{w_j})$ the convex hull of the
 vertices $\ve{w_0},\ve{w_1},\dots,\ve{w_j}$ then we have
 \begin{eqnarray*}
@@ -210,7 +215,7 @@ or in other words must be true
 \end{equation*}
 whatever is the partition vector.
 
-\begin{myfig}{Convex hull containing B-spline of grade 2}{fig:convexHull}
+\begin{myfig}{Convex hull containing \bs of grade 2}{fig:convexHull}
   \begin{tikzpicture}
     \coordinate (a) at (0,0);
     \coordinate (b) at (0.5,1.7);
@@ -242,17 +247,158 @@ whatever is the partition vector.
   \end{tikzpicture}  
 \end{myfig}
 On \cref{fig:convexHull} is visible an example of a control polygon
-and the surface where a quadratic B-spline applied to
+and the surface where a quadratic \bs applied to
 it can be contained. Note that the convex hull property holds also in
 3-dimensional
-space - i.e. a quadratic B-spline in 3-dimensional space is contained
+space - i.e. a quadratic \bs in 3-dimensional space is contained
 inside a flat surface composed by the union of triangles. From grade 3
 the area where $\ve{S}(t)$ can be contained is not anymore plane
 because is composed of union of solid polyhedrons.
 
-\subsection{Continuity}
-\subsection{Aligned vertices}
-\subsection{Curvature and torsion}
+\subsection{Smoothness}\label{sec:smoothness}\index{Smoothness}\index{\bss!smoothness}
+The concept of smoothness consist of identifying what is the number of
+possible derivatives of the function such that the function is
+continue. A function $f$ that is not continue is said to be of class
+$C^{-1}$, a function that is continue until derivative $d$ is said to
+be of class $C^d$, a function that is always continue for every
+derivative is said to be of class $C^\infty$.
+
+A \bs curve of degree $m$ with $n$ control vertices consists of
+$n-m$ polynomial segments, one for each 
+interval 
+\begin{equation*}
+[t_i,t_{i+1}]\qquad i=m,\dots,n+1  
+\end{equation*}
+this mean that $\ve{S}(t)$ is $C^\infty$ for
+\begin{equation*}
+t\in(t_i,t_{i+1})\qquad i=m,\dots,n+1.
+\end{equation*}
+Note that, if we use generalized \bs curves, an interval
+$[t_i,t_{i+1}]$ can also be of dimension $1$ if
+we have a knot multiplicity $>1$, in
+such case there isn't a polynomial segment.
+On every breakpoint $t_i$ with $i=1,\dots,n+m-1$ we have that the curve has
+smoothness $C^{m-1}$
+and, if we use generalized \bs curves, smoothness $C^{m-r}$ where $r$ is the
+multiplicity of the knot \cite{farin}.
+
+In our project we don't use generalized \bs curves, so globally a
+curve of degree $m$ have smoothness
+\begin{equation*}
+  C^{m-1}.
+\end{equation*}
+
+\subsection{Aligned vertices}\index{\bss!aligned vertices}
+In our project we dealt sometimes with some problems whose solution
+involved aligning two or more control vertices of the curve. In this
+section we analyze the effects on the curve of aligning vertices.
+
+We can have the following situations:
+\paragraph{$m$ aligned control vertices}
+If $m$ control vertices $v_i,\dots,v_{i+m-1}$ of control polygon are on the same line then
+the curve $\ve{S}(t)$ touch the segment joining those vertices.
+
+\paragraph{$m+1$ aligned control vertices}
+If $m+1$ control vertices $v_i,\dots,v_{i+m}$ of control polygon are on the same line then
+the curve $\ve{S}(t)$ lay on the segment joining those vertices.
+
+\subsection{End point interpolation}\index{\bss!end point interpolation}
+In general a \bs curve with control vertices
+\begin{equation*}
+  \ve{v_0}, \dots, \ve{v_n}
+\end{equation*}
+and partition vector
+\begin{equation*}
+  T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
+\end{equation*}
+don't necessarily interpolate any control vertex $v_i$, neither the
+first and the last one. But we are
+interested in using \bs for representing paths from one point to
+another, so should be a nice feature to have that the curve defined in
+the domain $[a,b]$ is shaped such that
+\begin{equation}\label{eq:clamped}
+  \begin{cases}
+    \ve{S}(t)=\ve{v_0}& \text{for } t=a\\
+    \ve{S}(t)=\ve{v_n}& \text{for } t=b.
+  \end{cases}
+\end{equation}
+
+We can obtain the conditions of \cref{eq:clamped} if we impose on the
+extended partition vector $T$:
+\begin{equation*}
+  t_0=\dots= t_{m-1}= \overmath{\equiv a}{t_{m}}<\dots<
+\overmath{\equiv b}{t_{n+1}}= t_{n+2}=\dots= t_{n+m+1}
+\end{equation*}
+in other words we want
+\begin{equation*}
+  T=\{\overbrace{a,\dots,a}^m,t_{m+1},\dots,t_{n},\overbrace{b,\dots,b}^m\}
+\end{equation*}
+
+\subsection{Curvature and
+  torsion}\index{Curvature and torsion}\index{\bss!curvature and torsion}
+We are interested in comparing the characteristics different curves,
+we need to recognize if a certain curve is a \emph{good} or a
+\emph{bad} curve. one factor that characterize a certain curve can 
+be the smoothness of the curve (\cref{sec:smoothness}) - i.e. a $C^3$ curve
+is better than a $C^2$ curve - but this isn't
+enough for comparing curves with same degree (and smoothness). For
+accomplish that we
+introduce on this section the concepts of \emph{curvature} and
+\emph{torsion} \cite{docarmo}. Both are quantities defined on generic
+parametric curves for each value of the parameter.
+
+For a generic parametric curve $\ve{S}(u)$ defined for $u\in[a,b]$ we
+have that the curvature is defined as
+\begin{equation}
+  \label{eq:curvature}
+  \kappa(u) = \frac{\left|\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right|}{{\left|\dot{\ve{S}}(u)\right|}^3}
+\end{equation}
+and the torsion is defined as
+\begin{equation}
+  \label{eq:torsion}
+  \tau(u) =
+  \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\left|\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right|}
+  = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\left|\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right|}
+\end{equation}
+where $\wedge$ is the vector product and
+\begin{equation*}
+  \dot{\ve{S}}(u) = \frac{\md}{\md u} \ve{S}(u)=\left[
+    \begin{array}{c}
+      \frac{\md}{\md u} X(u)\\
+      \frac{\md}{\md u} Y(u)\\
+      \frac{\md}{\md u} Z(u)
+    \end{array}
+    \right].
+\end{equation*}
+
+\cref{eq:curvature} and \cref{eq:torsion} describe completely the
+behavior of $\ve{S}(u)$ locally for each value of $u$. Curvature and
+torsion have also a geometric interpretation: for each value $\tilde{u}$ of
+the parameter $u$, the inverse $\frac{1}{\kappa(\tilde{u})}$ of the
+curvature is the radius of curvature on the point defined by
+$\ve{S}(\tilde{u})$ - i.e. the radius of the 
+osculating circle tangent to the point that lie on the plane where the
+curve is bending and
+that is situated on the inner side of the turn - $\tau(\tilde{u})$ indicate
+(if $\kappa(\tilde{u})\neq 0$) how sharply is rotating the plane where
+the curve lie.
+
+The value of $\kappa(u)$ can be only positive, $\tau(u)$ can be
+positive and negative. Also we have that:
+\begin{itemize}
+\item for $C^{\leq 0}$ curves $\kappa(u)$ and $\tau(u)$ are not defined;
+\item for $C^1$ curves $\kappa(u)$ is defined but not continue and
+  $\tau(u)$ is not defined;
+\item for $C^2$ curves $\kappa(u)$ is defined and continue and
+  $\tau(u)$ is defined but not continue;
+\item for $C^{\geq 3}$ curves $\kappa(u)$ is defined and continue and
+  $\tau(u)$ is defined and continue.
+\end{itemize}
+
+Two curves of same smoothness can be compared using the plots of
+curvature and torsion, in general a curve that have lower peaks of
+$\kappa(u)$ and $\tau(u)$ are better respect to curves that have
+higher peaks.
 
 \section{Statistical methods}
 On this section we make a short introduction to \ac{MCM}
@@ -263,7 +409,7 @@ method for transforming a constrained optimization problem in an
 unconstrained optimization problem increasing the state space
 dimension.
 \subsection{Notes on probabilities}
-\subsubsection{ac{PE}}
+\subsubsection{\ac{PE}}
 For a random variable $X$ normally distributed with
 \begin{itemize}
 \item mean $\mu$;
@@ -318,7 +464,7 @@ variables is a normal distribution with mean $Nm$ and variance $Nb^2$
 equals to mean and variance of $Y=X_1+X_2+\dots+X_N$ - even if
 $X_1,X_2,\dots,X_N$ aren't normally distributed.
 
-\subsection{\acf{MCM}}
+\subsection{\acf{MCM}}\index{Monte Carlo Method}
 Suppose that you need to calculate an unknown quantity $m$, you need
 to find a random variable $X$ such that:
 \begin{equation*}
@@ -406,7 +552,7 @@ uncertainty in the inputs or an high degree of liberty in the
 state. For instance integrating numerically a function with many
 dimensions or \ac{SA}.
 
-\subsection{\acf{SA}}
+\subsection{\acf{SA}}\index{Simulated annealing}
 The \ac{SA} is a method used for finding the global optimum - i.e. the
 maximum or the minimum - of a function. It is inspired by a method
 used in metallurgy that consists in heating and then cooling slowly a
@@ -455,7 +601,7 @@ configuration, after a certain number of \emph{Monte Carlo trials},
 the method converge to the equilibrium status $\bar{E}$ and continue
 to fluctuate around it. \ac{SA} is a method of this kind.
 
-\subsubsection{\acf{SA} algorithm}
+\subsubsection{\acf{SA} algorithm}\index{Simulated annealing!algorithm}
 \ac{SA} operates on a system starting from a certain initial state
 $s_0$, then execute a series of iterations where is evaluated a
 neighbour of the state and, with a certain distribution of

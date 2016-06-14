@@ -6,18 +6,18 @@ the different parts of the program. We do this with the help of the
 test scene in \cref{fig:empty}.
 \image{scrEmpty.png}{Initial scene.}{fig:empty}
 
-The general idea is to use an open B-spline curve of a certain degree
+The general idea is to use an open \bs curve of a certain degree
 interpolating the chosen starting and ending points, whose
 control polygon is a suitable modification of a polygonal chain
 extracted from a graph
 obtained with a Voronoi diagram method. In \cref{sec:polChain} we
 explain in detail how to
 build such polygonal chain. Before using the chain as a control
-polygon for the B-spline, it is refined and adjusted - as explained in
+polygon for the \bs, it is refined and adjusted - as explained in
 detail in \cref{sec:obsAvoid} and \cref{sec:degreeInc} - in order to
-ensure that the associated B-spline curve has no obstacle
+ensure that the associated \bs curve has no obstacle
 collision. Also we implemented a method for an optional adaptive
-arrangment of the breakpoints of the B-spline described in
+arrangment of the breakpoints of the \bs described in
 \cref{sec:nodeSel} and an optional post processing for the
 simplification of the path described in \cref{sec:postPro}.
 \section{Polygonal chain}\label{sec:polChain}
@@ -115,7 +115,7 @@ alternative methods:
 \end{itemize}
 
 Before using that path as a control polygon
-we need to take into account the degree of the B-spline and the
+we need to take into account the degree of the \bs and the
 position of the obstacles, the details are in \cref{sec:obsAvoid} and
 \cref{sec:degreeInc}.
 
@@ -283,12 +283,12 @@ of the vertices at the extremes of $e$.
 \section{Obstacle avoidance}\label{sec:obsAvoid}
 Before using the polynomial chain extracted using the algorithm
 explained in \cref{sec:polChain} as a control polygon for the
-B-spline, we need to deal with a
+\bs, we need to deal with a
 problem: every possible path in the graph $G$ is
 free from collisions by construction - in fact we prune the graph of
 every edge that intersect an obstacle - but this don't guarantees that
 the curve will be free from obstacles. This concept is expressed in \cref{fig:intersect}.
-\begin{myfig}{Schematic of B-spline that intersect an obstacle in the plane.}{fig:intersect}
+\begin{myfig}{Schematic of \bs that intersect an obstacle in the plane.}{fig:intersect}
   \begin{tikzpicture}
     \path[obstacle] (1,0) -- (2,1) -- (3,0) -- (1,0);
     \draw[controlPoly] (0,0) -- (2,2) -- (4,0);
@@ -301,7 +301,7 @@ the curve will be free from obstacles. This concept is expressed in \cref{fig:in
 \end{myfig}
 
 In this chapter we make the hypothesis of using
-quadratic B-splines\footnote{B-splines curves with degree 2 or equivalently order 3.}, in
+quadratic \bss\footnote{\bss curves with degree 2 or equivalently order 3.}, in
 \cref{sec:degreeInc} it is explained how is possible to use curves with
 higher degree. With this assumption we can exploit the convex hull
 property explained in \cref{sec:bsplineProp} and assert that the
@@ -311,7 +311,7 @@ polygon. Using that property we can resolve the problem of the
 collision maintaining all the triangles in the control polygon free
 from collision with the triangles that compose the faces of the
 obstacles. Note that the property of convex hull of quadratic
-B-splines is valid also in space, so the convex hull is still composed
+\bss is valid also in space, so the convex hull is still composed
 of planar figures - specifically of triangles - like the faces of the
 obstacles. This simplify all the check for the collisions because they
 are all between triangles in space and we can use the methods
@@ -766,10 +766,10 @@ from the topic of numerical analysis.
 We can see the problem of finding the shortest path as a constrained
 optimization problem where a certain configuration of the control
 vertices (and
-consequently the B-spline) is the state of the system, and we want to
+consequently the \bs) is the state of the system, and we want to
 minimize both the length of the control polygon (and consequently the
-B-spline) and the peak in curvature and torsion of the B-spline under
-the constraint that the B-spline must not intersect the obstacles. We
+\bs) and the peak in curvature and torsion of the \bs under
+the constraint that the \bs must not intersect the obstacles. We
 are interested in optimizing both length and curvature and torsion
 peaks because we want a path that is short but also a path that is
 smooth.
@@ -792,10 +792,10 @@ path. The \cref{eq:opt} is formulated in the problem
     & & \left|bspline(\ve{v})\cap \bigcup_{i\in I}obstacle_i\right| = 0.
   \end{aligned}
 \end{equation*}
-where $maxCurv(\ve{v})$ is the peak of curvature of the B-spline
+where $maxCurv(\ve{v})$ is the peak of curvature of the \bs
 constructed using $\ve{v}$ as control polygon,
 $maxTors(\ve{v})$ is the peak in absolute value of the torsion of
-the B-spline constructed using $\ve{v}$ as control polygon and
+the \bs constructed using $\ve{v}$ as control polygon and
 $normLen(\ve{v})$ is the length of the control polygon
 $\ve{v}$ normalized as percent of the length of the initial status
 after extracting the path. $\alpha$, $\beta$ and $\gamma$ are fixed
@@ -803,7 +803,7 @@ coefficients used for giving a weight in the optimization process to
 the curvature peak, torsion peak and length. The normalization of
 length is necessary for decoupling the weight of the length from the
 length of path. Regarding the constraint, $bspline(\ve{v})$
-is the set of tabulated points of the \emph{B-Spline} obtained as
+is the set of tabulated points of the \emph{\bs} obtained as
 explained in
 \cref{sec:spline} and \cref{sec:bsplines}, using the path as
 control polygon and
