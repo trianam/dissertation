@@ -18,7 +18,7 @@ detail in \cref{sec:obsAvoid} and \cref{sec:degreeInc} - in order to
 ensure that the associated \bs curve has no obstacle
 collision. Also we implemented a method for an optional adaptive
 arrangment of the breakpoints of the \bs described in
-\cref{sec:nodeSel} and an optional post processing for the
+\cref{sec:knotSel} and an optional post processing for the
 simplification of the path described in \cref{sec:postPro}.
 \section{Polygonal chain}\label{sec:polChain}
 In the first phase the objective is to extract a suitable polygonal chain from
@@ -1123,7 +1123,47 @@ every segment of the original control polygon $P$, because adding
 $m-2$ aligned vertices between each pair $(\ve{v_i},\ve{v_{i+1}})$
 will result in $m$ aligned vertices on each original segment (\cref{sec:alignedVertices}).
 
-\section{Nodes selection}\label{sec:nodeSel}
+\section{Knots selection}\label{sec:knotSel}\index{\bss!knot selection}
+On the previous sections we never discussed about how to select the
+knots 
+\begin{equation*}
+  T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
+\end{equation*}
+of the partition vector of the \bs, on this section we discuss the two
+methods that we implemented. Before all we want
+the curve to interpolate 
+the chosen start and end points, that correspond to the extremes
+$\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw on
+\cref{sec:clamped} that we can archive such interpolation if we impose
+\begin{equation}\label{eq:externalKnotsFix}
+  \begin{split}
+    &t_0 = t_1 = \dots = t_{m} = a\\
+    &t_{n+1} = t_{n+2} = \dots = t_{n+m+1} = b
+  \end{split}
+\end{equation}
+where $a$ and $b$ are the extremes of the parametric domain $[a,b]$ of
+the curve. The constraint of \cref{eq:externalKnotsFix} is a mandatory
+choice, so we cannot change it, regarding the parametric domain we
+chose it to be $[0,1]$ because changing the extremes doesn't change
+the behavior of the curve, only changing the ratio of the distance
+between the knot do it \cite{farin}. We still need to chose how to select 
+the inner knots $t_{m+1},\dots,t_n$, and we developed two different
+ways:
+\begin{enumerate}[label=\textbf{method \arabic*}]
+\item\label[void]{en:uniform} Use a uniform partition where $t_i-t_{i-1}=c$ for
+  $i=m+1,\dots,n+1$ and for $c$ constant;
+\item\label[void]{en:adaptive} Use an adaptive partition where we try to make dense knots on
+  correspondence of points on the curve where we have dense control
+  vertices.
+\end{enumerate}
+
+\cref{en:uniform} is the most easiest way of choosing a knot vector
+and is common as first choice in textbooks \cite{farin}\cite{docarmo},
+but it have the disadvantage of ignoring the geometry of the curve.
+
+
+
+
 \end{document}
 
 %%% Local Variables:
