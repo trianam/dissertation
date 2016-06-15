@@ -47,7 +47,7 @@
 %comandi per modello
 %--------------------------------------------------------------
 \newcommand{\myTitle}{B-Spline methods for designing smooth spatial
-  path with obstacle avoidance\xspace}
+  paths with obstacle avoidance\xspace}
 \newcommand{\mySubtitle}{Metodi B-spline per disegnare percorsi
   regolari in ambienti tridimensionali contenenti ostacoli}
 \newcommand{\mySubsubtitle}{Tesi di Laurea Magistrale in Informatica}
@@ -134,8 +134,9 @@
 \tikzstyle{imageArrow}=[draw=red, line width=0.5mm, ->]
 \tikzstyle{obstacle}=[fill=yellow, draw=black]
 \tikzstyle{convexHull}=[fill=blue!30]
-\tikzstyle{convexHullBord}=[color=black, dash pattern=on 3pt off 3pt]
+\tikzstyle{convexHullBord}=[color=black, dotted]%dash pattern=on 3pt off 3pt]
 \tikzstyle{controlPoly}=[color=black, line width=0.25mm]
+\tikzstyle{controlPolyHigh}=[color=red, line width=0.25mm]
 \tikzstyle{controlPolyTract}=[color=black, line width=0.25mm, dash pattern=on 3pt off 3pt]
 \tikzstyle{controlPolyTractHigh}=[color=red, line width=0.25mm, dash pattern=on 3pt off 3pt]
 \tikzstyle{obstacleTract}=[draw=black, line width=0.25mm, dash pattern=on 3pt off 3pt]
@@ -378,6 +379,9 @@ shadow, minimum width=\transH, minimum height=\transW]
 \algnewcommand\True{\ensuremath{True}}
 \algnewcommand\False{\ensuremath{False}}
 \algnewcommand\Break{\textbf{break}}
+\algnewcommand\IfNot{\textbf{not}\xspace}
+\algnewcommand\IfAnd{\textbf{and}\xspace}
+\algnewcommand\IfOr{\textbf{or}\xspace}
 
 \makeindex
 

@@ -36,7 +36,7 @@ collisions between the curve and the obstacles.
 
 \subsection{Base structure}
 First we
-start distributing points on the faces of the obstacles and on
+start distributing points on the \ac{OTF} and on
 an invisible bounding box, as in \cref{fig:sites}.
 \image{scrSites.png}{Scene with Voronoi sites.}{fig:sites}
 The sites are distributed using a recursive method, for each triangle
@@ -82,7 +82,7 @@ $$G=(V,E)$$
 using the vertices
 of the Voronoi cells as graph nodes in $V$, and the edges of the cells\footnote{Rejecting the
   infinite edges.} as graph edges in $E$. After we prune such graph deleting every edge that
-intersect an obstacle face, using the methods explained in \cref{sec:intersections}.
+intersect an \ac{OTF} using the methods explained in \cref{sec:intersections}.
 \image{scrGraph.png}{Scene with pruned graph.}{fig:graph}
 
 The result, visible in \cref{fig:graph}, is a graph that embrace the
@@ -96,7 +96,7 @@ in \cref{fig:voronoi2d}.
 \image{voronoi2d.png}{Voronoi graph in 2D before pruning (a) and after
   pruning (b).}{fig:voronoi2d}
 We decided to extend the method in 3 dimensions distributing points in
-the whole faces of obstacles, an alternative would be distributing
+the whole \ac{OTF}, an alternative would be distributing
 points only along the edges of the obstacles.
 
 On the graph obtained $G$ we attach the desired start and end
@@ -172,7 +172,7 @@ and \cref{eq:numE} become
 
 For pruning the graph of every edge that intersects obstacles we need
 to solve a system of three unknowns in thre equations for every edge
-and every obstacle's face\footnote{See \cref{sec:intersectionST}.}, so
+and every \ac{OTF}\footnote{See \cref{sec:intersectionST}.}, so
 we have a cost of
 \newcommand{\eqCostPruning}{\ensuremath{\bigO(k|Ob|^2)}}
 \begin{equation}
@@ -309,8 +309,8 @@ resulting curve is contained inside the union of all the triangles
 with vertices equal to three consecutive control vertices of the control
 polygon. Using that property we can resolve the problem of the
 collision maintaining all the triangles in the control polygon free
-from collision with the triangles that compose the faces of the
-obstacles. Note that the property of convex hull of quadratic
+from collision with the \ac{OTF}. Note that the property of convex
+hull of quadratic
 \bss is valid also in space, so the convex hull is still composed
 of planar figures - specifically of triangles - like the faces of the
 obstacles. This simplify all the check for the collisions because they
@@ -332,8 +332,9 @@ and when one is found some actions are taken for dealing with that.
 The first solution of the problem exploit the graph $G_t$ obtained as
 explained in \cref{sec:trigraph}. Before applying Dijkstra's algorithm
 to $G_t$ all the triples are filtered checking if the
-triangle composed of the vertices of a triple intersect an obstacle's
-face. If a triple intersect an obstacle then is removed from the graph
+triangle composed of the vertices of a triple intersect an
+\ac{OTF}. If a triple intersect an obstacle then is removed from the
+graph
 and so a path cannot pass from such vertices in that order.
 
 Note that if a triple $(\ve{a},\ve{b},\ve{c})$ is removed from $V_t$ - and
@@ -525,11 +526,11 @@ solution that uses another approach: obtain the shortest path
 from the Voronoi's graph $G$ directly using Dijkstra's algorithm,
 without removing any triple. On that path
 - that we call $P$ in this section - we
-check every triple of consecutive vertices, and if it collides with a
+check every triple of consecutive vertices, and if it collides with an
 \ac{OTF} then we take countermeasures. For instance if the path
 is composed from the vertices:
 \begin{equation*}
-  P=\ve{v_0},\ve{v_1},\dots,\ve{v_n}
+  P=(\ve{v_0},\ve{v_1},\dots,\ve{v_n})
 \end{equation*}
 then we check if every one of the triangles 
 \begin{eqnarray*}
@@ -710,7 +711,8 @@ consider every face of obstacle in $Ob$ for every
 triangle in $P$ and the cost for doing this is\footnote{If
   $\#\ac{OTF}=\bigO(|Ob|)$ - i.e. the
   number of \ac{OTF} don't grow faster than the number of obstacles.}
-$\bigO(|P|\cdot|Ob|)$ where in the worst case
+$\bigO(|P|\cdot|Ob|)$ where with $|P|$ we mean the number of vertexes
+in $P$, in the worst case
 $|P|=\bigO(|V|)=\bigO(|Ob|)$ so in total 
 \newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)}}
 \begin{equation}\label{eq:costCleanPath}
@@ -780,29 +782,29 @@ to the project.
 
 The variable space $X$ is composed of all possible
 configuration of the path, or in other words is the vector
-$\ve{v}=(\ve{v_1},\dots,\ve{v_n})$ of all $n$ ordered
+$P=(\ve{v_1},\dots,\ve{v_n})$ of all $n$ ordered
 vertices $\ve{v_i}=(x_i,y_i)$ of the
 path. The \cref{eq:opt} is formulated in the problem
 \begin{equation*}
   \begin{aligned}
-    & \underset{\ve{v}}{\text{minimize}}
-    & & \alpha\cdot maxCurv(\ve{v})+\beta\cdot
-    maxTors(\ve{v})+\gamma\cdot normLen(\ve{v}) \\
+    & \underset{P}{\text{minimize}}
+    & & \alpha\cdot maxCurv(P)+\beta\cdot
+    maxTors(P)+\gamma\cdot normLen(P) \\
     & \text{subject to}
-    & & \left|bspline(\ve{v})\cap \bigcup_{i\in I}obstacle_i\right| = 0.
+    & & \left|bspline(P)\cap \bigcup_{i\in I}obstacle_i\right| = 0.
   \end{aligned}
 \end{equation*}
-where $maxCurv(\ve{v})$ is the peak of curvature of the \bs
-constructed using $\ve{v}$ as control polygon,
-$maxTors(\ve{v})$ is the peak in absolute value of the torsion of
-the \bs constructed using $\ve{v}$ as control polygon and
-$normLen(\ve{v})$ is the length of the control polygon
-$\ve{v}$ normalized as percent of the length of the initial status
+where $maxCurv(P)$ is the peak of curvature of the \bs
+constructed using $P$ as control polygon,
+$maxTors(P)$ is the peak in absolute value of the torsion of
+the \bs constructed using $P$ as control polygon and
+$normLen(P)$ is the length of the control polygon
+$P$ normalized as percent of the length of the initial status
 after extracting the path. $\alpha$, $\beta$ and $\gamma$ are fixed
 coefficients used for giving a weight in the optimization process to
 the curvature peak, torsion peak and length. The normalization of
 length is necessary for decoupling the weight of the length from the
-length of path. Regarding the constraint, $bspline(\ve{v})$
+length of path. Regarding the constraint, $bspline(P)$
 is the set of tabulated points of the \emph{\bs} obtained as
 explained in
 \cref{sec:spline} and \cref{sec:bsplines}, using the path as
@@ -811,18 +813,22 @@ $obstacle_i$ is the area of the $i^{th}$ of $m$ obstacles, and
 $I=\{1,\dots,m\}$.
 
 We need to build now the Lagrangian function corresponding to
-\cref{eq:lagrangianFun}, the constraint function is not negative, and is calculated as the
+\cref{eq:lagrangianFun}, for conciseness we define the function
+\begin{equation*}
+  gain(P) = \alpha\cdot maxCurv(P)+\beta\cdot
+    maxTors(P)+\gamma\cdot normLen(P)
+\end{equation*}
+the constraint function is not negative, and is calculated as the
 ratio
 \begin{equation*}
-constraint(\ve{v}) = \frac{|\{\ve{p} \in spline(\ve{v})\ |\ \exists i\in\{1,\dots,m\}
-  : \ve{p}\in obstacle_i \}|}{|\{\ve{p} \in spline(\ve{v})\}|}
+constraint(P) = \frac{|\{\ve{p} \in spline(P)\ |\ \exists i\in\{1,\dots,m\}
+  : \ve{p}\in obstacle_i \}|}{|\{\ve{p} \in spline(P)\}|}
 \end{equation*}
 where the points $\ve{p}$ of the spline are calculated in a discrete form. That
 function is not negative, so the Lagrangian function correspondent to
 \cref{eq:lagrangianFun} is
 \begin{equation}\label{eq:lagrangianFunProj}
-    L_d(\ve{v},\lambda)=\alpha\cdot maxCurv(\ve{v})+\beta\cdot
-    maxTors(\ve{v})+\gamma\cdot normLen(\ve{v})+\lambda\cdot constraint(\ve{v}).
+    L_d(P,\lambda)=gain(P)+\lambda\cdot constraint(P).
 \end{equation}
 
 \subsubsection{Annealing phase}
@@ -878,16 +884,18 @@ a certain factor.
 The $neighbour$ function choose a neighbour of the state and is
 defined depending on the input
 \begin{itemize}
-  \item for $\lambda$ move uniformly in a range $[-maxLambdaPert, maxLambdaPert]$;
-  \item for path pick randomly one of the nodes, except the extremes,
-    then pick an angle in $[0,2\pi]$ and a distance
-    uniformly in a specific range.
+  \item a neighbour of $\lambda$ is a value that is equal to $\lambda$
+    plus a perturbation in a range $[-maxLambdaPert, maxLambdaPert]$;
+  \item a neighbour of the path is obtained picking randomly one of
+    the vertices $\ve{v_i}$, except the extremes $\ve{v_0}$ and $\ve{v_n}$,
+    then picking an angle in $[0,2\pi]$ and a distance
+    uniformly in a specific range, and finally moving $\ve{v_i}$ by
+    the chosen values.
 \end{itemize}
 
 The $energy$ function is equivalent to $L_d$ in the
 \cref{eq:lagrangianFunProj}:
-$$energy(\ve{x},\lambda)=\alpha\cdot maxCurv(\ve{v})+\beta\cdot
-    maxTors(\ve{v})+\gamma\cdot normLen(\ve{v})+\lambda\cdot constraint(\ve{v}).$$
+$$energy(\ve{x},\lambda)=gain(P)+\lambda\cdot constraint(P).$$
 
 The annealing process
 find a saddle point probabilistically increasing the energy, moving
@@ -895,12 +903,227 @@ $\lambda$ and
 decreasing the energy moving the points.
 
 
-\section{Post processing}\label{sec:postPro}
+\section{Post processing}\label{sec:postPro}\index{Post process}
 The purpose of the post processing phase is to try to simplify the
-path obtained in the previous phase removing useless vertices.
-\section{Degree increase}\label{sec:degreeInc}
+path $P=(\ve{v_0},\dots,\ve{v_n})$ obtained in the previous phase
+removing useless vertices, trying
+to achieve a smoother path.
+
+\begin{algo}{Post processing algorithm on path $P$.}{alg:postProcess}
+  \Procedure{postProcess}{$P$}
+  \For{$i\Ass 1,n-1$}
+  \If{$i=1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}})$}
+  \If{$i=n-1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}})$}
+  \State $P\Ass P\setminus\{\ve{v_i}\}$
+  \EndIf
+  \EndIf
+  \EndFor
+  \EndProcedure
+\end{algo}
+For obtaining this target we realized \cref{alg:postProcess} that
+iterate through all the vertices excluded the extremes, and for each
+$v_i$ check if it can be removed without consequences - where with
+consequences we mean that removing $v_i$ would cause that a triangle
+in $P$ intersect one of the \ac{OTF}. 
+
+\begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
+  \begin{tikzpicture}
+    \coordinate (l1) at (0,0);
+    \coordinate (a) at (1,0);
+    \coordinate (b) at (3,3);
+    \coordinate (c) at (5,4);
+    \coordinate (d) at (7,1);
+    \coordinate (e) at (9,2);
+    \coordinate (l2) at (10,2);
+    \coordinate (o1) at (4,0);
+    \coordinate (o2) at (5,1.5);
+    \coordinate (o3) at (6,0);
+
+    \path[convexHull] (a) -- (b) -- (d) -- (a);
+    \path[convexHull] (b) -- (d) -- (e) -- (b);
+
+    \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e);
+    \draw[controlPolyTract] (l1) -- (a);
+    \draw[controlPolyTract] (e) -- (l2);
+    \draw[controlPolyHigh] (b) -- (d);
+
+    \path[obstacle] (o1) -- (o2) -- (o3) -- (o1);
+    \node at (barycentric cs:o1=0.3,o2=0.3,o3=0.3) {\acs{OTF}};
+
+    \foreach \p in {a,b,d,e}
+    \filldraw[controlVert] (\p) circle (2pt);
+    \filldraw[controlVertHigh] (c) circle (3pt);
+
+    \node[below] at (a) {$\ve{v_{i-2}}$};
+    \node[above left] at (b) {$\ve{v_{i-1}}$};
+    \node[above] at (c) {$\ve{v_i}$};
+    \node[below right] at (d) {$\ve{v_{i+1}}$};
+    \node[above] at (e) {$\ve{v_{i+2}}$};
+  \end{tikzpicture}
+\end{myfig}
+For clarifying the concept consider \cref{fig:postProcess} that is a
+simplification in 2-dimensional space of the real case in
+3-dimensional space. The path to process
+is
+\begin{equation*}
+  P=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i}},\ve{v_{i+1}},\ve{v_{i+2}},\dots)
+\end{equation*}
+and we are
+considering removing $\ve{v_i}$ having a modified path
+\begin{equation*}
+  \tilde{P}=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i+1}},\ve{v_{i+2}},\dots).
+\end{equation*}
+Before doing this we need to check if any triangle in $\tilde{P}$
+intersect any \ac{OTF}, in detail we need to check only the two
+triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
+$\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
+triangles in $\tilde{P}$ where already present in $P$. For instance
+the obstacle in the figure don't intersect anyone of the triangles in
+$P$, but intersect $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
+$\tilde{P}$.
+
+\subsubsection{Complexity considerations}\index{Post process!complexity}
+For every vertex of $P$ we need to check if two triangles intersect
+with an \ac{OTF}, so we have a complexity of
+\begin{equation*}
+  \bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)
+\end{equation*}
+where $Ob$ is the set of obstacles and $|P|$ is the number of vertices
+in $P$.
+
+\section{Degree increase}\label{sec:degreeInc}\index{Degree
+  increase}\index{\bss!higher degree}
+Until now we assumed only quadratic \bss - i.e. of degree $m$ - because
+on that case,
+for the property of convex hull (\cref{sec:convexHull}),
+we need to check only for collisions between triangles and triangles
+(triangles in $P$ and \ac{OTF}). If we want to use higher degree
+curves we can modify the
+previous algorithms for dealing with polyhedral convex hulls, but this
+mean increasing the complexity of the methods.
+
+We adopted a compromise, we kept the previous algorithm unchanged, and
+then if we want to apply an higher degree \bs curve we modify 
+\begin{equation*}
+P=(\ve{v_0},\dots,\ve{v_n})  
+\end{equation*}
+adding aligned new vertices $(\ve{w_0},\ve{w_1},\dots)$ between each pair
+$(\ve{v_i},\ve{v_{i+1}})$ for $i=0,\dots,n-1$ of vertices in $P$. The
+number of $\ve{w_j}$
+between each pair $(\ve{v_i},\ve{v_{i+1}})$ depends on the desired
+grade of the curve
+\begin{itemize}
+\item one new vertex between each $(\ve{v_i},\ve{v_{i+1}})$ for cubic
+  \bs curves (degree $m=3$);
+\item two new vertices between each $(\ve{v_i},\ve{v_{i+1}})$ for quartic
+  \bs curves (degree $m=4$);
+\item $m-2$ new vertices between each $(\ve{v_i},\ve{v_{i+1}})$ for
+  \bs curves of degree $m$.
+\end{itemize}
+So the final modified path for a \bs curve of degree $m\ge 3$ is
+\begin{equation*}
+  \tilde{P}=(\ve{v_0},\ve{w_0},\dots,\ve{w_{m-3}},\ve{v_1},\dots,\ve{v_i},\ve{w_{i(m-2)}},\dots,\ve{w_{(i+1)(m-2)-1}},\ve{v_{i+1}},\dots,\ve{v_n}).
+\end{equation*}
+In the project we implemented the degree increase to cubic and quartic
+curves.
+
+\begin{myfig}{Increase the degree to $m=4$.}{fig:highDegree}
+  \begin{tikzpicture}
+    \coordinate (a) at (-2,0);
+    \coordinate (b) at (1,0);
+    \coordinate (c) at (3,3);
+    \coordinate (d) at (5,4);
+    \coordinate (e) at (7,1);
+    \coordinate (f) at (9,2);
+    \coordinate (g) at (12,2);
+
+    \coordinate (ab1) at ($ (a)!0.33!(b) $);
+    \coordinate (ab2) at ($ (b)!0.33!(a) $);
+    \coordinate (bc1) at ($ (b)!0.33!(c) $);
+    \coordinate (bc2) at ($ (c)!0.33!(b) $);
+    \coordinate (cd1) at ($ (c)!0.33!(d) $);
+    \coordinate (cd2) at ($ (d)!0.33!(c) $);
+    \coordinate (de1) at ($ (d)!0.33!(e) $);
+    \coordinate (de2) at ($ (e)!0.33!(d) $);
+    \coordinate (ef1) at ($ (e)!0.33!(f) $);
+    \coordinate (ef2) at ($ (f)!0.33!(e) $);
+    \coordinate (fg1) at ($ (f)!0.33!(g) $);
+    \coordinate (fg2) at ($ (g)!0.33!(f) $);
+
+    \foreach \x/\y/\z in {a/b/c,b/c/d,c/d/e,d/e/f,e/f/g}{
+      \path[convexHull] (\x) -- (\y) -- ($ (\y)!0.33!(\z) $) -- (\x);
+      \path[convexHull] ($ (\x)!0.33!(\y) $) -- (\y) -- ($ (\z)!0.33!(\y) $) -- ($ (\x)!0.33!(\y) $);
+      \path[convexHull] ($ (\y)!0.33!(\x) $) -- (\y) -- (\z) -- ($ (\y)!0.33!(\x) $);
+    }
+
+    \foreach \x/\y/\z in {a/b/c,b/c/d,c/d/e,d/e/f,e/f/g}{
+      \draw[convexHullBord] (\x) -- ($ (\y)!0.33!(\z) $);
+      \draw[convexHullBord] ($ (\x)!0.33!(\y) $) -- ($ (\z)!0.33!(\y) $);
+      \draw[convexHullBord] ($ (\y)!0.33!(\x) $) -- (\z);
+    }
+
+    \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e) -- (f) -- (g);
+
+    \foreach \p in {a,b,c,d,e,f,g}
+    \filldraw[controlVert] (\p) circle (2pt);
+
+    \foreach \g in {ab1,ab2,bc1,bc2,cd1,cd2,de1,de2,ef1,ef2,fg1,fg2}
+    \filldraw[controlVertHigh] (\g) circle (2pt);
+
+    \node[below] at (a) {$\ve{v_{0}}$};
+    \node[below] at (b) {$\ve{v_{1}}$};
+    \node[above left] at (c) {$\ve{v_{2}}$};
+    \node[above] at (d) {$\ve{v_3}$};
+    \node[below right] at (e) {$\ve{v_4}$};
+    \node[above] at (f) {$\ve{v_5}$};
+    \node[below] at (g) {$\ve{v_6}$};
+
+    \node[below] at (ab1) {$\ve{w_0}$};
+    \node[below] at (ab2) {$\ve{w_1}$};
+    \node[below right] at (bc1) {$\ve{w_2}$};
+    \node[below right=2pt] at (bc2) {$\ve{w_3}$};
+    \node[above] at (cd1) {$\ve{w_4}$};
+    \node[above] at (cd2) {$\ve{w_5}$};
+    \node[above right] at (de1) {$\ve{w_6}$};
+    \node[below left=2pt] at (de2) {$\ve{w_7}$};
+    \node[below right] at (ef1) {$\ve{w_8}$};
+    \node[below right=2pt] at (ef2) {$\ve{w_9}$};
+    \node[above] at (fg1) {$\ve{w_{10}}$};
+    \node[above] at (fg2) {$\ve{w_{11}}$};
+  \end{tikzpicture}
+\end{myfig}
+In \cref{fig:highDegree} is visible an example of path
+\begin{equation*}
+  P=(\ve{v_0},\ve{v_1},\ve{v_2},\ve{v_3},\ve{v_4},\ve{v_5},\ve{v_6}).
+\end{equation*}
+We want to adapt $P$ to quartic \bs curves, so we need to add two new
+vertices between each pair of vertices $(\ve{v_i},\ve{v_{i+1}})$ for
+$i=0,\dots,6$, those new vertices are
+\begin{equation*}
+  (\ve{w_0},\ve{w_1},\ve{w_2},\ve{w_3},\ve{w_4},\ve{w_5},\ve{w_6},\ve{w_7},\ve{w_8},\ve{w_9},\ve{w_{10}},\ve{w_{11}}).
+\end{equation*}
+
+Note that, with this algorithm, when we increase the degree from $2$
+to $m\ge 3$ we have that the convex hull that contains a \bs curve of
+degree $m$ in
+$\tilde{P}$ is a subset of the convex hull that contains a \bs curve
+of degree $2$
+in $P$, because the polyhedrons of consecutive $m+1$ vertices in
+$\tilde{P}$ are collapsed in triangles contained inside the triangles
+of consecutive vertices in $P$. For instance in \cref{fig:highDegree}
+the convex hull of the first $5$ vertices
+$\ve{v_0},\ve{w_0},\ve{w_1},\ve{v_1},\ve{w_2}$ of $\tilde{P}$
+coincides with the
+triangle $\triangle \ve{v_0}\ve{v_1}\ve{w_2}$ that is contained inside
+the convex hull of the first $3$ vertices of $P$
+
+The effect of this method on the applied curve of degree $m$ is that
+it will touch
+every segment of the original control polygon $P$, because adding
+$m-2$ aligned vertices between each pair $(\ve{v_i},\ve{v_{i+1}})$
+will result in $m$ aligned vertices on each original segment (\cref{sec:alignedVertices}).
+
 \section{Nodes selection}\label{sec:nodeSel}
-\section{Complexity}
 \end{document}
 
 %%% Local Variables:
