@@ -1147,7 +1147,7 @@ choice, so we cannot change it, regarding the parametric domain we
 chose it to be $[0,1]$ because changing the extremes doesn't change
 the behavior of the curve, only changing the ratio of the distance
 between the knot do it \cite{farin}. We still need to chose how to select 
-the inner knots $t_{m+1},\dots,t_n$, and we developed two different
+the inner $n-m$ knots $t_{m+1},\dots,t_n$, and we developed two different
 ways:
 \begin{enumerate}[label=\textbf{method \arabic*}]
 \item\label[void]{en:uniform} Use a uniform partition where $t_i-t_{i-1}=c$ for
@@ -1159,10 +1159,115 @@ ways:
 
 \cref{en:uniform} is the most easiest way of choosing a knot vector
 and is common as first choice in textbooks \cite{farin}\cite{docarmo},
-but it have the disadvantage of ignoring the geometry of the curve.
+but it have the disadvantage of ignoring the geometry of the curve
+\cite{farin}. How to accomplish \cref{en:uniform} is quite
+straightforward: we need simply to pick the nodes
+\begin{equation*}
+  \frac{i}{n-m+1}
+\end{equation*}
+for $i=1,\dots,n-m$; so we concentrate on \cref{en:adaptive}.
 
+\begin{myfig}{Optimal case (we want uniform partition).}{fig:adaptive1}
+  \begin{tikzpicture}
+    \coordinate (v0) at (0,0);
+    \coordinate (v1) at (2,0);
+    \coordinate (v2) at (4,0);
+    \coordinate (v3) at (6,0);
+    \coordinate (v4) at (8,0);
+    \coordinate (v5) at (10,0);
 
+    \coordinate (t0) at (0,-1);
+    \coordinate (t4) at (10,-1);
+    \coordinate (t1) at ($ (t0)!0.25!(t4) $);
+    \coordinate (t2) at ($ (t0)!0.5!(t4) $);
+    \coordinate (t3) at ($ (t0)!0.75!(t4) $);
 
+    \foreach \v/\w in {v0/w0,v1/w1,v2/w2,v3/w3,v4/w4,v5/w5}{
+      \coordinate (\w) at ($(t0)!(\v)!(t4)$);
+      \draw[controlToKnot] (\v) -- (\w);
+    }    
+
+    \draw[controlPoly] (v0) -- (v1) -- (v2) -- (v3) -- (v4) -- (v5);
+    \draw[knotPoly] (t0) -- (t1) -- (t2) -- (t3) -- (t4);
+
+    \foreach \v/\i in {v0/0,v1/1,v2/2,v3/3,v4/4,v5/5}{
+      \filldraw[controlVert] (\v) circle (2pt);
+      \node[above] at (\v) {$\ve{v_{\i}}$};
+    }
+
+    \foreach \t/\j/\pos in {t0/{0,1,2}/below,t1/3/above,t2/4/above,t3/5/above,t4/{6,7,8}/below}{
+      \filldraw[knot] (\t) circle (2pt);
+      \node[\pos] at (\t) {$t_{\j}$};
+    }
+
+    \foreach \w/\j in {w1/1,w2/2,w3/3,w4/4}{
+      \node[below] at (\w) {$\nu_{\j}$};
+    }
+    \node[below=15pt] at (w0) {$\nu_0$};
+    \node[below=15pt] at (w5) {$\nu_5$};
+    \node[left=20pt] at (v0) {$P$};
+    \node[left=20pt] at (t0) {$\tau$};
+
+    %\filldraw[color=yellow] ($ (w1)!0.25!(w2) $) circle (2pt);
+  \end{tikzpicture}
+\end{myfig}
+\begin{myfig}{General case (same distances between
+    $t_i$ and enclosing $\nu_j$, $\nu_{j+1}$ as \cref{fig:adaptive1}).}{fig:adaptive2}
+  \begin{tikzpicture}
+    \coordinate (v0) at (0,0);
+    \coordinate (v1) at (1,0);
+    \coordinate (v2) at (2,0);
+    \coordinate (v3) at (4,0);
+    \coordinate (v4) at (8,0);
+    \coordinate (v5) at (10,0);
+
+    \coordinate (t0) at (0,-1);
+    \coordinate (t4) at (10,-1);
+
+    \foreach \v/\w in {v0/w0,v1/w1,v2/w2,v3/w3,v4/w4,v5/w5}{
+      \coordinate (\w) at ($(t0)!(\v)!(t4)$);
+      \draw[controlToKnot] (\v) -- (\w);
+    }    
+
+    \coordinate (t1) at ($ (w1)!0.25!(w2) $);
+    \coordinate (t2) at ($ (w2)!0.5!(w3) $);
+    \coordinate (t3) at ($ (w3)!0.75!(w4) $);
+
+    \draw[controlPoly] (v0) -- (v1) -- (v2) -- (v3) -- (v4) -- (v5);
+    \draw[knotPoly] (t0) -- (t1) -- (t2) -- (t3) -- (t4);
+
+    \foreach \v/\i in {v0/0,v1/1,v2/2,v3/3,v4/4,v5/5}{
+      \filldraw[controlVert] (\v) circle (2pt);
+      \node[above] at (\v) {$\ve{v_{\i}}$};
+    }
+
+    \foreach \t/\j/\pos in {t0/{0,1,2}/below,t1/3/above,t2/4/above,t3/5/above,t4/{6,7,8}/below}{
+      \filldraw[knot] (\t) circle (2pt);
+      \node[\pos] at (\t) {$t_{\j}$};
+    }
+
+    \foreach \w/\j in {w1/1,w2/2,w3/3,w4/4}{
+      \node[below] at (\w) {$\nu_{\j}$};
+    }
+    \node[below=15pt] at (w0) {$\nu_0$};
+    \node[below=15pt] at (w5) {$\nu_5$};
+    \node[left=20pt] at (v0) {$P$};
+    \node[left=20pt] at (t0) {$\tau$};
+  \end{tikzpicture}
+\end{myfig}
+We started from the idea that if we have a control polygon with
+uniformly spaced vertices -
+i.e. $|\ve{v_1}-\ve{v_0}|=|\ve{v_2}-\ve{v_1}|=\cdots=|\ve{v_n}-\ve{v_{n-1}}|$
+- then we agree on a uniform partition of the knots, as in
+\cref{fig:adaptive1} where
+$t_{m+1}-t_m=t_{m+2}-t_{m+1}=\cdots=t_{n+1}-t_n$. Starting from this situation if
+we have a generic control polygon with segments of different length as
+in \cref{fig:adaptive2} we want that each $t_i$ keep the same
+distance, in ratio, between the surrounding $\nu_j$ and $\nu_{j+1}$
+respect to the optimal case, where $\nu_j$ is the projection of
+$\ve{v_j}$ on the axis of the parameter where $\ve{v_0}$ correspond to
+$a=0$, $\ve{v_n}$ 
+correspond to $b=1$ and the scale of the lengths are preserved.
 
 \end{document}
 
