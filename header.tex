@@ -230,6 +230,27 @@ shadow, minimum width=\transH, minimum height=\transW]
   \end{figure}
 }
 
+\NewDocumentCommand{\imaget}{mmmmmo}{
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \node [figureFrame] (image1) at (0,0) {\includegraphics[width=.9\textwidth]{#1}};
+        \node [figureFrame, below=of image1] (image2) {\includegraphics[width=.9\textwidth]{#2}};
+        \node [figureFrame, below=of image2] (image3) {\includegraphics[width=.9\textwidth]{#3}};
+        \IfNoValueTF{#6}
+        {}
+        {
+          \begin{scope}[x={(image.south east)},y={(image.north west)}]
+            #6
+          \end{scope}
+        }
+      \end{tikzpicture}
+    \end{center}
+    \caption{#4}
+    \label{#5}
+  \end{figure}
+}
+
 \NewDocumentCommand{\imageDouble}{mmmmoo}{
   \begin{figure}
     \begin{center}
@@ -360,6 +381,17 @@ shadow, minimum width=\transH, minimum height=\transW]
 
 \newcommand{\bs}{B-spline\xspace}
 \newcommand{\bss}{B-splines\xspace}
+
+\newcommand{\degr}{Degree\xspace}
+\newcommand{\metA}{Dijkstra in $G'$\xspace}
+\newcommand{\metB}{Dijkstra in $G$\xspace}
+\newcommand{\metC}{\acl{SA}\xspace}
+\newcommand{\ypp}{with post proc.\xspace}
+\newcommand{\npp}{no post proc.\xspace}
+\newcommand{\yad}{with adaptive part.\xspace}
+\newcommand{\nad}{no adaptive part.\xspace}
+\newcommand{\testLab}[4]{#1; #2; #3; #4.}
+
 
 \makeatletter
 \newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
