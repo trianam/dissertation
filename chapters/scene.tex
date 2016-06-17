@@ -1,6 +1,167 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
 \chapter{Scene representation}\label{cha:scene}
+The problem of how to represent the scene is basically to choose how
+to represent the obstacles, the path, and how to memorize all the
+elements.
+
+\section{Basic elements and path}
+First of all we designed the project with path planning in the space
+in mind, so all the coordinates are in $\mE^3$. Also we concentrated
+on \bss because we want that the output of the algorithm, the
+path between a start point $s$ and an end point $e$, should be a \bs
+curve. The elements for identify univocally a curve
+$\ve{S}(t):\mR\rightarrow\mE^3$ are the
+degree $m$ of the curve, the $n$ control vertices
+\begin{equation*}
+  P=\{\ve{v_0},\dots,\ve{v_n}\}
+\end{equation*}
+that are vectors in $\mE^3$, and finally the partition vector of the domain
+\begin{equation*}
+  T=\{t_0,\dots,t_{n-m+1}\}
+\end{equation*}
+with the knots $t_i$, where $t_m\equiv a$ and $t_{n+1}\equiv b$ are
+the extremes of the domain $[a,b]$ of the curve.
+
+Regarding the degree of the curve we gave
+to the users the possibility of choosing between quadratic curves
+($m=2$), cubic curves ($m=3$) and quartic curves ($m=4$). The users
+choose also the starting point $s$ that coincides with $t_0$ and the
+ending point $e$ that coincides with $t_n$. The number
+of vertices and the other vertices themselves come from the algorithm,
+and depends of the position of $s$ and $e$ and the obstacles, see
+\cref{sec:polChain} for details.
+
+The knots are generated automatically using one of two methods, who the
+user choose, see \cref{sec:knotSel} for details.
+
+So for the curve we memorize only the path $P$ and the degree
+$m$. When we need to plot it we tabulate $\ve{S}(t)$ for a certain
+number\footnote{Enough for having a smooth look.} of values of $t$ and
+then we draw the polygonal chain that connect them.
+
+\section{Basic obstacle representation}\index{Obstacle}\index{\acf{OTF}}
+Apart the curve, in the scene we need to represent the obstacles, we
+call $Obs$ the set of all obstacle in scene. We choose to represents
+each obstacle $Ob\in Obs$ as a set of triangular faces that we call
+\acp{OTF} each one containing three vertices. So recapping we have
+\begin{equation*}
+  \begin{split}
+    Obs&=\{Ob_0,\dots,Ob_{\#Obs}\}\\
+    Ob_i&=\{Otf_{i,0},\dots,Otf_{i,\#Otf_i}\}&i=0,\dots,\#Obs\\
+    Otf_{i,j}&=\{\ve{p_{i,j,0}},\ve{p_{i,j,1}},\ve{p_{i,j,2}}\}\quad\qquad&
+    i=0,\dots,\#Obs;\quad j=0,\dots,\#Otf_i
+  \end{split}
+\end{equation*}
+where $\#Obs$ is the number of obstacles in the scene and $\#Otf_i$ is
+the number of \acp{OTF} in obstacle $Ob_i$.
+
+We choose this specific configuration because doing that the basic units that
+constitutes the obstacles of the scene are triangles, and so all the
+intersection that can occur are between triangle and triangle or
+triangle and segment and so simple to calculate. If we wanted to
+design the obstacles in a more complex way we should have provided
+methods for triangulate the faces. 
+
+The drawback of this approach is that if we want to insert
+complex-shaped obstacles in the scene we need to triangulate the
+surface in a manual way, and insert the final \acp{OTF}. However we
+provided also methods
+of abstracting this task that provide the possibility of creating more
+complex obstacles in a simple way (\cref{sec:complexObs}).
+
+Using this solution also means that we can potentially insert in the
+scene open polyhedrons or shapes that intersect, as we don't have
+any restriction on the position of the points $\ve{p_{i,j,k}}$.
+
+\section{Tetrahedron and convex hull obstacles}\label{sec:complexObs}
+For helping the user with the construction of the scene we realized
+also two methods that builds obstacles in a simplified way
+\begin{itemize}
+\item one for building tetrahedrons;
+\item and one more general for building convex hulls.
+\end{itemize}
+
+\begin{algo}{Abstract construction of tetrahedron}{alg:tetrahedron}
+  \Procedure{buildTetrahedron}{$\ve{a}, \ve{b}, \ve{c}, \ve{d}$}
+  \State $Obs\Ass Obs\cup\{\ \{\ve{a},\ve{b},\ve{c}\},\ \{\ve{a},\ve{b},\ve{d}\},\ \{\ve{b},\ve{c},\ve{d}\},\ \{\ve{c},\ve{a},\ve{d}\}\ \}$
+  \EndProcedure
+\end{algo}
+\begin{algo}{Abstract construction of convex hull
+    polyhedron}{alg:convHullPoly}
+  \Procedure{buildConvexHullPolyhedron}{$\ve{p_0},\dots,\ve{p_n}$}
+  \State $Ob\Ass\emptyset$
+  \State $facets\Ass convexHull(\{\ve{p_0},\dots,\ve{p_n}\})$
+  \ForAll{$f\in facets$}
+  \State $simplices\Ass triangularize(f)$
+  \ForAll{$s\in simplices$}
+  \State $Ob\Ass Ob\cup\{\ve{s_0},\ve{s_1},\ve{s_2}\}$
+  \EndFor
+  \EndFor
+  \State $Obs\Ass Obs\cup Ob$
+  \EndProcedure
+\end{algo}
+\cref{alg:tetrahedron} take the four vertices of the tetrahedron to
+build and add to $Obs$ a new obstacle that have all the faces of the
+unique tetrahedron that can be built with the four
+points.
+
+\cref{alg:convHullPoly} is more complex, first we need to build the
+convex hull of the input points (see \cite{deberg} for details on the
+convex hull algorithm), then we obtain a set of $facets$ that can be
+triangles but also more complex planar polygons, in that case we need
+to triangularize the $facets$ obtaining one or more $simplices$ that
+are triangles (see \cite{deberg} for details on the triangularization
+algorithms), finally we add each simplex as a new \ac{OTF} of the
+obstacle.
+
+\section{Bounding box}\index{Bounding box}
+We decided also to give to the user the possibility of adding a
+bounding box around the scene. It is built as an obstacle, using
+\acp{OTF}, in fact we provide a method that take two points $\ve{a}$
+and $\ve{b}$ and build the cube with extremes those points and with
+all the faces triangularized like in \cref{fig:boundingBox}.
+\begin{myfig}{Bounding box with extremes $\ve{a}$ and $\ve{b}$.}{fig:boundingBox}
+  \begin{tikzpicture}
+    \pgfmathsetmacro\front{6}
+    \pgfmathsetmacro\side{2}
+    \pgfmathsetmacro\sum{\front+\side}
+
+    \coordinate (a) at (0,0);
+    \coordinate (o1) at (\front,0);
+    \coordinate (o2) at (\sum,\side);
+    \coordinate (o3) at (\front,\front);
+    \coordinate (o4) at (0,\front);
+    \coordinate (o5) at (\side,\sum);
+    \coordinate (b) at (\sum,\sum);
+
+
+    \draw[poly] (a) -- (o1) -- (o3) -- (o4) -- (a);
+    \draw[poly] (o1) -- (o2) -- (b) -- (o3);
+    \draw[poly] (b) -- (o5) -- (o4);
+    \draw[poly] (o4) -- (o1);
+    \draw[poly] (b) -- (o1);
+    \draw[poly] (b) -- (o4);
+
+
+    \foreach \p in {o1,o2,o3,o4,o5}
+    \filldraw[vertex] (\p) circle (2pt);
+
+    \foreach \p in {a,b}
+    \filldraw[vertexHigh] (\p) circle (4pt);
+
+    \foreach \n/\l/\p in {a/a/{below left},b/b/{above
+        right},o1/n_1/below,o2/n_2/{below right},o3/n_3/{below
+        right},o4/n_4/{left},o5/n_5/{above left}}
+    \node[\p] at (\n) {$\ve{\l}$};
+  \end{tikzpicture}
+\end{myfig}
+
+In all the project, regarding the intersections, the \acp{OTF} of the
+bounding box are considered
+exactly like the \acp{OTF} of the obstacles, the only differences are
+that the bounding box is not visible when the scene is plotted, and a
+point inside the bounding box is not considered inside obstacle.
 
 \end{document}
 

@@ -10,7 +10,7 @@ The general idea is to use an open \bs curve of a certain degree
 interpolating the chosen starting and ending points, whose
 control polygon is a suitable modification of a polygonal chain
 extracted from a graph
-obtained with a Voronoi diagram method. In \cref{sec:polChain} we
+obtained with a \ac{VD} method. In \cref{sec:polChain} we
 explain in detail how to
 build such polygonal chain. Before using the chain as a control
 polygon for the \bs, it is refined and adjusted - as explained in
@@ -20,7 +20,7 @@ collision. Also we implemented a method for an optional adaptive
 arrangment of the breakpoints of the \bs described in
 \cref{sec:knotSel} and an optional post processing for the
 simplification of the path described in \cref{sec:postPro}.
-\section{Polygonal chain}\label{sec:polChain}
+\section{Polygonal chain}\label{sec:polChain}\index{Polygonal chain}
 In the first phase the objective is to extract a suitable polygonal chain from
 the scene, such that the extremes coincides with the start point $\ve{s}$
 and the end point $\ve{e}$. In particular we are interested in short length
@@ -28,15 +28,15 @@ chains. We calculate the shortest path
 in a graph that is obtained by using an adaptation to three
 dimensions of a well known bidimensional method
 \cite{bhattacharya}\cite{ho-liu}\cite{seda-pich} that use
-Voronoi diagrams as base.
+\acp{VD} as base.
 
 We choose a Voronoi method because it build a structure roughly
 equidistant from obstacles, and so we have low probability of
 collisions between the curve and the obstacles.
 
-\subsection{Base structure}
+\subsection{Base structure}\index{Graph}
 First we
-start distributing points on the \ac{OTF} and on
+start distributing points on the \acp{OTF} and on
 an invisible bounding box, as in \cref{fig:sites}.
 \image{scrSites.png}{Scene with Voronoi sites.}{fig:sites}
 The sites are distributed using a recursive method, for each triangle
@@ -75,7 +75,7 @@ each new triangle.
   \end{tikzpicture}
 \end{myfig}
 
-We construct the Voronoi diagram using the Fortune's algorithm
+We construct the \ac{VD} using the Fortune's algorithm
 \cite{fortune} on
 those points as input sites, and we build a graph
 $$G=(V,E)$$
@@ -106,9 +106,13 @@ and $\ve{e}$ we designed two
 alternative methods:
 \begin{itemize}
 \item the first method find the vertex $\ve{v_n}\in V_{vis}\subseteq V$ such
-  that $dist(\ve{s},\ve{v_n})\leq dist(\ve{s},\ve{v_i})$, $\forall \ve{v_i}\in V_{vis}$, where
-  $V_{vis}=\{\ve{v}\in V |$ the segment $\overline{\ve{s} \ve{v_i}}$ don't intersect
-  any obstacle$\}$, then add $\ve{s}$ to $V$ and the edge $(\ve{s},\ve{v_n})$ to $E$;
+  that $dist(\ve{s},\ve{v_n})\leq dist(\ve{s},\ve{v_i})$, $\forall
+  \ve{v_i}\in V_{vis}$, where
+  \begin{equation*}
+    V_{vis}=\{\ve{v}\in V\ :\ \overline{\ve{s} \ve{v_i}}\ \text{don't intersect
+  any obstacle}\},
+  \end{equation*}
+  then add $\ve{s}$ to $V$ and the edge $(\ve{s},\ve{v_n})$ to $E$;
   similarly for $\ve{e}$;
 \item the second method add $\ve{s}$ to $V$ and all the edges $(\ve{s},\ve{v_i})$
   $\forall \ve{v_i}\in V_{vis}$; similarly for $\ve{e}$.
@@ -119,7 +123,7 @@ we need to take into account the degree of the \bs and the
 position of the obstacles, the details are in \cref{sec:obsAvoid} and
 \cref{sec:degreeInc}.
 
-\subsubsection{Complexity considerations}
+\subsubsection{Complexity considerations}\index{Complexity}
 Fortune's algorithm runs in time $\bigO(|Is|\log |Is|)$ \cite{deberg}
 where $Is$ is
 the set 
@@ -154,8 +158,8 @@ then we have that
   \label{eq:numE}
   |E|=\bigO(k|V|)=\bigO(k|Ob|).
 \end{equation}
-In the worst case $k=|V|$ and $|E|=\bigO(|V|^2)$ but for Voronoi
-diagrams in plane there is a property that if we have $n$ input sites
+In the worst case $k=|V|$ and $|E|=\bigO(|V|^2)$ but for \acp{VD} in
+plane there is a property that if we have $n$ input sites
 that lay on a circumference, without any other site inside the
 circumference, then the center of the circumference is a vertex shared
 by $n$ cells \cite{deberg}. The same property is extensible in space with
@@ -184,7 +188,7 @@ and if we make the assumption of $k$ constant
   \bigO(|Ob|^2)
 \end{equation*}
 
-\subsection{Triple's graph}\label{sec:trigraph}
+\subsection{Triple's graph}\label{sec:trigraph}\index{Graph!triple's graph}
 Before calculating the shortest path on the chosen graph with Dijkstra
 \cite{dijkstra}\cite{knuth}, we
 transform it in a graph containing all the triples
@@ -244,7 +248,7 @@ avoidance algorithm of
 \cref{sec:inter1}, theoretically is possible to bypass such
 transformation for the algorithm on \cref{sec:inter2}.
 
-\subsubsection{Complexity considerations}
+\subsubsection{Complexity considerations}\index{Complexity}
 If we suppose a maximum degree $k$ for each vertex in the graph $G$ -
 i.e. each vertex in $V$ can have maximum $k$ edges attached to
 it - then the number of vertices in the transformed graph $G_t$ is 
@@ -309,7 +313,7 @@ resulting curve is contained inside the union of all the triangles
 with vertices equal to three consecutive control vertices of the control
 polygon. Using that property we can resolve the problem of the
 collision maintaining all the triangles in the control polygon free
-from collision with the \ac{OTF}. Note that the property of convex
+from collision with the \acp{OTF}. Note that the property of convex
 hull of quadratic
 \bss is valid also in space, so the convex hull is still composed
 of planar figures - specifically of triangles - like the faces of the
@@ -328,7 +332,7 @@ the shortest path from start to end in the graph $G$, checking later for
 collisions in the triangles formed of consecutive points in such path
 and when one is found some actions are taken for dealing with that.
 
-\subsection{First solution: Dijkstra's algorithm in $G_t$}\label{sec:inter1}
+\subsection{First solution: Dijkstra's algorithm in $G_t$}\label{sec:inter1}\index{Dijkstra}
 The first solution of the problem exploit the graph $G_t$ obtained as
 explained in \cref{sec:trigraph}. Before applying Dijkstra's algorithm
 to $G_t$ all the triples are filtered checking if the
@@ -341,7 +345,7 @@ Note that if a triple $(\ve{a},\ve{b},\ve{c})$ is removed from $V_t$ - and
 consequently also the triple $(\ve{c},\ve{b},\ve{a})$ - not necessarily this exclude
 the three vertices $\ve{a}$, $\ve{b}$, $\ve{c}$ from being part of the final
 polynomial chain. For instance\footnote{In the plane, this graph cannot be
-  obtained using the procedure based on Voronoi diagrams explained in
+  obtained using the procedure based on \ac{VD} explained in
   \cref{sec:voronoi}, but a similar situation is plausible
   considering Voronoi cells in space.} in
 \cref{fig:exampleTriples} the triple
@@ -436,7 +440,7 @@ triangles in the
 path collides with obstacles. On \cref{fig:sol12} is visible another
 point of view of pictures shown in \cref{fig:sol11}.
 
-\subsubsection{Complexity considerations}
+\subsubsection{Complexity considerations}\index{Complexity}
 For each triple and each \ac{OTF} we need to solve three $3\times 3$
 linear systems for the
 collision check\footnote{See
@@ -518,7 +522,7 @@ for the routing.}.
 On \cref{tab:costsSol1} we resumed all the terms that contributes to
 the total costs, and the total cost itself.
 
-\subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}
+\subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}\index{Dijkstra}
 The First solution is interesting from an algorithmic point of view,
 but is not very practical because it throws all the triples that
 intersect an obstacle. We tried another
@@ -542,7 +546,7 @@ T_i &=& \triangle \ve{v_i}\ve{v_{i+1}}\ve{v_{i+2}}\\
 T_{n-3} &=& \triangle \ve{v_{n-3}}\ve{v_{n-2}}\ve{v_{n-1}}\\
 T_{n-2} &=& \triangle \ve{v_{n-2}}\ve{v_{n-1}}\ve{v_n}
 \end{eqnarray*}
-intersect one of the \ac{OTF}, where $\triangle \ve{v_i}\ve{v_j}\ve{v_k}$ denotes the
+intersect one of the \acp{OTF}, where $\triangle \ve{v_i}\ve{v_j}\ve{v_k}$ denotes the
 triangle with
 vertices the points $\ve{v_i}$, $\ve{v_j}$ and $\ve{v_k}$.
 
@@ -565,7 +569,7 @@ triangle $T_i$. So for each $T_i$ we have a (possibly empty) set of points
 of intersection between it and the edges of each \ac{OTF} - we call
 that set $O$.
 \begin{myfig}{$T_i$($=\triangle \ve{v_i}\ve{v_{i+1}}\ve{v_{i+2}}$) and the points
-    $\ve{o_1},\ve{o_2},\ve{o_3}$ of intersection between it and the edges of some \ac{OTF}.}{fig:triangleIntersection}
+    $\ve{o_1},\ve{o_2},\ve{o_3}$ of intersection between it and the edges of some \acp{OTF}.}{fig:triangleIntersection}
   \begin{tikzpicture}
     \coordinate (P) at (-1,0);
     \coordinate (A) at (0,0);
@@ -689,7 +693,7 @@ composed of those vertices
 collide with the obstacle on the back. The two new vertices $\ve{w_1}$
 and $\ve{w_2}$ are added to avoid the collision.
 
-\subsubsection{Complexity considerations}
+\subsubsection{Complexity considerations}\index{Complexity}
 For this solution we have still the cost for
 the creation and pruning of the graph $G$, then we need to apply Dijkstra's
 algorithm in $G$ for obtaining $P$ with a cost \cite{bondy}
@@ -709,8 +713,8 @@ and if we make the assumption of $k$ constant we have a cost
 For checking and removing the collisions in the path we need to
 consider every face of obstacle in $Ob$ for every
 triangle in $P$ and the cost for doing this is\footnote{If
-  $\#\ac{OTF}=\bigO(|Ob|)$ - i.e. the
-  number of \ac{OTF} don't grow faster than the number of obstacles.}
+  $\#\acp{OTF}=\bigO(|Ob|)$ - i.e. the
+  number of \acp{OTF} don't grow faster than the number of obstacles.}
 $\bigO(|P|\cdot|Ob|)$ where with $|P|$ we mean the number of vertexes
 in $P$, in the worst case
 $|P|=\bigO(|V|)=\bigO(|Ob|)$ so in total 
@@ -757,7 +761,7 @@ this case we can divide the algorithm in two parts constructing only
 once $G$ with cost $\bigO(|Ob|^2)$ and then using it for different
 trials with a cost $\bigO(|P|\cdot|Ob|)$.
 
-\subsection{Third solution: simulated annealing}\label{sec:inter3}
+\subsection{Third solution: \acf{SA}}\label{sec:inter3}\index{\acf{SA}}
 The others solutions of \cref{sec:inter1} and \cref{sec:inter2} have two
 problem in common: both reject configurations in a prudent way
 considering only the control polygon, and both don't optimize neither
@@ -776,7 +780,7 @@ are interested in optimizing both length and curvature and torsion
 peaks because we want a path that is short but also a path that is
 smooth.
 
-\subsubsection{\acf{LR} applied to the project}
+\subsubsection{\acf{LR} applied to the project}\index{\acf{LR}}
 We can apply the concept explained in \cref{sec:lagrangianRelaxation}
 to the project.
 
@@ -821,8 +825,9 @@ We need to build now the Lagrangian function corresponding to
 the constraint function is not negative, and is calculated as the
 ratio
 \begin{equation*}
-constraint(P) = \frac{|\{\ve{p} \in spline(P)\ |\ \exists i\in\{1,\dots,m\}
-  : \ve{p}\in obstacle_i \}|}{|\{\ve{p} \in spline(P)\}|}
+constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \ve{p}\in
+    obstacle_i, i\in\{1,\dots,m\}\}\ \right|}{\left|\ \{\ve{p} \in
+    spline(P)\}\ \right|}
 \end{equation*}
 where the points $\ve{p}$ of the spline are calculated in a discrete form. That
 function is not negative, so the Lagrangian function correspondent to
@@ -924,7 +929,7 @@ For obtaining this target we realized \cref{alg:postProcess} that
 iterate through all the vertices excluded the extremes, and for each
 $v_i$ check if it can be removed without consequences - where with
 consequences we mean that removing $v_i$ would cause that a triangle
-in $P$ intersect one of the \ac{OTF}. 
+in $P$ intersect one of the \acp{OTF}. 
 
 \begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
   \begin{tikzpicture}
@@ -982,7 +987,7 @@ the obstacle in the figure don't intersect anyone of the triangles in
 $P$, but intersect $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
 $\tilde{P}$.
 
-\subsubsection{Complexity considerations}\index{Post process!complexity}
+\subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity}
 For every vertex of $P$ we need to check if two triangles intersect
 with an \ac{OTF}, so we have a complexity of
 \begin{equation*}
@@ -997,7 +1002,7 @@ Until now we assumed only quadratic \bss - i.e. of degree $m$ - because
 on that case,
 for the property of convex hull (\cref{sec:convexHull}),
 we need to check only for collisions between triangles and triangles
-(triangles in $P$ and \ac{OTF}). If we want to use higher degree
+(triangles in $P$ and \acp{OTF}). If we want to use higher degree
 curves we can modify the
 previous algorithms for dealing with polyhedral convex hulls, but this
 mean increasing the complexity of the methods.
@@ -1257,17 +1262,73 @@ for $i=1,\dots,n-m$; so we concentrate on \cref{en:adaptive}.
 \end{myfig}
 We started from the idea that if we have a control polygon with
 uniformly spaced vertices -
-i.e. $|\ve{v_1}-\ve{v_0}|=|\ve{v_2}-\ve{v_1}|=\cdots=|\ve{v_n}-\ve{v_{n-1}}|$
-- then we agree on a uniform partition of the knots, as in
-\cref{fig:adaptive1} where
-$t_{m+1}-t_m=t_{m+2}-t_{m+1}=\cdots=t_{n+1}-t_n$. Starting from this situation if
+i.e. $\norm{\ve{v_1}-\ve{v_0}}=\norm{\ve{v_2}-\ve{v_1}}=\cdots=\norm{\ve{v_n}-\ve{v_{n-1}}}$
+- then we agree on a uniform partition of the knots
+($t_{m+1}-t_m=t_{m+2}-t_{m+1}=\cdots=t_{n+1}-t_n$). In
+\cref{fig:adaptive1} there is an example of a cubic \bs curve with
+uniformly spaced control polygon, where the segment above is a
+\emph{rectified} 
+visualization of the control polygon with six control
+vertices
+$\ve{v_0},\dots,\ve{v_5}$, and the segment below represent the
+partition of the domain from $a$ (left) to $b$
+(right) with the projections $\nu_0,\dots,\nu_5$ of the control vertices
+scaled in length to the parametric domain axis\footnote{$\ve{v_0}$ is
+  projected to $a$, $\ve{v_5}$ is projected to $b$, and the ratios
+  between the distances between vertices are preserved.} and the knots $t_0,\dots,t_8$. Starting from this situation if
 we have a generic control polygon with segments of different length as
 in \cref{fig:adaptive2} we want that each $t_i$ keep the same
 distance, in ratio, between the surrounding $\nu_j$ and $\nu_{j+1}$
-respect to the optimal case, where $\nu_j$ is the projection of
-$\ve{v_j}$ on the axis of the parameter where $\ve{v_0}$ correspond to
-$a=0$, $\ve{v_n}$ 
-correspond to $b=1$ and the scale of the lengths are preserved.
+respect to the optimal case. For instance on \cref{fig:adaptive1}
+$\frac{t_3-\nu_1}{\nu_2-\nu_1}=\frac{1}{4}$ and
+$\frac{\nu_2-t_3}{\nu_2-\nu_1}=\frac{3}{4}$, this means that on
+\cref{fig:adaptive2} the same values must be preserved.
+
+The problem now is how to calculate the values of $t_i$ on the general
+case. We consider only the inner part $\tau$ of the partition vector
+included the extremes
+\begin{equation*}
+  \tau_i = t_{i+m}\qquad i=0,\dots,n-m+1
+\end{equation*}
+where $\tau_0=a=0$ and $\tau_{n-m+1}=b=1$, on \cref{fig:adaptive1} and
+\cref{fig:adaptive2}
+$\tau=(t_2,t_3,t_4,t_5,t_6)$. Now we calculate the position of
+$\tau_i$ respect to the $\nu_j$ in the \emph{optimal} case, we can do this
+calculating the position of $\tau_i$ expressed in units of $\nu_j$. In
+other words we calculate
+\begin{equation}\label{eq:adaptivePos}
+  \tau_i^\nu=\frac{n}{n-m+1}\cdot i\qquad i=0,\dots,n-m+1
+\end{equation}
+and we obtain numbers $\tau_i^\nu$ whose integer part
+$\lfloor\tau_i^\nu\rfloor$ represents the index $j$ of the
+$\nu_j$ that is on the left of $\tau_i$, and the decimal part
+$(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)$ represents the distance
+$\frac{\tau_i-\nu_j}{\nu_{j+1}-\nu_j}$.
+
+Now we calculate the projections $\nu_i$ in the domain on the
+\emph{generic} case,
+we start calculating the incremental distance of
+the vertices
+\begin{equation*}
+  \begin{cases}
+    d_0=0&\\
+    d_i=d_{i-1}+\norm{\ve{v_i}-\ve{v_{i-1}}}&\qquad i=1,\dots,n
+  \end{cases}
+\end{equation*}
+and, remembering that the parametric domain is $[0,1]$, we have
+\begin{equation}\label{eq:adaptiveProj}
+  \nu_i=\frac{d_i}{d_n}\qquad i=0,\dots,n.
+\end{equation}
+
+Now using the positions \cref{eq:adaptivePos} on the projection
+\cref{eq:adaptiveProj} we obtain the values
+\begin{equation*}
+  \tau_i=\nu_{\lfloor\tau_i^\nu\rfloor}+(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)(\nu_{\lfloor\tau_i^\nu\rfloor+1}-\nu_{\lfloor\tau_i^\nu\rfloor})\qquad i=0,\dots,n-m+1
+\end{equation*}
+and finally adding the duplicated knots we obtain
+\begin{equation*}
+  t_i=\tau_{\min(n-m+1,\ \max(0,\ i-m))}\qquad i=0,\dots,n+m+1.
+\end{equation*}
 
 \end{document}
 

@@ -1,7 +1,6 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
 \chapter{Prerequisites}
-\section{Voronoi diagrams}\label{sec:voronoi}
 \section{Splines and \bss}\label{sec:spline}
 A \emph{spline} is a piecewise polynomial function with prescribed
 regularity on its domain.
@@ -351,14 +350,14 @@ For a generic parametric curve $\ve{S}(u)$ defined for $u\in[a,b]$ we
 have that the curvature is defined as
 \begin{equation}
   \label{eq:curvature}
-  \kappa(u) = \frac{\left|\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right|}{{\left|\dot{\ve{S}}(u)\right|}^3}
+  \kappa(u) = \frac{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}{{\norm{\dot{\ve{S}}(u)}}^3}
 \end{equation}
 and the torsion is defined as
 \begin{equation}
   \label{eq:torsion}
   \tau(u) =
-  \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\left|\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right|}
-  = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\left|\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right|}
+  \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}
+  = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}
 \end{equation}
 where $\wedge$ is the vector product and
 \begin{equation*}
@@ -400,7 +399,64 @@ curvature and torsion, in general a curve that have lower peaks of
 $\kappa(u)$ and $\tau(u)$ are better respect to curves that have
 higher peaks.
 
-\section{Statistical methods}
+\section{Voronoi Diagrams}\label{sec:voronoi}\index{\acf{VD}}
+On this section we introduce an important structure that we used in
+our project. \ac{VD} \cite{deberg} provide a method for creating a
+partition of the
+space using distances from a set of input points called
+\emph{sites}. Formally we have a set
+\begin{equation*}
+  S=\{\ve{s_0},\ve{s_1},\dots,\ve{s_n}\} \subset \mE^d
+\end{equation*}
+Of $n$ sites in the euclidean space of dimension $d$, and we build a
+set of Voronoi \emph{cells}
+\begin{equation*}
+  Vor(S)=\{V(\ve{s_0}),\dots,V(\ve{s_n})\}\subset 2^{\mE^d}
+\end{equation*}
+such that each cell, one for each site $\ve{s_i}$, is the set
+\begin{equation*}
+  V(\ve{\ve{s_i}})=\{\ve{p}\in\mE^d\ :\
+  \norm{\ve{p}-\ve{s_i}}<\norm{\ve{p}-\ve{s_j}}\ \forall \ve{s_j}\neq\ve{s_i}\}
+\end{equation*}
+of the points of the space such that are nearer to $\ve{s_i}$ respect
+to the other sites.
+
+\image{voronoi.eps}{Example of \ac{VD}.}{fig:voronoi}
+
+
+The most important algorithm for calculating \ac{VD} is the
+\emph{sweeping line} algorithm that build the diagram in $\bigO(n\log
+n)$ and it is optimal. The algorithm involve building $Vor(S)$
+incrementally while sweeping the space, see \cite{deberg} and
+\cite{fortune} for
+details.
+
+One property of \ac{VD} is that $V(\ve{s_i})$ can be closed area or an
+open area - i.e. the edges of the cells can be infinite - is important
+to deal with this fact if we want to interpret $Vor(S)$ as the graph of
+vertexes and edges of the cells (it will have edges that go to
+infinite), we call such graph $G(Vor(S))$.
+
+Another property is that if we have $d+1$ sites $\ve{s_0'},\dots,\ve{s_d'}$ that lay on the
+surface of a $(d-1)$-sphere\footnote{A circumference in $2$-dimensional
+  space, a sphere in $3$-dimensional space, an hypersphere in
+  $n$-dimensional space with $n\ge 3$.} that don't have any other site on
+the interior, then the center point of the $(d-1)$-sphere is the
+vertex shared between the $d+1$ cells $V(\ve{s_0'}),\dots,V(\ve{s_d'})$
+and nothing else. This is not true for less than $d+1$ sites on a
+$(d-1)$-sphere because they are not enough to define it univocally,
+but is possible to have $n>d+1$ sites on a $(d-1)$-sphere, on that
+case the center of the $(d-1)$-sphere is the shared vertex of the
+cells corresponding to the $n$ sites. This is important for reasoning
+about the topography of $G(Vor(S))$ because if we allow more than
+$d+1$ sites on a $(d-1)$-sphere then the maximum degree
+$\Delta(G(Vor(S)))$ of the graph can be arbitrarily big (until the
+number of vertices). However the fact that we work with real scenarios -
+i.e. with coordinates in $\mE^d$ - legitimize the restriction of not
+allowing more than $d+1$ sites on an $(d-1)$-sphere, limiting
+$\Delta(G(Vor(S)))$ to $d+1$.
+
+\section{Statistical methods}\label{sec:statisticalMethods}
 On this section we make a short introduction to \ac{MCM}
 \cite{metropolis}\cite{sobol}\cite{newman} and \ac{SA} \cite{kirkpatrick}\cite{ho},
 two statistical methods for calculating unknown quantities and finding
@@ -552,7 +608,7 @@ uncertainty in the inputs or an high degree of liberty in the
 state. For instance integrating numerically a function with many
 dimensions or \ac{SA}.
 
-\subsection{\acf{SA}}\index{Simulated annealing}
+\subsection{\acf{SA}}\index{\acf{SA}}
 The \ac{SA} is a method used for finding the global optimum - i.e. the
 maximum or the minimum - of a function. It is inspired by a method
 used in metallurgy that consists in heating and then cooling slowly a
