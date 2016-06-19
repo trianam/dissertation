@@ -107,11 +107,13 @@ unique tetrahedron that can be built with the four
 points.
 
 \cref{alg:convHullPoly} is more complex, first we need to build the
-convex hull of the input points (see \cite{deberg} for details on the
+convex hull of the input points (see \cite{deberg} and \cite{press}
+for details on the 
 convex hull algorithm), then we obtain a set of $facets$ that can be
 triangles but also more complex planar polygons, in that case we need
 to triangularize the $facets$ obtaining one or more $simplices$ that
-are triangles (see \cite{deberg} for details on the triangularization
+are triangles (see \cite{deberg} and \cite{press} for details on the
+triangularization
 algorithms), finally we add each simplex as a new \ac{OTF} of the
 obstacle.
 

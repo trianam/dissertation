@@ -38,7 +38,8 @@ collisions between the curve and the obstacles.
 First we
 start distributing points on the \acp{OTF} and on
 an invisible bounding box, as in \cref{fig:sites}.
-\image{scrSites.png}{Scene with Voronoi sites.}{fig:sites}
+\image{scrSites.png}{Scene with Voronoi sites (on
+  obstacles and on invisible bounding box).}{fig:sites}
 The sites are distributed using a recursive method, for each triangle
 of the scene we add three points - one for each
 vertex, if not already added before - and then we calculate the area
@@ -47,7 +48,7 @@ the triangle in four triangles adding three more vertices on the
 midpoints of the edges of the original triangle as in
 \cref{fig:triangleDec}, and repeating the process recursively for
 each new triangle.
-\begin{myfig}{Decomposition of a triangle.}{fig:triangleDec}
+\begin{myfig}{Decomposition of an \ac{OTF}.}{fig:triangleDec}
   \begin{tikzpicture}[scale=2]
     \coordinate (a1) at (1,0);
     \coordinate (b1) at (2,1);
@@ -93,10 +94,10 @@ In the bidimensional case the equivalent method implies distributing
 the sites in the edges of the polygonal obstacles and then pruning the
 graph when an edge of the graph intersect an edge of the obstacle as
 in \cref{fig:voronoi2d}.
-\image{voronoi2d.png}{Voronoi graph in 2D before pruning (a) and after
-  pruning (b).}{fig:voronoi2d}
+\imageDouble{voronoi2d-a.eps}{voronoi2d-b.eps}{Voronoi graph in 2D
+  before (left) and after (right) pruning.}{fig:voronoi2d}
 We decided to extend the method in 3 dimensions distributing points in
-the whole \ac{OTF}, an alternative would be distributing
+the whole \ac{OTF} surface, an alternative would be distributing
 points only along the edges of the obstacles.
 
 On the graph obtained $G$ we attach the desired start and end
@@ -947,10 +948,12 @@ in $P$ intersect one of the \acp{OTF}.
     \path[convexHull] (a) -- (b) -- (d) -- (a);
     \path[convexHull] (b) -- (d) -- (e) -- (b);
 
-    \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e);
+    \draw[controlPoly] (a)  -- (b);
+    \draw[controlPoly] (d)  -- (e);
     \draw[controlPolyTract] (l1) -- (a);
     \draw[controlPolyTract] (e) -- (l2);
-    \draw[controlPolyHigh] (b) -- (d);
+    \draw[controlPolyTractHigh] (b) -- (d);
+    \draw[controlPolyHigh] (b) -- (c) -- (d);
 
     \path[obstacle] (o1) -- (o2) -- (o3) -- (o1);
     \node at (barycentric cs:o1=0.3,o2=0.3,o3=0.3) {\acs{OTF}};
