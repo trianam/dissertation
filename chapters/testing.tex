@@ -1,47 +1,62 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
 \chapter{Testing}
-For evaluating the project we made the tests on \cref{tab:tests}
+For evaluating the project we made the tests on \cref{tab:tests},
+where
+\begin{itemize}
+\item \emph{Deg.} is the degree of the \bs curve;
+\item \emph{Met.} is the method used, where
+  \begin{itemize}
+  \item Method \metA is Dijkstra in $G'$;
+  \item Method \metB is Dijkstra in $G$;
+  \item Method \metC is \acl{SA};
+  \end{itemize}
+\item \emph{P. p.} indicate if the post processing is used (\ypp) or
+  not (\npp);
+\item \emph{Part.} indicate if is used the uniform knot partition
+  (\nad) or the adaptive one (\yad)
+\end{itemize}
+
 \begin{table}
   \centering
   \begin{tabular}{|c|c|c|c|c|}
     \hline
-    Deg.&Method&Post proc.&Adap. part.&figure\\
+    Deg.&Met.&P. p.&Part.&figure\\
     \hline
-    2&\metA&no&no&\cref{fig:test21xx}(\cpageref{fig:test21xx})\\
-    2&\metA&yes&no&\cref{fig:test21vx}(\cpageref{fig:test21vx})\\
-    2&\metA&no&yes&\cref{fig:test21xv}(\cpageref{fig:test21xv})\\
-    3&\metA&no&no&\cref{fig:test31xx}(\cpageref{fig:test31xx})\\
-    4&\metA&no&no&\cref{fig:test41xx}(\cpageref{fig:test41xx})\\
-    4&\metA&yes&yes&\cref{fig:test41vv}(\cpageref{fig:test41vv})\\
-    2&\metB&no&no&\cref{fig:test22xx}(\cpageref{fig:test22xx})\\
-    2&\metB&yes&no&\cref{fig:test22vx}(\cpageref{fig:test22vx})\\
-    2&\metB&no&yes&\cref{fig:test22xv}(\cpageref{fig:test22xv})\\
-    3&\metB&no&no&\cref{fig:test32xx}(\cpageref{fig:test32xx})\\
-    4&\metB&no&no&\cref{fig:test42xx}(\cpageref{fig:test42xx})\\
-    2&\metC&no&no&\cref{fig:test23xx}(\cpageref{fig:test23xx})\\
-    3&\metC&no&no&\cref{fig:test33xx}(\cpageref{fig:test33xx})\\
-    4&\metC&no&no&\cref{fig:test43xx}(\cpageref{fig:test43xx})\\
+    \degTwo&\metA&\npp&\nad&\cref{fig:test21xx}(\cpageref{fig:test21xx})\\
+    \degTwo&\metA&\ypp&\nad&\cref{fig:test21vx}(\cpageref{fig:test21vx})\\
+    \degTwo&\metA&\npp&\yad&\cref{fig:test21xv}(\cpageref{fig:test21xv})\\
+    \degThree&\metA&\npp&\nad&\cref{fig:test31xx}(\cpageref{fig:test31xx})\\
+    \degFour&\metA&\npp&\nad&\cref{fig:test41xx}(\cpageref{fig:test41xx})\\
+    \degFour&\metA&\ypp&\yad&\cref{fig:test41vv}(\cpageref{fig:test41vv})\\
+    \degTwo&\metB&\npp&\nad&\cref{fig:test22xx}(\cpageref{fig:test22xx})\\
+    \degTwo&\metB&\ypp&\nad&\cref{fig:test22vx}(\cpageref{fig:test22vx})\\
+    \degTwo&\metB&\npp&\yad&\cref{fig:test22xv}(\cpageref{fig:test22xv})\\
+    \degThree&\metB&\npp&\nad&\cref{fig:test32xx}(\cpageref{fig:test32xx})\\
+    \degFour&\metB&\npp&\nad&\cref{fig:test42xx}(\cpageref{fig:test42xx})\\
+    \degTwo&\metC&\ndpp&\ndad&\cref{fig:test23xx}(\cpageref{fig:test23xx})\\
+    \degThree&\metC&\ndpp&\ndad&\cref{fig:test33xx}(\cpageref{fig:test33xx})\\
+    \degFour&\metC&\ndpp&\ndad&\cref{fig:test43xx}(\cpageref{fig:test43xx})\\
     \hline
   \end{tabular}
   \caption{Resume of the tests.}
   \label{tab:tests}
 \end{table}
 
-\imaget{test21xxa.png}{test21xxb.png}{test21xxc.png}{\testLab{\degr 2}{\metA}{\npp}{\nad}}{fig:test21xx}
-\imaget{test21vxa.png}{test21vxb.png}{test21vxc.png}{\testLab{\degr 2}{\metA}{\ypp}{\nad}}{fig:test21vx}
-\imaget{test21xva.png}{test21xvb.png}{test21xvc.png}{\testLab{\degr 2}{\metA}{\npp}{\yad}}{fig:test21xv}
-\imaget{test31xxa.png}{test31xxb.png}{test31xxc.png}{\testLab{\degr 3}{\metA}{\npp}{\nad}}{fig:test31xx}
-\imaget{test41xxa.png}{test41xxb.png}{test41xxc.png}{\testLab{\degr 4}{\metA}{\npp}{\nad}}{fig:test41xx}
-\imaget{test41vva.png}{test41vvb.png}{test41vvc.png}{\testLab{\degr 4}{\metA}{\ypp}{\yad}}{fig:test41vv}
-\imaget{test22xxa.png}{test22xxb.png}{test22xxc.png}{\testLab{\degr 2}{\metB}{\npp}{\nad}}{fig:test22xx}
-\imaget{test22vxa.png}{test22vxb.png}{test22vxc.png}{\testLab{\degr 2}{\metB}{\ypp}{\nad}}{fig:test22vx}
-\imaget{test22xva.png}{test22xvb.png}{test22xvc.png}{\testLab{\degr 2}{\metB}{\npp}{\yad}}{fig:test22xv}
-\imaget{test32xxa.png}{test32xxb.png}{test32xxc.png}{\testLab{\degr 3}{\metB}{\npp}{\nad}}{fig:test32xx}
-\imaget{test42xxa.png}{test42xxb.png}{test42xxc.png}{\testLab{\degr 4}{\metB}{\npp}{\nad}}{fig:test42xx}
-\imaget{test23xxa.png}{test23xxb.png}{test23xxc.png}{\testLab{\degr 2}{\metC}{\npp}{\nad}}{fig:test23xx}
-\imaget{test33xxa.png}{test33xxb.png}{test33xxc.png}{\testLab{\degr 3}{\metC}{\npp}{\nad}}{fig:test33xx}
-\imaget{test43xxa.png}{test43xxb.png}{test43xxc.png}{\testLab{\degr 4}{\metC}{\npp}{\nad}}{fig:test43xx}
+\imaget{test21xxa.png}{test21xxb.png}{test21xxc.png}{\testLab{\degTwo}{\metA}{\npp}{\nad}}{fig:test21xx}
+\imaget{test21vxa.png}{test21vxb.png}{test21vxc.png}{\testLab{\degTwo}{\metA}{\ypp}{\nad}}{fig:test21vx}
+\imaget{test21xva.png}{test21xvb.png}{test21xvc.png}{\testLab{\degTwo}{\metA}{\npp}{\yad}}{fig:test21xv}
+\imaget{test31xxa.png}{test31xxb.png}{test31xxc.png}{\testLab{\degThree}{\metA}{\npp}{\nad}}{fig:test31xx}
+\imaget{test41xxa.png}{test41xxb.png}{test41xxc.png}{\testLab{\degFour}{\metA}{\npp}{\nad}}{fig:test41xx}
+\imaget{test41vva.png}{test41vvb.png}{test41vvc.png}{\testLab{\degFour}{\metA}{\ypp}{\yad}}{fig:test41vv}
+\imaget{test22xxa.png}{test22xxb.png}{test22xxc.png}{\testLab{\degTwo}{\metB}{\npp}{\nad}}{fig:test22xx}
+\imaget{test22vxa.png}{test22vxb.png}{test22vxc.png}{\testLab{\degTwo}{\metB}{\ypp}{\nad}}{fig:test22vx}
+\imaget{test22xva.png}{test22xvb.png}{test22xvc.png}{\testLab{\degTwo}{\metB}{\npp}{\yad}}{fig:test22xv}
+\imaget{test32xxa.png}{test32xxb.png}{test32xxc.png}{\testLab{\degThree}{\metB}{\npp}{\nad}}{fig:test32xx}
+\imaget{test42xxa.png}{test42xxb.png}{test42xxc.png}{\testLab{\degFour}{\metB}{\npp}{\nad}}{fig:test42xx}
+\imaget{test23xxa.png}{test23xxb.png}{test23xxc.png}{\testLab{\degTwo}{\metC}{\ndpp}{\ndad}}{fig:test23xx}
+\imaget{test33xxa.png}{test33xxb.png}{test33xxc.png}{\testLab{\degThree}{\metC}{\ndpp}{\ndad}}{fig:test33xx}
+\imaget{test43xxa.png}{test43xxb.png}{test43xxc.png}{\testLab{\degFour}{\metC}{\ndpp}{\ndad}}{fig:test43xx}
 
 
 \end{document}

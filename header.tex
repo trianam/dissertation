@@ -30,6 +30,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{pifont}
 % Options for classicthesis.sty:
 % tocaligned eulerchapternumbers drafting linedheaders 
 % listsseparated subfig nochapters beramono eulermath parts 
@@ -382,15 +383,24 @@ shadow, minimum width=\transH, minimum height=\transW]
 \newcommand{\bs}{B-spline\xspace}
 \newcommand{\bss}{B-splines\xspace}
 
-\newcommand{\degr}{Degree\xspace}
-\newcommand{\metA}{Dijkstra in $G'$\xspace}
-\newcommand{\metB}{Dijkstra in $G$\xspace}
-\newcommand{\metC}{\acl{SA}\xspace}
-\newcommand{\ypp}{with post proc.\xspace}
-\newcommand{\npp}{no post proc.\xspace}
-\newcommand{\yad}{with adaptive part.\xspace}
-\newcommand{\nad}{no adaptive part.\xspace}
-\newcommand{\testLab}[4]{#1; #2; #3; #4.}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\newcommand{\degTwo}{2\xspace}
+\newcommand{\degThree}{3\xspace}
+\newcommand{\degFour}{4\xspace}
+\newcommand{\metA}{A\xspace}
+\newcommand{\metB}{B\xspace}
+\newcommand{\metC}{C\xspace}
+%\newcommand{\ly}{\xspace}
+\newcommand{\ypp}{\cmark\xspace}
+\newcommand{\npp}{\xmark\xspace}
+\newcommand{\ndpp}{\textbf{-}\xspace}
+\newcommand{\yad}{\textbf{A}\xspace}
+\newcommand{\nad}{\textbf{U}\xspace}
+\newcommand{\ndad}{\textbf{-}\xspace}
+\newcommand{\testLab}[4]{Degree #1; Method #2; Post proc. #3;
+  Part. #4.}
 
 
 \makeatletter
