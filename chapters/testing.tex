@@ -19,44 +19,67 @@ where
 
 \begin{table}
   \centering
-  \begin{tabular}{|c|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
-    Deg.&Met.&P. p.&Part.&figure\\
+    Scene&Deg.&Met.&P. p.&Part.&Config.&figure\\
     \hline
-    \degTwo&\metA&\npp&\nad&\cref{fig:test21xx}(\cpageref{fig:test21xx})\\
-    \degTwo&\metA&\ypp&\nad&\cref{fig:test21vx}(\cpageref{fig:test21vx})\\
-    \degTwo&\metA&\npp&\yad&\cref{fig:test21xv}(\cpageref{fig:test21xv})\\
-    \degThree&\metA&\npp&\nad&\cref{fig:test31xx}(\cpageref{fig:test31xx})\\
-    \degFour&\metA&\npp&\nad&\cref{fig:test41xx}(\cpageref{fig:test41xx})\\
-    \degFour&\metA&\ypp&\yad&\cref{fig:test41vv}(\cpageref{fig:test41vv})\\
-    \degTwo&\metB&\npp&\nad&\cref{fig:test22xx}(\cpageref{fig:test22xx})\\
-    \degTwo&\metB&\ypp&\nad&\cref{fig:test22vx}(\cpageref{fig:test22vx})\\
-    \degTwo&\metB&\npp&\yad&\cref{fig:test22xv}(\cpageref{fig:test22xv})\\
-    \degThree&\metB&\npp&\nad&\cref{fig:test32xx}(\cpageref{fig:test32xx})\\
-    \degFour&\metB&\npp&\nad&\cref{fig:test42xx}(\cpageref{fig:test42xx})\\
-    \degTwo&\metC&\ndpp&\ndad&\cref{fig:test23xx}(\cpageref{fig:test23xx})\\
-    \degThree&\metC&\ndpp&\ndad&\cref{fig:test33xx}(\cpageref{fig:test33xx})\\
-    \degFour&\metC&\ndpp&\ndad&\cref{fig:test43xx}(\cpageref{fig:test43xx})\\
+    \sceneA&\degTwo&\metA&\npp&\nad&\nd&\cref{fig:test121xx}(\cpageref{fig:test121xx})\\
+    \sceneA&\degTwo&\metA&\ypp&\nad&\nd&\cref{fig:test121vx}(\cpageref{fig:test121vx})\\
+    \sceneA&\degTwo&\metA&\npp&\yad&\nd&\cref{fig:test121xv}(\cpageref{fig:test121xv})\\
+    \sceneA&\degThree&\metA&\npp&\nad&\nd&\cref{fig:test131xx}(\cpageref{fig:test131xx})\\
+    \sceneA&\degFour&\metA&\npp&\nad&\nd&\cref{fig:test141xx}(\cpageref{fig:test141xx})\\
+    \sceneA&\degFour&\metA&\ypp&\yad&\nd&\cref{fig:test141vv}(\cpageref{fig:test141vv})\\
+    \sceneA&\degTwo&\metB&\npp&\nad&\nd&\cref{fig:test122xx}(\cpageref{fig:test122xx})\\
+    \sceneA&\degTwo&\metB&\ypp&\nad&\nd&\cref{fig:test122vx}(\cpageref{fig:test122vx})\\
+    \sceneA&\degTwo&\metB&\npp&\yad&\nd&\cref{fig:test122xv}(\cpageref{fig:test122xv})\\
+    \sceneA&\degThree&\metB&\npp&\nad&\nd&\cref{fig:test132xx}(\cpageref{fig:test132xx})\\
+    \sceneA&\degFour&\metB&\npp&\nad&\nd&\cref{fig:test142xx}(\cpageref{fig:test142xx})\\
+    \sceneA&\degTwo&\metC&\nd&\nad&\annA&\cref{fig:test123xx1}(\cpageref{fig:test123xx1})\\
+    \sceneA&\degThree&\metC&\nd&\nad&\annA&\cref{fig:test133xx1}(\cpageref{fig:test133xx1})\\
+    \sceneA&\degFour&\metC&\nd&\nad&\annA&\cref{fig:test143xx1}(\cpageref{fig:test143xx1})\\
+    \sceneA&\degFour&\metC&\nd&\nad&\annB&\cref{fig:test143xx2}(\cpageref{fig:test143xx2})\\
+    \sceneA&\degFour&\metC&\nd&\nad&\annC&\cref{fig:test143xx3}(\cpageref{fig:test143xx3})\\
     \hline
   \end{tabular}
   \caption{Resume of the tests.}
   \label{tab:tests}
 \end{table}
 
-\imaget{test21xxa.png}{test21xxb.png}{test21xxc.png}{\testLab{\degTwo}{\metA}{\npp}{\nad}}{fig:test21xx}
-\imaget{test21vxa.png}{test21vxb.png}{test21vxc.png}{\testLab{\degTwo}{\metA}{\ypp}{\nad}}{fig:test21vx}
-\imaget{test21xva.png}{test21xvb.png}{test21xvc.png}{\testLab{\degTwo}{\metA}{\npp}{\yad}}{fig:test21xv}
-\imaget{test31xxa.png}{test31xxb.png}{test31xxc.png}{\testLab{\degThree}{\metA}{\npp}{\nad}}{fig:test31xx}
-\imaget{test41xxa.png}{test41xxb.png}{test41xxc.png}{\testLab{\degFour}{\metA}{\npp}{\nad}}{fig:test41xx}
-\imaget{test41vva.png}{test41vvb.png}{test41vvc.png}{\testLab{\degFour}{\metA}{\ypp}{\yad}}{fig:test41vv}
-\imaget{test22xxa.png}{test22xxb.png}{test22xxc.png}{\testLab{\degTwo}{\metB}{\npp}{\nad}}{fig:test22xx}
-\imaget{test22vxa.png}{test22vxb.png}{test22vxc.png}{\testLab{\degTwo}{\metB}{\ypp}{\nad}}{fig:test22vx}
-\imaget{test22xva.png}{test22xvb.png}{test22xvc.png}{\testLab{\degTwo}{\metB}{\npp}{\yad}}{fig:test22xv}
-\imaget{test32xxa.png}{test32xxb.png}{test32xxc.png}{\testLab{\degThree}{\metB}{\npp}{\nad}}{fig:test32xx}
-\imaget{test42xxa.png}{test42xxb.png}{test42xxc.png}{\testLab{\degFour}{\metB}{\npp}{\nad}}{fig:test42xx}
-\imaget{test23xxa.png}{test23xxb.png}{test23xxc.png}{\testLab{\degTwo}{\metC}{\ndpp}{\ndad}}{fig:test23xx}
-\imaget{test33xxa.png}{test33xxb.png}{test33xxc.png}{\testLab{\degThree}{\metC}{\ndpp}{\ndad}}{fig:test33xx}
-\imaget{test43xxa.png}{test43xxb.png}{test43xxc.png}{\testLab{\degFour}{\metC}{\ndpp}{\ndad}}{fig:test43xx}
+\begin{landscape}
+  \begin{table}
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+      Config.&$T_0$&Trials&warm.&min $T$&min $\Delta E$&$\lambda$ pert&$V$ pert fact&$\lambda_0$&$\lambda P$&Len type&Ratios\\
+      \hline
+      \annA&10&10&0.7&\num{1e-7}&\num{1e-6}&100&10&0&\num{5e-2}&\lenArc&\ratios{0.1}{0.1}{0.8}\\
+      \annB&10&10&0.7&\num{1e-7}&\num{1e-6}&100&10&0&\num{5e-2}&\lenPol&\ratios{0.1}{0.1}{0.8}\\
+      \annC&10&10&0.7&\num{1e-7}&\num{1e-6}&100&10&0&\num{5e-2}&\lenArc&\ratios{0.3}{0.3}{0.4}\\
+      \hline
+    \end{tabular}
+    \caption{Annealing configurations.}
+    \label{tab:annealingConfigs}
+  \end{table}  
+\end{landscape}
+
+\newpage
+
+\imaget{test121xxa.png}{test121xxb.png}{test121xxc.png}{\testLab{\degTwo}{\metA}{\npp}{\nad}}{fig:test121xx}
+\imaget{test121vxa.png}{test121vxb.png}{test121vxc.png}{\testLab{\degTwo}{\metA}{\ypp}{\nad}}{fig:test121vx}
+\imaget{test121xva.png}{test121xvb.png}{test121xvc.png}{\testLab{\degTwo}{\metA}{\npp}{\yad}}{fig:test121xv}
+\imaget{test131xxa.png}{test131xxb.png}{test131xxc.png}{\testLab{\degThree}{\metA}{\npp}{\nad}}{fig:test131xx}
+\imaget{test141xxa.png}{test141xxb.png}{test141xxc.png}{\testLab{\degFour}{\metA}{\npp}{\nad}}{fig:test141xx}
+\imaget{test141vva.png}{test141vvb.png}{test141vvc.png}{\testLab{\degFour}{\metA}{\ypp}{\yad}}{fig:test141vv}
+\imaget{test122xxa.png}{test122xxb.png}{test122xxc.png}{\testLab{\degTwo}{\metB}{\npp}{\nad}}{fig:test122xx}
+\imaget{test122vxa.png}{test122vxb.png}{test122vxc.png}{\testLab{\degTwo}{\metB}{\ypp}{\nad}}{fig:test122vx}
+\imaget{test122xva.png}{test122xvb.png}{test122xvc.png}{\testLab{\degTwo}{\metB}{\npp}{\yad}}{fig:test122xv}
+\imaget{test132xxa.png}{test132xxb.png}{test132xxc.png}{\testLab{\degThree}{\metB}{\npp}{\nad}}{fig:test132xx}
+\imaget{test142xxa.png}{test142xxb.png}{test142xxc.png}{\testLab{\degFour}{\metB}{\npp}{\nad}}{fig:test142xx}
+\imaget{test123xx1a.png}{test123xx1b.png}{test123xx1c.png}{\testLabAnn{\degTwo}{\metC}{\nad}{\annA}}{fig:test123xx1}
+\imagett{test133xx1a.png}{test133xx1b.png}{test133xx1c.png}{test133xx1d.png}{\testLabAnn{\degThree}{\metC}{\nad}{\annA}}{fig:test133xx1}
+\imagett{test143xx1a.png}{test143xx1b.png}{test143xx1c.png}{test143xx1d.png}{\testLabAnn{\degFour}{\metC}{\nad}{\annA}}{fig:test143xx1}
+\imagett{test143xx2a.png}{test143xx2b.png}{test143xx2c.png}{test143xx2d.png}{\testLabAnn{\degFour}{\metC}{\nad}{\annB}}{fig:test143xx2}
+\imagett{test143xx3a.png}{test143xx3b.png}{test143xx3c.png}{test143xx3d.png}{\testLabAnn{\degFour}{\metC}{\nad}{\annC}}{fig:test143xx3}
 
 
 \end{document}

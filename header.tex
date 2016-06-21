@@ -10,6 +10,8 @@
 \usepackage{makeidx}
 %\usepackage[italian]{babel}
 %\usepackage{graphicx}
+\usepackage{lscape}
+\usepackage{siunitx}
 \usepackage{enumitem}
 \usepackage{subfiles}
 \usepackage{listings}
@@ -252,6 +254,29 @@ shadow, minimum width=\transH, minimum height=\transW]
   \end{figure}
 }
 
+\NewDocumentCommand{\imagett}{mmmmmmo}{
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \node [figureFrame] (image1) at (0,0) {\includegraphics[width=.9\textwidth]{#1}};
+        \node [figureFrame, below=of image1] (image2) {\includegraphics[width=.9\textwidth]{#2}};
+        \coordinate[below=2.5cm of image2] (puntello);
+        \node [figureFrame, left = 0.2cm of puntello] (image3) {\includegraphics[width=.45\textwidth]{#3}};
+        \node [figureFrame, right = 0.2cm of puntello] (image4) {\includegraphics[width=.45\textwidth]{#4}};
+        \IfNoValueTF{#7}
+        {}
+        {
+          \begin{scope}[x={(image.south east)},y={(image.north west)}]
+            #7
+          \end{scope}
+        }
+      \end{tikzpicture}
+    \end{center}
+    \caption{#5}
+    \label{#6}
+  \end{figure}
+}
+
 \NewDocumentCommand{\imageDouble}{mmmmoo}{
   \begin{figure}
     \begin{center}
@@ -395,12 +420,19 @@ shadow, minimum width=\transH, minimum height=\transW]
 %\newcommand{\ly}{\xspace}
 \newcommand{\ypp}{\cmark\xspace}
 \newcommand{\npp}{\xmark\xspace}
-\newcommand{\ndpp}{\textbf{-}\xspace}
 \newcommand{\yad}{\textbf{A}\xspace}
 \newcommand{\nad}{\textbf{U}\xspace}
-\newcommand{\ndad}{\textbf{-}\xspace}
-\newcommand{\testLab}[4]{Degree #1; Method #2; Post proc. #3;
-  Part. #4.}
+\newcommand{\nd}{\textbf{-}\xspace}
+\newcommand{\testLab}[4]{Degree #1; Method #2; Post proc. #3; Part. #4.}
+\newcommand{\testLabAnn}[4]{Degree #1; Method #2; Part. #3; Config. #4.}
+\newcommand{\lenArc}{arc}
+\newcommand{\lenPol}{poly}
+\newcommand{\ratios}[3]{[#1, #2, #3]}
+\newcommand{\sceneA}{1\xspace}
+\newcommand{\annA}{1\xspace}
+\newcommand{\annB}{2\xspace}
+\newcommand{\annC}{3\xspace}
+
 
 
 \makeatletter
@@ -431,6 +463,8 @@ shadow, minimum width=\transH, minimum height=\transW]
 \algnewcommand\IfNot{\textbf{not}\xspace}
 \algnewcommand\IfAnd{\textbf{and}\xspace}
 \algnewcommand\IfOr{\textbf{or}\xspace}
+
+\sisetup{output-exponent-marker=\ensuremath{\mathrm{e}}}
 
 \makeindex
 
