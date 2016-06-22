@@ -170,7 +170,18 @@ combination of \bss,
 A \emph{spline curve} in the affine space $\mE^d$ is the image of a
 parametric vector function $\ve{S}:[a,b]\rightarrow\mE^d$ whose
 components are all splines belonging to a fixed spline space
-$S_{m,\tau}$. Thus $\ve{S}(t)$ can be written as follows in the
+$S_{m,\tau}$. For $d=3$
+\begin{equation}\label{eq:bsplineCurveComp}
+  \ve{S}(u) = \left[
+    \begin{array}{c}
+      \ve{x}(u)\\
+      \ve{y}(u)\\
+      \ve{z}(u)
+    \end{array}
+    \right].
+\end{equation}
+
+$\ve{S}(t)$ can be written as follows in the
 truncated-powers basis
 % A parametric spline \emph{curve} $\ve{S}(t)$ is a curve in a certain
 % dimension obtained applying a spline function to a set of points
@@ -329,14 +340,14 @@ In general a \bs curve with control vertices
 \begin{equation*}
   \ve{v_0}, \dots, \ve{v_n}
 \end{equation*}
-and partition vector
+and extended knot vector
 \begin{equation*}
   T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
 \end{equation*}
-don't necessarily interpolate any control vertex $v_i$, neither the
+does not necessarily interpolate any control vertex $v_i$, neither the
 first and the last one. But we are
 interested in using \bs for representing paths from one point to
-another, so should be a nice feature to have that the curve defined in
+another. So it should be a nice feature to have that the curve defined in
 the domain $[a,b]$ is shaped such that
 \begin{equation}\label{eq:clamped}
   \begin{cases}
@@ -345,7 +356,7 @@ the domain $[a,b]$ is shaped such that
   \end{cases}
 \end{equation}
 
-We can obtain the conditions of \cref{eq:clamped} if we impose on the
+We can obtain \cite{deboor} the conditions of \cref{eq:clamped} if we impose on the
 extended partition vector $T$:
 \begin{equation*}
   t_0=\dots= t_{m-1}= \overmath{\equiv a}{t_{m}}<\dots<
@@ -358,40 +369,36 @@ in other words we want
 
 \subsection{Curvature and
   torsion}\index{Curvature and torsion}\index{\bss!curvature and torsion}
-We are interested in comparing the characteristics different curves,
+Since we are interested in comparing different curves,
 we need to recognize if a certain curve is a \emph{good} or a
-\emph{bad} curve. one factor that characterize a certain curve can 
-be the smoothness of the curve (\cref{sec:smoothness}) - i.e. a $C^3$ curve
+\emph{bad} one. One factor that characterizes a certain curve can 
+be its smoothness (\cref{sec:smoothness}) - i.e. a $C^3$ curve
 is better than a $C^2$ curve - but this isn't
-enough for comparing curves with same degree (and smoothness). For
-accomplish that we
-introduce on this section the concepts of \emph{curvature} and
-\emph{torsion} \cite{docarmo}. Both are quantities defined on generic
-parametric curves for each value of the parameter.
+enough for comparing curves. Usually are used for this
+\emph{curvature} and 
+\emph{torsion} \cite{docarmo}. Both are scalar quantities defined on
+sufficiently smooth 
+parametric curves for each value of the parameter, and they do not
+depend on the selected parametrization.
 
-For a generic parametric curve $\ve{S}(u)$ defined for $u\in[a,b]$ we
-have that the curvature is defined as
-\begin{equation}
-  \label{eq:curvature}
-  \kappa(u) = \frac{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}{{\norm{\dot{\ve{S}}(u)}}^3}
-\end{equation}
-and the torsion is defined as
-\begin{equation}
-  \label{eq:torsion}
-  \tau(u) =
-  \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}
-  = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}
-\end{equation}
-where $\wedge$ is the vector product and
+For a generic parametric curve $\ve{S}(u)$ defined for $u\in[a,b]$
+given the notation $\wedge$ for the vector product and for \cref{eq:bsplineCurveComp}
 \begin{equation*}
   \dot{\ve{S}}(u) = \frac{\md}{\md u} \ve{S}(u)=\left[
     \begin{array}{c}
-      \frac{\md}{\md u} X(u)\\
-      \frac{\md}{\md u} Y(u)\\
-      \frac{\md}{\md u} Z(u)
+      \frac{\md}{\md u} \ve{x}(u)\\
+      \frac{\md}{\md u} \ve{y}(u)\\
+      \frac{\md}{\md u} \ve{z}(u)
     \end{array}
     \right].
 \end{equation*}
+we define the
+curvature $\kappa(u)$ and, in points with non vanishing curvature,
+the torsion $\tau(u)$ as
+\begin{empheq}[left={=\empheqbiglbrace~}]{align}
+  \kappa(u) &= \frac{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}{{\norm{\dot{\ve{S}}(u)}}^3}  \label{eq:curvature}\\
+  \tau(u) &= \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}} = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}  \label{eq:torsion}
+\end{empheq}
 
 \cref{eq:curvature} and \cref{eq:torsion} describe completely the
 behavior of $\ve{S}(u)$ locally for each value of $u$. Curvature and
@@ -399,63 +406,56 @@ torsion have also a geometric interpretation: for each value $\tilde{u}$ of
 the parameter $u$, the inverse $\frac{1}{\kappa(\tilde{u})}$ of the
 curvature is the radius of curvature on the point defined by
 $\ve{S}(\tilde{u})$ - i.e. the radius of the 
-osculating circle tangent to the point that lie on the plane where the
+osculating circle tangent in that point to the curve belongs to the
+plane where the
 curve is bending and
-that is situated on the inner side of the turn - $\tau(\tilde{u})$ indicate
-(if $\kappa(\tilde{u})\neq 0$) how sharply is rotating the plane where
-the curve lie.
+that is situated on the inner side of its turn - $\tau(\tilde{u})$ indicate
+(if $\kappa(\tilde{u})\neq 0$) how sharply the plane where
+the curve lies is rotating.
 
-The value of $\kappa(u)$ can be only positive, $\tau(u)$ can be
-positive and negative. Also we have that:
-\begin{itemize}
-\item for $C^{\leq 0}$ curves $\kappa(u)$ and $\tau(u)$ are not defined;
-\item for $C^1$ curves $\kappa(u)$ is defined but not continue and
-  $\tau(u)$ is not defined;
-\item for $C^2$ curves $\kappa(u)$ is defined and continue and
-  $\tau(u)$ is defined but not continue;
-\item for $C^{\geq 3}$ curves $\kappa(u)$ is defined and continue and
-  $\tau(u)$ is defined and continue.
-\end{itemize}
+The value of $\kappa(u)$ can be only non negative, while $\tau(u)$ is
+a signed quantity.
 
 Two curves of same smoothness can be compared using the plots of
-curvature and torsion, in general a curve that have lower peaks of
-$\kappa(u)$ and $\tau(u)$ are better respect to curves that have
+curvature and torsion, in general curves that have lower peaks of
+$\kappa(u)$ and $\tau(u)$ are better than curves with
 higher peaks.
 
-\section{Voronoi Diagrams}\label{sec:voronoi}\index{\acf{VD}}
-On this section we introduce an important structure that we used in
-our project. \ac{VD} \cite{deberg} provide a method for creating a
+\section{Voronoi Diagrams}\label{sec:voronoi}\index{\acfp{VD}}
+In this section we introduce \acfp{VD}, an important structure used in
+the project. \acp{VD} \cite{deberg} provide a method for creating a
 partition of the
 space using distances from a set of input points called
 \emph{sites}. Formally we have a set
 \begin{equation*}
   S=\{\ve{s_0},\ve{s_1},\dots,\ve{s_n}\} \subset \mE^d
 \end{equation*}
-Of $n$ sites in the euclidean space of dimension $d$, and we build a
-set of Voronoi \emph{cells}
+of $n$ sites in the euclidean space of dimension $d$, and we build a
+set of $n$ Voronoi \emph{cells}\note{$2^{\mE^d}$ is the power set of
+  $\mE^d$, the set of all the subsets of $\mE^d$.}
 \begin{equation*}
   Vor(S)=\{V(\ve{s_0}),\dots,V(\ve{s_n})\}\subset 2^{\mE^d}
 \end{equation*}
-such that each cell, one for each site $\ve{s_i}$, is the set
+such that
 \begin{equation*}
   V(\ve{\ve{s_i}})=\{\ve{p}\in\mE^d\ :\
   \norm{\ve{p}-\ve{s_i}}<\norm{\ve{p}-\ve{s_j}}\ \forall \ve{s_j}\neq\ve{s_i}\}
 \end{equation*}
-of the points of the space such that are nearer to $\ve{s_i}$ respect
-to the other sites.
+is the set of the points in $\mE^d$ closer to $\ve{s_i}$ than to any
+other site.
 
-\image{voronoi.eps}{Example of \ac{VD}, dashed lines are infinite edges.}{fig:voronoi}
-\Cref{fig:voronoi} is an example of \ac{VD} built on some random
+\image{voronoi.eps}{Example of a \ac{VD}, dashed lines are infinite edges.}{fig:voronoi}
+\Cref{fig:voronoi} is an example of the \ac{VD} built on some random
 sites, on the figure the dashed lines are edges that go to infinite.
 
-The most important algorithm for calculating \ac{VD} is the
+The most important algorithm for calculating \acp{VD} is the
 \emph{sweeping line} algorithm that build the diagram in $\bigO(n\log
 n)$ and it is optimal. The algorithm involve building $Vor(S)$
 incrementally while sweeping the space, see \cite{deberg} and
 \cite{fortune} for
 details.
 
-One property of \ac{VD} is that $V(\ve{s_i})$ can be closed area or an
+One property of \acp{VD} is that $V(\ve{s_i})$ can be closed area or an
 open area - i.e. the edges of the cells can be infinite - is important
 to deal with this fact if we want to interpret $Vor(S)$ as the graph of
 vertexes and edges of the cells (it will have edges that go to
