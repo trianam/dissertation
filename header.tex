@@ -32,6 +32,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{stmaryrd}
 \usepackage{empheq}
 \usepackage{pifont}
 % Options for classicthesis.sty:
@@ -424,13 +425,15 @@ shadow, minimum width=\transH, minimum height=\transW]
 \newcommand{\yad}{\textbf{A}\xspace}
 \newcommand{\nad}{\textbf{U}\xspace}
 \newcommand{\nd}{\textbf{-}\xspace}
-\newcommand{\testLab}[4]{Degree #1; Method #2; Post proc. #3; Part. #4.}
-\newcommand{\testLabAnn}[4]{Degree #1; Method #2; Part. #3; Config. #4.}
+\newcommand{\testLab}[6]{Scene #1; $\ve{s}\shortrightarrow\ve{e}$ #2; Deg. #3; Meth. #4; Post proc. #5; Part. #6.}
+\newcommand{\testLabAnn}[6]{Scene #1; $\ve{s}\shortrightarrow\ve{e}$ #2; Deg. #3; Meth. #4; Part. #5; Config. #6.}
 \newcommand{\lenArc}{arc}
 \newcommand{\lenPol}{poly}
-\newcommand{\ratios}[3]{[#1, #2, #3]}
-\newcommand{\vertex}[3]{[#1, #2, #3]}
+\newcommand{\ratios}[3]{$[#1, #2, #3]$}
+\newcommand{\vertex}[3]{$[#1, #2, #3]$}
+\newcommand{\vertices}[6]{$\scriptstyle[#1, #2, #3]\shortrightarrow[#4, #5, #6]$}
 \newcommand{\sceneA}{1\xspace}
+\newcommand{\sceneB}{2\xspace}
 \newcommand{\annA}{1\xspace}
 \newcommand{\annB}{2\xspace}
 \newcommand{\annC}{3\xspace}

@@ -535,19 +535,19 @@ the total costs, and the total cost itself.
 
 \subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}\index{Dijkstra}
 The First solution is interesting from an algorithmic point of view,
-but is not very practical because it throws all the triples that
-intersect an obstacle. We tried another
+but it is not very practical because it throws all the triples that
+intersect an obstacle. We manage to develop a
 solution that uses another approach: obtain the shortest path 
 from the Voronoi's graph $G$ directly using Dijkstra's algorithm,
 without removing any triple. On that path
-- that we call $P$ in this section - we
+- that we call $P$ - we
 check every triple of consecutive vertices, and if it collides with an
 \ac{OTF} then we take countermeasures. For instance if the path
 is composed from the vertices:
 \begin{equation*}
   P=(\ve{v_0},\ve{v_1},\dots,\ve{v_n})
 \end{equation*}
-then we check if every one of the triangles 
+then we check every one of the triangles 
 \begin{eqnarray*}
 T_0 &=& \triangle \ve{v_0}\ve{v_1}\ve{v_2}\\
 T_1 &=& \triangle \ve{v_1}\ve{v_2}\ve{v_3}\\
@@ -557,25 +557,25 @@ T_i &=& \triangle \ve{v_i}\ve{v_{i+1}}\ve{v_{i+2}}\\
 T_{n-3} &=& \triangle \ve{v_{n-3}}\ve{v_{n-2}}\ve{v_{n-1}}\\
 T_{n-2} &=& \triangle \ve{v_{n-2}}\ve{v_{n-1}}\ve{v_n}
 \end{eqnarray*}
-intersect one of the \acp{OTF}, where $\triangle \ve{v_i}\ve{v_j}\ve{v_k}$ denotes the
+for intersections with \acp{OTF}, where $\triangle \ve{v_i}\ve{v_j}\ve{v_k}$ denotes the
 triangle with
 vertices the points $\ve{v_i}$, $\ve{v_j}$ and $\ve{v_k}$.
 
 In \cref{sec:intersectionsTriangleTriangle} we explain how to measure
 if a triangle $T_1=\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
-collides with another triangle $T_2=\triangle \ve{a_2}\ve{b_2}\ve{c_2}$ and, when a
-collision is found, how to 
-obtain also the barycentric coordinates on $\ve{a_2},\ve{b_2},\ve{c_2}$ of the points
-where the 
-edges of $T_1$ intersect $T_2$ (or the coordinates on $\ve{a_1},\ve{b_1},\ve{c_1}$ of
-the points where $T_2$ intersect $T_1$).
+collides with another triangle $T_2=\triangle
+\ve{a_2}\ve{b_2}\ve{c_2}$. Furthermore, when a
+collision is found, is possible to 
+obtain also the barycentric coordinates on
+$\ve{a_2},\ve{b_2},\ve{c_2}$ of the points where the 
+edges of $T_1$ intersect $T_2$ (or vice versa the coordinates on
+$\ve{a_1},\ve{b_1},\ve{c_1}$ of the points where $T_2$ intersect $T_1$).
 
 Consider also that $G$ is pruned from all the edges that intersect any
 obstacle, so none of the edges of the triangles $T_i$ can intersect
-an \ac{OTF}, and the only possibility is that an edge or
-more\footnote{At most two edges for each \ac{OTF} if we ignore special
-  cases.} of the
-obstacles intersect a
+an \ac{OTF}. The only possibility is that edges\footnote{At most two
+  edges for each \ac{OTF} if we ignore special 
+  cases.} of \ac{OTF} intersect a
 triangle $T_i$. So for each $T_i$ we have a (possibly empty) set of points
 of intersection between it and the edges of each \ac{OTF} - we call
 that set $O$.
@@ -633,20 +633,26 @@ where each one of the points in $O$ is expressed in barycentric
 coordinates of the vertices $\ve{v_i}$, $\ve{v_{i+1}}$ and $\ve{v_{i+2}}$ of the
 triangle:
 \begin{eqnarray*}
-  O_1&=&\alpha_1 \ve{v_i}+\beta_1 \ve{v_{i+1}}+\gamma_1 \ve{v_{i+2}}\\
-  O_2&=&\alpha_2 \ve{v_i}+\beta_2 \ve{v_{i+1}}+\gamma_2 \ve{v_{i+2}}\\
-  O_3&=&\alpha_3 \ve{v_i}+\beta_3 \ve{v_{i+1}}+\gamma_3 \ve{v_{i+2}}
+  \ve{o_1}&=&\alpha_1 \ve{v_i}+\beta_1 \ve{v_{i+1}}+\gamma_1 \ve{v_{i+2}}\\
+  \ve{o_2}&=&\alpha_2 \ve{v_i}+\beta_2 \ve{v_{i+1}}+\gamma_2 \ve{v_{i+2}}\\
+  \ve{o_3}&=&\alpha_3 \ve{v_i}+\beta_3 \ve{v_{i+1}}+\gamma_3 \ve{v_{i+2}}
 \end{eqnarray*}
 where $\alpha_i+\beta_i+\gamma_i=1$ for $i=1,2,3$.
 
-We want to deal with the collision adding vertices in the control
-polygon such that consecutive triangles are free from obstacles. We
-obtain this adding a control vertex $\ve{w_1}$ between $\ve{v_i}$ and $\ve{v_{i+1}}$
-and $\ve{w_2}$ between $\ve{v_{i+1}}$ and $\ve{v_{i+2}}$. Also we add those two
+We want to deal with collisions adding vertices in the control
+polygon, such that consecutive triangles are free from obstacles. We
+obtain this adding two new control vertices: 
+\begin{itemize}
+\item $\ve{w_1}$ between $\ve{v_i}$ and $\ve{v_{i+1}}$;
+\item $\ve{w_2}$ between $\ve{v_{i+1}}$ and $\ve{v_{i+2}}$.
+\end{itemize}
+We add those
 points in a manner such that the segment $\overline{\ve{w_1}\ve{w_2}}$ is
 parallel to the segment $\overline{\ve{v_i}\ve{v_{i+2}}}$ and such that
-$\overline{\ve{w_1}\ve{w_2}}$ pass through the obstacle point $\ve{o_{near}}$ nearest
-to $\ve{v_{i+1}}$ ($\ve{o_1}$ in \cref{fig:triangleIntersection}) keeping the
+$\overline{\ve{w_1}\ve{w_2}}$ pass just above the obstacle point
+$\ve{o_{near}}$ that is the nearest
+to $\ve{v_{i+1}}$ ($\ve{o_1}$ in
+\cref{fig:triangleIntersection}). Doing this keeps the
 triangle $\triangle \ve{w_1}\ve{v_{i+1}}\ve{w_2}$ - and also
 the degenerated triangles $\triangle \ve{v_i}\ve{w_1}\ve{v_{i+1}}$ and $\triangle
 \ve{v_{i+1}}\ve{w_2}\ve{v_{i+2}}$ - free from obstacles.
@@ -698,8 +704,8 @@ and then, using the corresponding $\beta_{near}$, we can obtain
 ]
 In \cref{fig:sol21} and \cref{fig:sol22} we can see the effects of the
 application of this
-solution to a tract of the curve. The original tract of control
-polygon are on the left pictures and, the triangle
+solution to a tract of the curve. The original tracts of control
+polygon are on the left pictures, the triangle
 composed of those vertices
 collide with the obstacle on the back. The two new vertices $\ve{w_1}$
 and $\ve{w_2}$ are added to avoid the collision.
@@ -723,12 +729,12 @@ and if we make the assumption of $k$ constant we have a cost
 
 For checking and removing the collisions in the path we need to
 consider every face of obstacle in $Ob$ for every
-triangle in $P$ and the cost for doing this is\footnote{If
+triangle in $P$. The cost for doing this is\footnote{If
   $\#\acp{OTF}=\bigO(|Ob|)$ - i.e. the
   number of \acp{OTF} don't grow faster than the number of obstacles.}
-$\bigO(|P|\cdot|Ob|)$ where with $|P|$ we mean the number of vertexes
-in $P$, in the worst case
-$|P|=\bigO(|V|)=\bigO(|Ob|)$ so in total 
+$\bigO(|P|\cdot|Ob|)$ where $|P|$ means the number of vertices
+in $P$. In the worst case
+$|P|=\bigO(|V|)=\bigO(|Ob|)$ so we have a cost
 \newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)}}
 \begin{equation}\label{eq:costCleanPath}
   \eqCostCleanPath
@@ -767,29 +773,36 @@ and if we consider $k$ constant
 On \cref{tab:costsSol2} we resumed all the terms that contributes to
 the total costs, and the total cost itself.
 
-The cost is comparable with the one of the first solution, and also in
+The cost is comparable with the one of the first solution. Furthermore,
+also in 
 this case we can divide the algorithm in two parts constructing only
 once $G$ with cost $\bigO(|Ob|^2)$ and then using it for different
 trials with a cost $\bigO(|P|\cdot|Ob|)$.
 
 \subsection{Third solution: \acf{SA}}\label{sec:inter3}\index{\acf{SA}}
-The others solutions of \cref{sec:inter1} and \cref{sec:inter2} have two
-problem in common: both reject configurations in a prudent way
-considering only the control polygon, and both don't optimize neither
-length nor other parameters. On this section we describe a third
-approach that we considered on the project, an approach that diverge
-from the topic of numerical analysis.
+The solutions proposed in \cref{sec:inter1} and \cref{sec:inter2} have two
+problems in common:
+\begin{itemize}
+\item both reject configurations in a prudent way
+  considering only the control polygon;
+\item and both don't optimize neither
+  length nor other parameters.
+\end{itemize}
+In this section we describe a third
+approach considered on the project, an approach based on a
+probabilistic computation.
 
 We can see the problem of finding the shortest path as a constrained
-optimization problem where a certain configuration of the control
+optimization problem, where a certain configuration of the control
 vertices (and
 consequently the \bs) is the state of the system, and we want to
 minimize both the length of the control polygon (and consequently the
-\bs) and the peak in curvature and torsion of the \bs under
+\bs\footnote{We give to the user also the possibility of selecting the
+  arc length as quantity to minimize.}) and the peak in curvature and torsion of the \bs, under
 the constraint that the \bs must not intersect the obstacles. We
 are interested in optimizing both length and curvature and torsion
 peaks because we want a path that is short but also a path that is
-smooth.
+fair.
 
 \subsubsection{\acf{LR} applied to the project}\index{\acf{LR}}
 We can apply the concept explained in \cref{sec:lagrangianRelaxation}
@@ -798,7 +811,7 @@ to the project.
 The variable space $X$ is composed of all possible
 configuration of the path, or in other words is the vector
 $P=(\ve{v_1},\dots,\ve{v_n})$ of all $n$ ordered
-vertices $\ve{v_i}=(x_i,y_i)$ of the
+vertices $\ve{v_i}=(x_i,y_i,z_i)$ of the
 path. The \cref{eq:opt} is formulated in the problem
 \begin{equation*}
   \begin{aligned}
@@ -811,19 +824,21 @@ path. The \cref{eq:opt} is formulated in the problem
 \end{equation*}
 where $maxCurv(P)$ is the peak of curvature of the \bs
 constructed using $P$ as control polygon,
-$maxTors(P)$ is the peak in absolute value of the torsion of
-the \bs constructed using $P$ as control polygon and
+$maxTors(P)$ is the peak in absolute value of the torsion and
 $normLen(P)$ is the length of the control polygon
 $P$ normalized as percent of the length of the initial status
-after extracting the path. $\alpha$, $\beta$ and $\gamma$ are fixed
-coefficients used for giving a weight in the optimization process to
+after extracting the path\footnote{If the user chooses to minimize the
+  arc length, then $normLen(P)$ becomes the length of the \bs curve.}
+. $\alpha$, $\beta$ and $\gamma$ are fixed
+coefficients used for giving different weights in the optimization
+process to 
 the curvature peak, torsion peak and length. The normalization of
 length is necessary for decoupling the weight of the length from the
 length of path. Regarding the constraint, $bspline(P)$
 is the set of tabulated points of the \emph{\bs} obtained as
 explained in
 \cref{sec:spline} and \cref{sec:bsplines}, using the path as
-control polygon and
+control polygon, and
 $obstacle_i$ is the area of the $i^{th}$ of $m$ obstacles, and
 $I=\{1,\dots,m\}$.
 
@@ -835,13 +850,17 @@ We need to build now the Lagrangian function corresponding to
 \end{equation*}
 the constraint function is not negative, and is calculated as the
 ratio
-\begin{equation*}
+\begin{equation}\label{eq:constraintLag}
 constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \ve{p}\in
     obstacle_i, i\in\{1,\dots,m\}\}\ \right|}{\left|\ \{\ve{p} \in
     spline(P)\}\ \right|}
-\end{equation*}
-where the points $\ve{p}$ of the spline are calculated in a discrete form. That
-function is not negative, so the Lagrangian function correspondent to
+\end{equation}
+where the points $\ve{p}$ of the spline are calculated in a discrete
+form. Thus the constraint depends on the tabulation of the curve and
+it is also possible to have borderline cases where the calculated
+constraint doesn't reflect the real situation. The
+function in \cref{eq:constraintLag} is not negative, thus the
+Lagrangian function corresponding to 
 \cref{eq:lagrangianFun} is
 \begin{equation}\label{eq:lagrangianFunProj}
     L_d(P,\lambda)=gain(P)+\lambda\cdot constraint(P).
@@ -872,39 +891,51 @@ the curve represented by the
   \EndProcedure
 \end{algo}
 
-The \cref{alg:annealing} is the annealing process, on
-\cref{alg:annealing:initialize} $\lambda$ and the
-temperature are initialized; the \emph{while} on
-\cref{alg:annealing:while} is the main loop and the terminating
-condition is given by a minimum temperature or a minimum variation of
-energy between two iterations; the \emph{for} at
-\cref{alg:annealing:for} repeat the annealing move for a certain
-number of trials, on each iteration the algorithm probabilistically
-try to make a move of the state of the system, first on
-\cref{alg:annealing:lambdaProb} make a choice if moving in the
-Lagrangian space or in the space of the path, after that based on that
-choice try to move the system in a neighbouring state - in the
-Lagrangian space at
-\cref{alg:annealing:changeLambda} or in the path space at
-\cref{alg:annealing:changeX} - the choice is made
-probabilistically in the meaning that if the energy increase in the
-Lagrangian space or decrease in the path space the probability of
-choosing the new state is 1, if the energy decrease in the Lagrangian
-space or increase in the path space then the new state is accepted
+The \cref{alg:annealing} is the annealing process,
+\begin{enumerate}
+\item $\lambda$ and the
+  temperature are initialized on
+  \cref{alg:annealing:initialize};
+\item the \emph{while} on
+  \cref{alg:annealing:while} is the main loop and the terminating
+  condition is given by a minimum temperature or a minimum variation of
+  energy between two iterations;
+\item the \emph{for} at
+  \cref{alg:annealing:for} repeats the annealing move for a certain
+  number of trials, on each iteration the algorithm probabilistically
+  tries to make a move of the state of the system;
+  \begin{itemize}
+  \item first on
+    \cref{alg:annealing:lambdaProb} makes the choice if moving in the
+    Lagrangian space or in the space of the path;
+  \item after that, based on the previous
+    choice, the algorithm tries probabilistically to move the system
+    in a neighbouring
+    state: in the
+    Lagrangian space at
+    \cref{alg:annealing:changeLambda} or in the path space at
+    \cref{alg:annealing:changeX};
+  \end{itemize}
+\item finally at the end of every trial set,
+  at \cref{alg:annealing:cooling}, the temperature $T$ is cooled by
+  a certain factor.
+\end{enumerate}
+The choice of the neighbour is made
+probabilistically in the meaning that if the energy increases in the
+Lagrangian space or decreases in the path space, then the probability of
+choosing the new state is 1. If the energy decreases in the Lagrangian
+space or increases in the path space, then the new state is accepted
 with a probability that is\footnote{Note that $[x]^+=\max(0,x)$.}:
 $$\exp(-\frac{\Delta energy}{T}).$$
-Finally at the end of every trial set,
-at \cref{alg:annealing:cooling}, the temperature $T$ is cooled by
-a certain factor.
 
-The $neighbour$ function choose a neighbour of the state and is
-defined depending on the input
+The $neighbour$ function chooses a neighbour of the state and it is
+defined depending on the input:
 \begin{itemize}
   \item a neighbour of $\lambda$ is a value that is equal to $\lambda$
     plus a perturbation in a range $[-maxLambdaPert, maxLambdaPert]$;
   \item a neighbour of the path is obtained picking randomly one of
     the vertices $\ve{v_i}$, except the extremes $\ve{v_0}$ and $\ve{v_n}$,
-    then picking an angle in $[0,2\pi]$ and a distance
+    then choosing an angle in $[0,2\pi]$ and a distance
     uniformly in a specific range, and finally moving $\ve{v_i}$ by
     the chosen values.
 \end{itemize}
@@ -914,10 +945,9 @@ The $energy$ function is equivalent to $L_d$ in the
 $$energy(\ve{x},\lambda)=gain(P)+\lambda\cdot constraint(P).$$
 
 The annealing process
-find a saddle point probabilistically increasing the energy, moving
-$\lambda$ and 
-decreasing the energy moving the points.
-
+find a saddle point probabilistically increasing the energy, when
+$\lambda$ is moved, and 
+decreasing the energy when the points are moved.
 
 \section{Post processing}\label{sec:postPro}\index{Post process}
 The purpose of the post processing phase is to try to simplify the
@@ -936,11 +966,11 @@ to achieve a smoother path.
   \EndFor
   \EndProcedure
 \end{algo}
-For obtaining this target we realized \cref{alg:postProcess} that
-iterate through all the vertices excluded the extremes, and for each
-$v_i$ check if it can be removed without consequences - where with
+For obtaining this we realized \cref{alg:postProcess} that
+iterates through all the vertices, excluded the extremes, and for each
+$v_i$ checks if it can be removed without consequences. With
 consequences we mean that removing $v_i$ would cause that a triangle
-in $P$ intersect one of the \acp{OTF}. 
+in $P$ intersect one of the \acp{OTF}.
 
 \begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
   \begin{tikzpicture}
@@ -987,17 +1017,17 @@ is
   P=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i}},\ve{v_{i+1}},\ve{v_{i+2}},\dots)
 \end{equation*}
 and we are
-considering removing $\ve{v_i}$ having a modified path
+considering removing $\ve{v_i}$ obtaining a modified path
 \begin{equation*}
   \tilde{P}=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i+1}},\ve{v_{i+2}},\dots).
 \end{equation*}
 Before doing this we need to check if any triangle in $\tilde{P}$
-intersect any \ac{OTF}, in detail we need to check only the two
+intersects any \ac{OTF}. In detail we need to check only the two
 triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
 $\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
 triangles in $\tilde{P}$ where already present in $P$. For instance
-the obstacle in the figure don't intersect anyone of the triangles in
-$P$, but intersect $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
+the obstacle in the figure don't intersects anyone of the triangles in
+$P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
 $\tilde{P}$.
 
 \subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity}
@@ -1011,22 +1041,23 @@ in $P$.
 
 \section{Degree increase}\label{sec:degreeInc}\index{Degree
   increase}\index{\bss!higher degree}
-Until now we assumed only quadratic \bss - i.e. of degree $m$ - because
+Until now we assumed only quadratic \bss{} - i.e. of degree $m$ - because
 on that case,
 for the property of convex hull (\cref{sec:convexHull}),
 we need to check only for collisions between triangles and triangles
-(triangles in $P$ and \acp{OTF}). If we want to use higher degree
+(in $P$ and \acp{OTF}). If we want to use higher degree
 curves we can modify the
 previous algorithms for dealing with polyhedral convex hulls, but this
 mean increasing the complexity of the methods.
 
-We adopted a compromise, we kept the previous algorithm unchanged, and
+We adopted a compromise: we kept the previous algorithms unchanged, and
 then if we want to apply an higher degree \bs curve we modify 
 \begin{equation*}
 P=(\ve{v_0},\dots,\ve{v_n})  
 \end{equation*}
-adding aligned new vertices $(\ve{w_0},\ve{w_1},\dots)$ between each pair
-$(\ve{v_i},\ve{v_{i+1}})$ for $i=0,\dots,n-1$ of vertices in $P$. The
+adding a certain number of aligned new vertices
+$(\ve{w_0},\ve{w_1},\dots)$ between each pair 
+$(\ve{v_i},\ve{v_{i+1}})$ of vertices in $P$ for $i=0,\dots,n-1$. The
 number of $\ve{w_j}$
 between each pair $(\ve{v_i},\ve{v_{i+1}})$ depends on the desired
 grade of the curve
@@ -1038,14 +1069,14 @@ grade of the curve
 \item $m-2$ new vertices between each $(\ve{v_i},\ve{v_{i+1}})$ for
   \bs curves of degree $m$.
 \end{itemize}
-So the final modified path for a \bs curve of degree $m\ge 3$ is
+Thus the final modified path for a \bs curve of degree $m\ge 3$ is
 \begin{equation*}
   \tilde{P}=(\ve{v_0},\ve{w_0},\dots,\ve{w_{m-3}},\ve{v_1},\dots,\ve{v_i},\ve{w_{i(m-2)}},\dots,\ve{w_{(i+1)(m-2)-1}},\ve{v_{i+1}},\dots,\ve{v_n}).
 \end{equation*}
 In the project we implemented the degree increase to cubic and quartic
 curves.
 
-\begin{myfig}{Increase the degree to $m=4$.}{fig:highDegree}
+\begin{myfig}{Increase the degree $m$ from $2$ to $4$.}{fig:highDegree}
   \begin{tikzpicture}
     \coordinate (a) at (-2,0);
     \coordinate (b) at (1,0);
@@ -1116,30 +1147,32 @@ In \cref{fig:highDegree} is visible an example of path
 \end{equation*}
 We want to adapt $P$ to quartic \bs curves, so we need to add two new
 vertices between each pair of vertices $(\ve{v_i},\ve{v_{i+1}})$ for
-$i=0,\dots,6$, those new vertices are
+$i=0,\dots,6$. Those new vertices are
 \begin{equation*}
   (\ve{w_0},\ve{w_1},\ve{w_2},\ve{w_3},\ve{w_4},\ve{w_5},\ve{w_6},\ve{w_7},\ve{w_8},\ve{w_9},\ve{w_{10}},\ve{w_{11}}).
 \end{equation*}
 
 Note that, with this algorithm, when we increase the degree from $2$
-to $m\ge 3$ we have that the convex hull that contains a \bs curve of
+to $m\ge 3$ we have that the convex hull containing a \bs curve of
 degree $m$ in
-$\tilde{P}$ is a subset of the convex hull that contains a \bs curve
+$\tilde{P}$ is a subset of the convex hull containing a \bs curve
 of degree $2$
-in $P$, because the polyhedrons of consecutive $m+1$ vertices in
-$\tilde{P}$ are collapsed in triangles contained inside the triangles
+in $P$. This is because the polyhedrons of consecutive $m+1$ vertices in
+$\tilde{P}$ collapses in triangles contained inside the triangles
 of consecutive vertices in $P$. For instance in \cref{fig:highDegree}
 the convex hull of the first $5$ vertices
 $\ve{v_0},\ve{w_0},\ve{w_1},\ve{v_1},\ve{w_2}$ of $\tilde{P}$
 coincides with the
 triangle $\triangle \ve{v_0}\ve{v_1}\ve{w_2}$ that is contained inside
-the convex hull of the first $3$ vertices of $P$
+the triangle $\triangle \ve{v_0}\ve{v_1}\ve{v_2}$ of the first $3$
+vertices of $P$.
 
-The effect of this method on the applied curve of degree $m$ is that
-it will touch
-every segment of the original control polygon $P$, because adding
+One effect of the application of this method is that a curve of
+degree $m$ in $\tilde{P}$ will touch
+every segment of the original control polygon $P$. This is because adding
 $m-2$ aligned vertices between each pair $(\ve{v_i},\ve{v_{i+1}})$
-will result in $m$ aligned vertices on each original segment (\cref{sec:alignedVertices}).
+will result in $m$ aligned vertices on each original segment
+(\cref{sec:alignedVertices}).
 
 \section{Knots selection}\label{sec:knotSel}\index{\bss!knot selection}
 On the previous sections we never discussed about how to select the
@@ -1147,11 +1180,13 @@ knots
 \begin{equation*}
   T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
 \end{equation*}
-of the partition vector of the \bs, on this section we discuss the two
-methods that we implemented. Before all we want
-the curve to interpolate 
+of the knots vector of the \bs. In this section we discuss two
+methods that we implemented.
+
+Before all we want that
+the curve interpolates
 the chosen start and end points, that correspond to the extremes
-$\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw on
+$\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw in
 \cref{sec:clamped} that we can archive such interpolation if we impose
 \begin{equation}\label{eq:externalKnotsFix}
   \begin{split}
@@ -1159,31 +1194,34 @@ $\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw on
     &t_{n+1} = t_{n+2} = \dots = t_{n+m+1} = b
   \end{split}
 \end{equation}
-where $a$ and $b$ are the extremes of the parametric domain $[a,b]$ of
-the curve. The constraint of \cref{eq:externalKnotsFix} is a mandatory
-choice, so we cannot change it, regarding the parametric domain we
-chose it to be $[0,1]$ because changing the extremes doesn't change
-the behavior of the curve, only changing the ratio of the distance
-between the knot do it \cite{farin}. We still need to chose how to select 
+where $a$ and $b$ are the extremes of the parametric domain of
+the curve.
+
+The constraint of \cref{eq:externalKnotsFix} is a mandatory
+choice, so we cannot change it. Regarding the parametric domain, we
+chose it to be $[0,1]$ because changing the extremes don't change
+the behavior of the curve, only changing the ratios of the distances
+between the knots do it \cite{farin}. We still need to chose how to select 
 the inner $n-m$ knots $t_{m+1},\dots,t_n$, and we developed two different
-ways:
+ways of doing it:
 \begin{enumerate}[label=\textbf{method \arabic*}]
 \item\label[void]{en:uniform} Use a uniform partition where $t_i-t_{i-1}=c$ for
-  $i=m+1,\dots,n+1$ and for $c$ constant;
-\item\label[void]{en:adaptive} Use an adaptive partition where we try to make dense knots on
+  $i=m+1,\dots,n+1$ for $c$ constant;
+\item\label[void]{en:adaptive} Use an adaptive partition, where we try
+  to make dense knots in
   correspondence of points on the curve where we have dense control
   vertices.
 \end{enumerate}
 
-\cref{en:uniform} is the most easiest way of choosing a knot vector
+\cref{en:uniform} is the easiest way of choosing a knot vector
 and is common as first choice in textbooks \cite{farin}\cite{docarmo},
 but it have the disadvantage of ignoring the geometry of the curve
-\cite{farin}. How to accomplish \cref{en:uniform} is quite
-straightforward: we need simply to pick the nodes
+\cite{farin}. The steps to do for accomplish \cref{en:uniform} are quite
+straightforward: we need to pick the nodes
 \begin{equation*}
   \frac{i}{n-m+1}
 \end{equation*}
-for $i=1,\dots,n-m$; so we concentrate on \cref{en:adaptive}.
+for $i=1,\dots,n-m$. Thus we concentrate on \cref{en:adaptive}.
 
 \begin{myfig}{Optimal case (we want uniform partition).}{fig:adaptive1}
   \begin{tikzpicture}
@@ -1274,53 +1312,58 @@ for $i=1,\dots,n-m$; so we concentrate on \cref{en:adaptive}.
   \end{tikzpicture}
 \end{myfig}
 We started from the idea that if we have a control polygon with
-uniformly spaced vertices -
+uniformly-spaced vertices -
 i.e. $\norm{\ve{v_1}-\ve{v_0}}=\norm{\ve{v_2}-\ve{v_1}}=\cdots=\norm{\ve{v_n}-\ve{v_{n-1}}}$
 - then we agree on a uniform partition of the knots
 ($t_{m+1}-t_m=t_{m+2}-t_{m+1}=\cdots=t_{n+1}-t_n$). In
 \cref{fig:adaptive1} there is an example of a cubic \bs curve with
-uniformly spaced control polygon, where the segment above is a
+uniformly-spaced control polygon. The above segment is a
 \emph{rectified} 
 visualization of the control polygon with six control
 vertices
-$\ve{v_0},\dots,\ve{v_5}$, and the segment below represent the
-partition of the domain from $a$ (left) to $b$
-(right) with the projections $\nu_0,\dots,\nu_5$ of the control vertices
+$\ve{v_0},\dots,\ve{v_5}$. The segment below represents the
+partition of the domain from $a$ (on the left) to $b$
+(on the right), with the projections $\nu_0,\dots,\nu_5$ of the control
+vertices,
 scaled in length to the parametric domain axis\footnote{$\ve{v_0}$ is
   projected to $a$, $\ve{v_5}$ is projected to $b$, and the ratios
-  between the distances between vertices are preserved.} and the knots $t_0,\dots,t_8$. Starting from this situation if
+  between the distances between vertices are preserved.}, and the
+knots $t_0,\dots,t_8$ on it.
+
+Starting from this situation, if
 we have a generic control polygon with segments of different length as
-in \cref{fig:adaptive2} we want that each $t_i$ keep the same
-distance, in ratio, between the surrounding $\nu_j$ and $\nu_{j+1}$
-respect to the optimal case. For instance on \cref{fig:adaptive1}
+in \cref{fig:adaptive2}, then we want that each $t_i$ keep the same
+distance, in ratio, between the surrounding $\nu_j$ and $\nu_{j+1}$,
+respect to the optimal case. For instance in \cref{fig:adaptive1}
 $\frac{t_3-\nu_1}{\nu_2-\nu_1}=\frac{1}{4}$ and
-$\frac{\nu_2-t_3}{\nu_2-\nu_1}=\frac{3}{4}$, this means that on
+$\frac{\nu_2-t_3}{\nu_2-\nu_1}=\frac{3}{4}$, this means that in
 \cref{fig:adaptive2} the same values must be preserved.
 
-The problem now is how to calculate the values of $t_i$ on the general
-case. We consider only the inner part $\tau$ of the partition vector
+The problem now is how to calculate the values of $t_i$ in the general
+case. We consider only the inner part $\tau$ of the partition vector,
 included the extremes
 \begin{equation*}
   \tau_i = t_{i+m}\qquad i=0,\dots,n-m+1
 \end{equation*}
-where $\tau_0=a=0$ and $\tau_{n-m+1}=b=1$, on \cref{fig:adaptive1} and
+where $\tau_0=a=0$ and $\tau_{n-m+1}=b=1$. In \cref{fig:adaptive1} and
 \cref{fig:adaptive2}
-$\tau=(t_2,t_3,t_4,t_5,t_6)$. Now we calculate the position of
-$\tau_i$ respect to the $\nu_j$ in the \emph{optimal} case, we can do this
-calculating the position of $\tau_i$ expressed in units of $\nu_j$. In
-other words we calculate
+$\tau=(t_2,t_3,t_4,t_5,t_6)$. Now we calculate the positions of all
+$\tau_i$ respect to the $\nu_j$ in the \emph{optimal} case. We can
+archive that
+calculating the positions of $\tau_i$ expressed in units of $\nu_j$. In
+other terms we calculate
 \begin{equation}\label{eq:adaptivePos}
   \tau_i^\nu=\frac{n}{n-m+1}\cdot i\qquad i=0,\dots,n-m+1
 \end{equation}
-and we obtain numbers $\tau_i^\nu$ whose integer part
+obtaining the numbers $\tau_i^\nu$ whose integer part
 $\lfloor\tau_i^\nu\rfloor$ represents the index $j$ of the
-$\nu_j$ that is on the left of $\tau_i$, and the decimal part
-$(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)$ represents the distance
-$\frac{\tau_i-\nu_j}{\nu_{j+1}-\nu_j}$.
+$\nu_j$ that is to the left of $\tau_i$, and the decimal part
+$(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)$ represents the distance from
+it: $\frac{\tau_i-\nu_j}{\nu_{j+1}-\nu_j}$.
 
-Now we calculate the projections $\nu_i$ in the domain on the
-\emph{generic} case,
-we start calculating the incremental distance of
+Now we calculate the projections $\nu_i$ in the
+\emph{generic} case.
+We start calculating the incremental distances between
 the vertices
 \begin{equation*}
   \begin{cases}
@@ -1333,12 +1376,12 @@ and, remembering that the parametric domain is $[0,1]$, we have
   \nu_i=\frac{d_i}{d_n}\qquad i=0,\dots,n.
 \end{equation}
 
-Now using the positions \cref{eq:adaptivePos} on the projection
-\cref{eq:adaptiveProj} we obtain the values
+Now, using the positions in \cref{eq:adaptivePos} on the projection in
+\cref{eq:adaptiveProj}, we obtain the values
 \begin{equation*}
-  \tau_i=\nu_{\lfloor\tau_i^\nu\rfloor}+(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)(\nu_{\lfloor\tau_i^\nu\rfloor+1}-\nu_{\lfloor\tau_i^\nu\rfloor})\qquad i=0,\dots,n-m+1
+  \tau_i=\nu_{\lfloor\tau_i^\nu\rfloor}+(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)(\nu_{\lfloor\tau_i^\nu\rfloor+1}-\nu_{\lfloor\tau_i^\nu\rfloor})\qquad i=0,\dots,n-m+1.
 \end{equation*}
-and finally adding the duplicated knots we obtain
+Finally, adding the duplicated knots, we obtain
 \begin{equation*}
   t_i=\tau_{\min(n-m+1,\ \max(0,\ i-m))}\qquad i=0,\dots,n+m+1.
 \end{equation*}
