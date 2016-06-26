@@ -1,6 +1,6 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
-\chapter{Algorithm}
+\chapter{Algorithm}\label{cha:algorithm}
 In this chapter we analyze step-by-step the algorithms that implement
 the different parts of the program. We do this with the help of the
 test scene in \cref{fig:empty}.
@@ -34,7 +34,7 @@ We choose a Voronoi method because it build a structure roughly
 equidistant from obstacles, and so we have low probability of
 collisions between the curve and the obstacles.
 
-\subsection{Base structure}\index{Graph}\index{$G$}
+\subsection{Base Graph}\label{sec:baseGraph}\index{Graph}\index{$G$}
 First we
 start distributing points on the \acp{OTF} and on
 an invisible bounding box, as in \cref{fig:sites}.
@@ -310,15 +310,14 @@ the curve will be free from obstacles. This concept is exemplified in
 In this chapter we make the hypothesis of using
 quadratic \bss\footnote{\bss curves with degree 2 or equivalently order 3.}, in
 \cref{sec:degreeInc} it is explained how is possible to use curves with
-higher degree. With this assumption we can exploit the convex hull
-property explained in \cref{sec:bsplineProp}, and assert that the
+higher degree. With this assumption we can exploit the \acp{CHP}
+explained in \cref{sec:bsplineProp}, and assert that the 
 resulting curve is contained inside the union of all the triangles of
 three consecutive control vertices of the control
 polygon. Using that property we can resolve the problem of the
 collision, maintaining free 
 from collision with \acp{OTF} all the triangles associated with the control
-polygon. Note that the property of convex
-hull of quadratic
+polygon. Note that the \ac{CHP} of quadratic
 \bss is valid also in space, so the convex hull is still composed
 of triangles, like the faces of the
 obstacles. This simplifies all the checks for collisions because they
@@ -1189,7 +1188,7 @@ in $P$.
   increase}\index{\bss!higher degree}
 Until now we assumed only quadratic \bss{} - i.e. of degree $m$ - because
 on that case,
-for the property of convex hull (\cref{sec:convexHull}),
+for the \ac{CHP} (\cref{sec:convexHull}),
 we need to check only for collisions between triangles and triangles
 (in $P$ and \acp{OTF}). If we want to use higher degree
 curves we can modify the

@@ -10,6 +10,7 @@
 \usepackage{makeidx}
 %\usepackage[italian]{babel}
 %\usepackage{graphicx}
+%\usepackage{hyperref}
 \usepackage{lscape}
 \usepackage{siunitx}
 \usepackage{enumitem}
@@ -39,8 +40,7 @@
 % tocaligned eulerchapternumbers drafting linedheaders 
 % listsseparated subfig nochapters beramono eulermath parts 
 % minionpro pdfspacing
-\usepackage[eulerchapternumbers,subfig,beramono,eulermath,
-	parts]{classicthesis}
+\usepackage[linedheaders,eulerchapternumbers,subfig,beramono,eulermath,parts]{classicthesis}
 %--------------------------------------------------------------
 \usepackage{tikz}
 \usetikzlibrary{shapes, chains, scopes, shadows, positioning, arrows,
@@ -48,6 +48,34 @@
 
 \usepackage[capitalise]{cleveref}
 \usepackage{acronym}
+
+% make the part links in the TOC point to the right page
+\usepackage{etoolbox}
+\pretocmd{\oldpart}{\cleardoublepage}{}{}
+
+\makeatletter
+\def\ttl@tocpart{% %magic code, don't ask
+  \def\ttl@a{\protect\numberline{\thepart}\@gobble{}}}
+
+%% If you want part titles aligned with chapter titles
+%% uncomment the following line and remove the code
+%% up to (and excluding) \makeatother
+ \setlength{\cftpartnumwidth}{\cftchapnumwidth}
+
+% \let\classic@l@part\l@part
+% \renewcommand\l@part[2]{%
+%   \begingroup
+%   \renewcommand{\numberline}[1]{\textsc{##1} }%
+%   \classic@l@part{#1}{#2}%
+%   \endgroup
+% }
+\makeatother
+
+% %%% Magic code for part indices; don't ask ;-)
+% \makeatletter
+% \def\ttl@tocpart{%
+%   \def\ttl@a{\protect\numberline{\thepart}\@gobble{}}}
+% \makeatother
 
 %comandi per modello
 %--------------------------------------------------------------
@@ -221,6 +249,25 @@ shadow, minimum width=\transH, minimum height=\transW]
     \begin{center}
       \begin{tikzpicture}
         \node [figureFrame] (image) at (0,0) {\includegraphics[width=.9\textwidth]{#1}};
+        \IfNoValueTF{#4}
+        {}
+        {
+          \begin{scope}[x={(image.south east)},y={(image.north west)}]
+            #4
+          \end{scope}
+        }
+      \end{tikzpicture}
+    \end{center}
+    \caption{#2}
+    \label{#3}
+  \end{figure}
+}
+
+\NewDocumentCommand{\imagev}{mmmo}{
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \node [figureFrame, inner sep=5mm] (image) at (0,0) {\includegraphics[height=.9\textheight]{#1}};
         \IfNoValueTF{#4}
         {}
         {
@@ -449,6 +496,7 @@ shadow, minimum width=\transH, minimum height=\transW]
 \crefname{problem}{problem}{problems}
 \crefname{void}{}{}
 \crefname{system}{system}{systems}
+\crefformat{part}{Part #2\MakeUppercase{#1}#3}
 
 %comando per inserire algoritmo
 \NewDocumentEnvironment{algo}{mm}{

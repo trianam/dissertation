@@ -1,6 +1,6 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
-\chapter{Prerequisites}
+\chapter{Prerequisites}\label{cha:prerequisites}
 \section{Splines and \bss}\label{sec:spline}
 A \emph{spline} is a piecewise polynomial function with prescribed
 regularity on its domain.
@@ -225,9 +225,10 @@ shape of the curve.
 In this section we describe some properties of \bs curves that we
 used for the development of the project.
 
-\subsection{Convex hull}\label{sec:convexHull}\index{\bss!convex hull}
-A \bs curve $\ve{S}(t)$ of order $m$ defined by the control polygon
-$\ve{v_0},\ve{v_1},\dots,\ve{v_n}$ is contained inside the union of the
+\subsection{\acf{CHP}}\label{sec:convexHull}\index{\bss!\acf{CHP}}
+The \acf{CHP} states that a \bs curve $\ve{S}(t)$ of order $m$,
+defined by the control polygon 
+$\ve{v_0},\ve{v_1},\dots,\ve{v_n}$, is contained inside the union of the
 convex hulls composed of $m+1$ vertices of the control polygon
 \cite{farin}. If we
 call $\conv(\ve{w_0},\ve{w_1},\dots,\ve{w_j})$ the convex hull of the
@@ -281,7 +282,7 @@ whatever is the partition vector.
 \end{myfig}
 On \cref{fig:convexHull} is visible an example of a control polygon
 and the surface where a quadratic \bs applied to
-it can be contained. Note that the convex hull property holds also in
+it can be contained. Note that the \ac{CHP} holds also in
 3-dimensional
 space - i.e. a quadratic \bs in 3-dimensional space is contained
 inside a flat surface composed by the union of triangles. From grade 3
@@ -665,7 +666,7 @@ uncertainty in the inputs or an high degree of liberty in the
 state. For instance integrating numerically a function with many
 dimensions or \ac{SA}.
 
-\subsection{\acf{SA}}\index{\acf{SA}}
+\subsection{\acf{SA}}\label{sec:simulatedAnnealing}\index{\acf{SA}}
 The \ac{SA} is a method used for finding the global optimum - i.e. the
 maximum or the minimum - of a function. It is inspired by a method
 used in metallurgy that consists in heating and then cooling slowly a

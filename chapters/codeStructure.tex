@@ -1,8 +1,62 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
-\chapter{Code structure}
-We designed the code in Python, the main class is called
-\pp{Voronizator}, it maintains the status of all the obstacles,
-distribute the sites on the surfaces of them, and calculate the
-Voronoi cells and the correspondent graph. 
+\chapter{Code structure}\label{cha:codeStructure}
+We designed the code with an \ac{OOP} methodology in Python 3
+(\url{https://www.python.org/}). A versatile language with a strong
+appeal on
+scientific community, easy to learn and with an increasing active
+community of developers behind. We
+relied on SciPy (\url{https://www.scipy.org/}) and NumPy
+(\url{http://www.numpy.org/}) libraries for taking care of
+different numerical methods. Furthermore we used NetworkX library
+(\url{http://networkx.github.io/}) to represent graphs and
+to route in them. Regarding the graphic output we used \ac{VTK}
+(\url{http://www.vtk.org/}) bindings in Python.
+
+\imagev{uml.eps}{Excerpt \acs{UML} of the project}{fig:uml}
+The main class is \pp{Voronizator}, it maintains the status of the
+scene and provides all the methods for the interface with users.
+\begin{itemize}
+\item \pp{addBoundingBox} is used for adding a bounding box at specified
+  coordinates to the scene.
+\item \pp{addPolyhedron} is used for adding a new
+  obstacle to the scene, it required a \pp{Polyhedron} object as
+  argument.
+\item \pp{setPolyhedronsSites} add the sites for the \ac{VD} to the scene.
+\item The method \pp{makeVoroGraph} is used for creating the graphs
+  $G$ and $G_t$ using the algorithms described in \cref{sec:baseGraph}
+  and \cref{sec:trigraph}.
+\item \pp{setAdaptivePartition} and \pp{setBsplineDegree} are used for
+  selecting between uniform or adaptive knot partition, and for choosing
+  the desired degree of the curve.
+\item \pp{extractXmlTree} and \pp{importXmlTree} are used for saving
+  and restoring the scene in \acs{XML} format.
+\item All the other methods \pp{plot*} are used for drawing the
+  different elements of the scene. They require a plotter as
+  argument.
+\end{itemize}
+
+The class \pp{Plotter} provides the interface for drawing all the
+necessary elements using \ac{VTK}.
+
+The class \pp{Polyhedron} represents a single obstacle (that can also
+be one of the two subclasses \pp{ConvexHull} and \pp{Tetrahedron}). it
+provides all the necessary methods for performing geometry checks of
+point inclusion and intersection with segments, triangles, and other
+obstacles.
+
+The class \pp{Path} represents the control polygon of the curve. It
+provides the methods \pp{addNAlignedVertexes} and \pp{simplify} that
+perform respectively the degree increase (\cref{sec:degreeInc}) and
+the post processing (\cref{sec:postPro}). The method \pp{clean} is
+necessary for the second solution described in
+\cref{sec:inter2}. Furthermore this class provides also the
+functionality for optimizing the curve using the \ac{SA}
+(\cref{sec:inter3}) with the method \pp{anneal}.
+
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../dissertation"
+%%% End:

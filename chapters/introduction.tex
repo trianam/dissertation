@@ -13,15 +13,68 @@ The considered topic is highly cross-disciplinary. In fact we designed
 this project with the help of an extended set of
 competencies acquired following the courses. We applied notions of
 \emph{linear algebra} for the collision checks; \emph{numerical
-  analysis} for the design of the curves; \emph{probability},
-\emph{graph theory} and \emph{algorithm theory} for the design of the
+  analysis} for the design of the curves; \emph{computational
+  geometry},
+\emph{graph theory}, \emph{probability} and \emph{algorithm theory}
+for the design of the 
 algorithms; and finally \emph{theoretical computer science} for the
 analysis of the costs.
 
 We focused on finding a trade-off between having a short curve, a
-fairly efficient computation, and a smooth curve. We explored
+smooth curve, and keeping the time complexity low. We explored
 different solutions with different collocations on the trade-off
 triangle and with different qualitative effects on the curve.
+
+We developed a framework in Python using \ac{VTK} for the graphic
+output. We used a roadmap method based on \acp{VD} for creating a
+graph (details in
+\cref{sec:baseGraph}), that is the base
+structure for the project. Using such structure we developed three
+different solutions.
+\begin{enumerate}
+\item The first method benefits from the \acf{CHP} of \bs
+  curves (\cref{sec:convexHull}). it applies a transformation on the
+  graph such that every path in it can be used as a control polygon
+  for an obstacle-free curve (\cref{sec:trigraph}). Therefore the
+  algorithm selects the shortest path on the transformed graph and
+  build the curve on it (\cref{sec:inter1}).
+\item The second method still benefits from the \ac{CHP},
+  but it picks the shortest path directly on the base graph. If
+  violations of the \ac{CHP} emerge on it, then rectification
+  measures are taken (cref{sec:inter2}).
+\item The third method uses a probabilistic approach. Starting from
+  the shortest path in the original graph, it performs a simulated
+  annealing optimization (\cref{sec:simulatedAnnealing}) that converge
+  in a state were the desired trade-off between having a short curve,
+  and low curvature
+  and torsion peaks, is optimal (\cref{sec:inter3}).
+\end{enumerate}
+
+This document is structured as follows, we have three parts. The first
+(\cref{prt:stateOfArt})
+Is dedicated to the state of the art, we provide an survey of
+different topics and algorithms related to \emph{motion planning}.
+
+The
+second part (\cref{prt:project}) is committed to describing
+all the different parts of the algorithm. In detail
+\cref{cha:prerequisites} gives to the reader all the necessary notions
+to understand the following parts. \cref{cha:scene} describes how the
+environment and the resulting curve are represented. Finally in
+\cref{cha:algorithm} we describe how to obtain the basic structures
+(\cref{sec:polChain}), how to avoid the obstacles using the three
+methods described before (\cref{sec:obsAvoid}), and how to improve the
+obtained curve simplifying the control polygon (\cref{sec:postPro}),
+increasing the curve degree (\cref{sec:degreeInc}) and changing the
+\bs knot vector (\cref{sec:knotSel}).
+
+The third part (\cref{prt:evaluation}) describe the instruments used
+for implementing the algorithms (cref{cha:codeStructure}) and presents
+a series of tests with
+different scenes and configurations (\cref{cha:testing}). Furthermore
+we deduce conclusions from the execution of the tests
+(\cref{cha:conclusions}).
+
 \end{document}
 
 %%% Local Variables:
