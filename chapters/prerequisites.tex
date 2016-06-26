@@ -367,8 +367,7 @@ in other words we want
   T=\{\overbrace{a,\dots,a}^m,t_{m+1},\dots,t_{n},\overbrace{b,\dots,b}^m\}
 \end{equation*}
 
-\subsection{Curvature and
-  torsion}\index{Curvature and torsion}\index{\bss!curvature and torsion}
+\subsection{Curvature and torsion}\index{Curvature and torsion}\index{\bss!curvature and torsion}
 Since we are interested in comparing different curves,
 we need to recognize if a certain curve is a \emph{good} or a
 \emph{bad} one. One factor that characterizes a certain curve can 
@@ -381,7 +380,8 @@ sufficiently smooth
 parametric curves for each value of the parameter, and they do not
 depend on the selected parametrization.
 
-For a generic parametric curve $\ve{S}(u)$ defined for $u\in[a,b]$
+For a generic parametric curve\footnote{\label{ftn:genericParCur}Thus
+  also a \bs curve.} $\ve{S}(u)$ defined for $u\in[a,b]$
 given the notation $\wedge$ for the vector product and for \cref{eq:bsplineCurveComp}
 \begin{equation*}
   \dot{\ve{S}}(u) = \frac{\md}{\md u} \ve{S}(u)=\left[
@@ -420,6 +420,19 @@ Two curves of same smoothness can be compared using the plots of
 curvature and torsion, in general curves that have lower peaks of
 $\kappa(u)$ and $\tau(u)$ are better than curves with
 higher peaks.
+
+\subsection{Arc length}\index{Arc length}\index{\bss!arc length}
+Sometimes we are interested in evaluating the length of a generic
+parametric curve\footnote{See \cref{ftn:genericParCur}.} $\ve{S}(u)$
+defined for $u\in[a,b]$. We can obtain such length, called \emph{arc
+  length}, calculating the integral
+\begin{equation*}
+  \int_a^b\norm{\dot{\ve{S}}(u)}\md u.
+\end{equation*}
+
+We can approximate this value using a discrete tabulation of the curve
+$\ve{S}(u)$ and some integrating method like the \emph{trapezoidal
+  rule} \cite{press}\cite{stoer}.
 
 \section{Voronoi Diagrams}\label{sec:voronoi}\index{\acfp{VD}}
 In this section we introduce \acfp{VD}, an important structure used in

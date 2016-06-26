@@ -34,7 +34,7 @@ We choose a Voronoi method because it build a structure roughly
 equidistant from obstacles, and so we have low probability of
 collisions between the curve and the obstacles.
 
-\subsection{Base structure}\index{Graph}
+\subsection{Base structure}\index{Graph}\index{$G$}
 First we
 start distributing points on the \acp{OTF} and on
 an invisible bounding box, as in \cref{fig:sites}.
@@ -124,7 +124,7 @@ we need to take into account the degree of the \bs and the
 position of the obstacles, the details are in \cref{sec:obsAvoid} and
 \cref{sec:degreeInc}.
 
-\subsubsection{Complexity considerations}\index{Complexity}
+\subsubsection{Complexity considerations}\index{Complexity!$G$ creation}\index{$G$!complexity}
 Fortune's algorithm runs in time $\bigO(|Is|\log |Is|)$ \cite{deberg}
 where $Is$ is
 the set 
@@ -190,7 +190,7 @@ and if we make the assumption of $k$ constant
   \bigO(|Ob|^2)
 \end{equation*}
 
-\subsection{Triple's graph}\label{sec:trigraph}\index{Graph!triple's graph}
+\subsection{Triple's graph}\label{sec:trigraph}\index{Graph!triple's graph}\index{$G_t$}
 Before calculating the shortest path on the chosen graph with Dijkstra
 \cite{dijkstra}\cite{knuth}, we
 transform it in a graph containing all the triples
@@ -250,7 +250,7 @@ avoidance algorithm of
 \cref{sec:inter1}, theoretically is possible to bypass such
 transformation for the algorithm on \cref{sec:inter2}.
 
-\subsubsection{Complexity considerations}\index{Complexity}
+\subsubsection{Complexity considerations}\index{Complexity!$G_t$ creation}\index{$G_t$!complexity}
 If we suppose a maximum degree $k$ for each vertex in the graph $G$ -
 i.e. each vertex in $V$ can have maximum $k$ edges attached to
 it - then the number of vertices in the transformed graph $G_t$ is 
@@ -337,7 +337,7 @@ collisions in the triangles formed of three consecutive points in such
 path. When a collision is found some actions are taken for dealing
 with that.
 
-\subsection{First solution: Dijkstra's algorithm in $G_t$}\label{sec:inter1}\index{Dijkstra}
+\subsection{First solution: Dijkstra's algorithm in $G_t$}\label{sec:inter1}\index{Dijkstra}\index{Dijkstra in $G_t$}
 The first solution of the problem exploits the graph $G_t$ obtained as
 explained in \cref{sec:trigraph}. Before applying Dijkstra's algorithm
 to $G_t$ all the triples are filtered checking if the
@@ -448,7 +448,7 @@ triangles in the
 path collide with obstacles. In \cref{fig:sol12} another
 point of view of pictures shown in \cref{fig:sol11} is visible.
 
-\subsubsection{Complexity considerations}\index{Complexity}
+\subsubsection{Complexity considerations}\index{Complexity!Dijkstra's algorithm in $G_t$}\index{Dijkstra in $G_t$!complexity}
 For each triple and each \ac{OTF} we need to solve three $3\times 3$
 linear systems for the
 collision check\footnote{See
@@ -465,13 +465,16 @@ and for \cref{eq:numV} and \cref{eq:numTriples} this is equal to
 \end{equation}
 
 The cost of applying Dijkstra's algorithm\footnote{In the worst case
-  where no triples are removed in the cleaning phase.} in $G_t$ is
-\newcommand{\eqCostDijkstraTriples}{\ensuremath{\bigO(k^3|V|+k^2|V|\log(k^2|V|)}}
+  where no triples are removed in the cleaning phase.} in $G_t$ is \cite{bondy}\cite{lavalle}
+\newcommand{\eqCostDijkstraTriples}{\ensuremath{\bigO(k^3|Ob|+k^2|Ob|\log(k^2|Ob|)}}
 \begin{equation}
   \label{eq:costDijkstraTriples}
-  \bigO(|E_t|+|V_t|\log |V_t|) = \eqCostDijkstraTriples .
+  \begin{split}
+    \bigO(|E_t|+|V_t|\log |V_t|) &= \bigO(k^3|V|+k^2|V|\log(k^2|V|)\\
+    &= \eqCostDijkstraTriples.
+  \end{split}
 \end{equation}
-This cost has two special cases:
+Such cost has two special cases:
 \begin{itemize}
 \item if $G$ is a \emph{clique} - i.e. each
   node in $V$ is connected to every other node \cite{bondy} - then
@@ -502,13 +505,18 @@ constant as we said before then we have an overall cost of
 \begin{equation}\label{eq:costTotalOneK}
   \eqCostTotalOneK
 \end{equation}
-That derive from the collision-check controls\footnote{We can improve
-  this result if we divide the algorithm in two parts, we 
-can construct the graph only once with the heavy cost $\bigO(|Ob|^2)$
-and then using
-it in different trials with different starting and ending points with
-a reduced cost of $\bigO(|Ob|\log |Ob|)$
-for the routing.}.
+That derive from the collision-check controls.
+
+We can improve
+this result if we divide the algorithm in two parts:
+\begin{enumerate}
+\item first we 
+  can construct the graph once with cost $\bigO(|Ob|^2)$;
+\item then we can
+  use the graph in different situations\footnote{With specific starting
+    and ending points} with cost $\bigO(|Ob|\log |Ob|)$, only for the
+  routing.
+\end{enumerate}
 
 \begin{table}
   \centering
@@ -533,7 +541,7 @@ for the routing.}.
 On \cref{tab:costsSol1} we resumed all the terms that contributes to
 the total costs, and the total cost itself.
 
-\subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}\index{Dijkstra}
+\subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}\index{Dijkstra}\index{Dijkstra in $G$}
 The First solution is interesting from an algorithmic point of view,
 but it is not very practical because it throws all the triples that
 intersect an obstacle. We manage to develop a
@@ -710,10 +718,12 @@ composed of those vertices
 collide with the obstacle on the back. The two new vertices $\ve{w_1}$
 and $\ve{w_2}$ are added to avoid the collision.
 
-\subsubsection{Complexity considerations}\index{Complexity}
-For this solution we have still the cost for
-the creation and pruning of the graph $G$, then we need to apply Dijkstra's
-algorithm in $G$ for obtaining $P$ with a cost \cite{bondy}
+\subsubsection{Complexity considerations}\index{Complexity!Dijkstra's algorithm in $G$}\index{Dijkstra in $G$!complexity}
+For this solution we have still the costs of \cref{eq:costGraph} and
+\cref{eq:costPruning} for
+the creation and pruning of the graph $G$. In addition we need to
+apply Dijkstra's
+algorithm in $G$ for obtaining $P$ with a cost \cite{bondy}\cite{lavalle}
 \begin{equation*}
   \bigO(|E|+|V|\log |V|).
 \end{equation*}
@@ -741,7 +751,7 @@ $|P|=\bigO(|V|)=\bigO(|Ob|)$ so we have a cost
 \end{equation}
 
 Summing up all the costs we have 
-\newcommand{\eqCostTotalTwo}{\ensuremath{\bigO(k|Ob|^2+|Ob|\log|Ob|)}}
+\newcommand{\eqCostTotalTwo}{\ensuremath{\bigO(k|Ob|^2)}}
 \begin{equation}\label{eq:costTotalTwo}
   \eqCostTotalTwo
 \end{equation}
@@ -775,9 +785,13 @@ the total costs, and the total cost itself.
 
 The cost is comparable with the one of the first solution. Furthermore,
 also in 
-this case we can divide the algorithm in two parts constructing only
-once $G$ with cost $\bigO(|Ob|^2)$ and then using it for different
-trials with a cost $\bigO(|P|\cdot|Ob|)$.
+this case we can divide the algorithm in two parts:
+\begin{enumerate}
+\item first we can construct only
+  once $G$ with cost $\bigO(|Ob|^2)$;
+\item then we can use it for different
+  situations with cost $\bigO(|Ob|\log|Ob|+|P|\cdot|Ob|)$.
+\end{enumerate}
 
 \subsection{Third solution: \acf{SA}}\label{sec:inter3}\index{\acf{SA}}
 The solutions proposed in \cref{sec:inter1} and \cref{sec:inter2} have two
@@ -791,7 +805,7 @@ problems in common:
 In this section we describe a third
 approach considered on the project, an approach based on a
 probabilistic computation.
-
+    
 We can see the problem of finding the shortest path as a constrained
 optimization problem, where a certain configuration of the control
 vertices (and
@@ -826,39 +840,52 @@ where $maxCurv(P)$ is the peak of curvature of the \bs
 constructed using $P$ as control polygon,
 $maxTors(P)$ is the peak in absolute value of the torsion and
 $normLen(P)$ is the length of the control polygon
-$P$ normalized as percent of the length of the initial status
-after extracting the path\footnote{If the user chooses to minimize the
+$P$ normalized as percent of the length of the initial
+status\footnote{If the user chooses to minimize the
   arc length, then $normLen(P)$ becomes the length of the \bs curve.}
 . $\alpha$, $\beta$ and $\gamma$ are fixed
 coefficients used for giving different weights in the optimization
 process to 
 the curvature peak, torsion peak and length. The normalization of
 length is necessary for decoupling the weight of the length from the
-length of path. Regarding the constraint, $bspline(P)$
-is the set of tabulated points of the \emph{\bs} obtained as
-explained in
-\cref{sec:spline} and \cref{sec:bsplines}, using the path as
-control polygon, and
+length of path.
+
+Curvature and torsion, and thus also the
+relative peaks, are obtained in a discrete form. The \bs curve is
+tabulated in a number of points that depends on the length of $P$
+by a constant, then for each point the curvature and torsion values
+are calculated.
+
+Regarding the constraint, $bspline(P)$
+is the set of points of the \emph{\bs}, using $P$ as 
+control polygon, and 
 $obstacle_i$ is the area of the $i^{th}$ of $m$ obstacles, and
 $I=\{1,\dots,m\}$.
 
 We need to build now the Lagrangian function corresponding to
 \cref{eq:lagrangianFun}, for conciseness we define the function
-\begin{equation*}
+\begin{equation}\label{eq:gainLag}
   gain(P) = \alpha\cdot maxCurv(P)+\beta\cdot
     maxTors(P)+\gamma\cdot normLen(P)
-\end{equation*}
+\end{equation}
 the constraint function is not negative, and is calculated as the
 ratio
 \begin{equation}\label{eq:constraintLag}
 constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \ve{p}\in
     obstacle_i, i\in\{1,\dots,m\}\}\ \right|}{\left|\ \{\ve{p} \in
-    spline(P)\}\ \right|}
+    spline(P)\}\ \right|}.
 \end{equation}
-where the points $\ve{p}$ of the spline are calculated in a discrete
-form. Thus the constraint depends on the tabulation of the curve and
+
+
+The points $\ve{p}$ of the spline are calculated in a discrete
+form, like curvature and torsion. Thus the constraint depends on the
+tabulation of the curve and
 it is also possible to have borderline cases where the calculated
-constraint doesn't reflect the real situation. The
+constraint doesn't reflect the real situation\footnote{For instance if
+  we have very thin obstacles, a curve can pass through it having few
+  points (or even none) of it inside them.}.
+
+The
 function in \cref{eq:constraintLag} is not negative, thus the
 Lagrangian function corresponding to 
 \cref{eq:lagrangianFun} is
@@ -920,6 +947,13 @@ The \cref{alg:annealing} is the annealing process,
   at \cref{alg:annealing:cooling}, the temperature $T$ is cooled by
   a certain factor.
 \end{enumerate}
+
+The termination condition in \cref{alg:annealing:while} is triggered by a
+minimum variation of energy $\Delta energy$ between two consecutive
+iterations of the cycle. Also the termination is triggered when a
+minimum temperature is reached, this is for impose a limit on the
+number of cycles.
+
 The choice of the neighbour is made
 probabilistically in the meaning that if the energy increases in the
 Lagrangian space or decreases in the path space, then the probability of
@@ -942,12 +976,124 @@ defined depending on the input:
 
 The $energy$ function is equivalent to $L_d$ in the
 \cref{eq:lagrangianFunProj}:
-$$energy(\ve{x},\lambda)=gain(P)+\lambda\cdot constraint(P).$$
+\begin{equation}
+  \label{eq:annealingEnergy}
+  energy(\ve{x},\lambda)=gain(P)+\lambda\cdot constraint(P).
+\end{equation}
 
 The annealing process
 find a saddle point probabilistically increasing the energy, when
 $\lambda$ is moved, and 
 decreasing the energy when the points are moved.
+
+\subsubsection{Complexity considerations}\index{\acf{SA}!complexity}\index{Complexity!\acf{SA}}
+For this solution we have still the costs of \cref{eq:costGraph} and
+\cref{eq:costPruning} for
+the creation and pruning of the graph $G$. In addition we need to
+apply Dijkstra's
+algorithm in $G$ for obtaining the initial path $P$ with the cost of
+\cref{eq:costDijkstraG}.
+
+Regarding the annealing phase, for each \emph{step} (an
+iteration of \cref{alg:annealing:while} in \cref{alg:annealing}) we
+have a fixed number of \emph{trials} (the iterations of \cref{alg:annealing:for}). For each trial we need to
+calculate the value of the energy, \cref{eq:annealingEnergy}, that is
+the sum of the gain and the constraint.
+
+For the gain, \cref{eq:gainLag}, we need to calculate the values of
+curvature and torsion for every tabulated point. Furthermore there is
+also a cost\footnote{Only if
+  the user do not choose to minimize the arc length.} of
+$\bigO(|P|)$ for
+calculating the length of the control polygon. The cost for
+calculating the gain is thus
+\begin{equation*}
+  \bigO(|Sp|+|P|)
+\end{equation*}
+where $Sp$ is the set of the tabulated points of the curve. The number
+of points in $Sp$ depends on the length of the control polygon
+$len(P)$. Thus
+we have a cost of $\bigO(len(P)+|P|)$, but in the worst case
+$|P|=\bigO(|V|)=\bigO(|Ob|)$, thus the cost is
+\newcommand{\eqCostGain}{\ensuremath{\bigO(len(P)+|P|)=\bigO(len(P)+|Ob|)}}
+\begin{equation}
+  \label{eq:costGain}
+  \eqCostGain.
+\end{equation}
+
+Regarding the constraint, \cref{eq:constraintLag}, we need to calculate if
+every point 
+of the curve is inside an obstacle. This means a cost of
+\newcommand{\eqCostConstraint}{\ensuremath{\bigO(len(P)|Ob|)}}
+\begin{equation}
+  \label{eq:costConstraint}
+  \eqCostConstraint.
+\end{equation}
+
+The total cost for the calculation of the annealing phase is thus
+\begin{equation*}
+\bigO(\#steps\cdot\#trials\cdot(len(P)|Ob|)),
+\end{equation*}
+but the number of steps and trials are bounded by
+constants\footnote{Although such constants can be very high.}. Thus
+the cost becomes
+\newcommand{\eqCostAnneal}{\ensuremath{\bigO(len(P)|Ob|)}}
+\begin{equation}
+  \label{eq:costAnneal}
+  \eqCostAnneal.
+\end{equation}
+
+The total cost for the solution is
+\newcommand{\eqCostTotalThree}{\ensuremath{\bigO(k|Ob|^2+len(P)|Ob|)}}
+\begin{equation}
+  \label{eq:costTotalThree}
+  \eqCostTotalThree.
+\end{equation}
+
+Likewise the previous solutions, if we have that $k$ is a constant
+then the total cost become
+\newcommand{\eqCostTotalThreeK}{\ensuremath{\bigO(|Ob|^2+len(P)|Ob|)}}
+\begin{equation}
+  \label{eq:costTotalThreeK}
+  \eqCostTotalThreeK.
+\end{equation}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|l|c|r|}
+    \hline
+    Description&Cost&Reference\\
+    \hline
+    \hline
+    Creation of $G$&\eqCostGraph&\cref{eq:costGraph}\\
+    Pruning of $G$&\eqCostPruning&\cref{eq:costPruning}\\
+    Routing in $G$&\eqCostDijkstraG&\cref{eq:costDijkstraG}\\
+    Gain&\eqCostGain&\cref{eq:costGain}\\
+    Constraint&\eqCostConstraint&\cref{eq:costConstraint}\\
+    Annealing&\eqCostAnneal&\cref{eq:costAnneal}\\
+    \hline
+    Total&\eqCostTotalThree&\cref{eq:costTotalThree}\\
+    Total ($k$ costant)&\eqCostTotalThreeK&\cref{eq:costTotalThreeK}\\
+    \hline
+  \end{tabular}
+  \caption{Resume of the costs for solution three}
+  \label{tab:costsSol3}
+\end{table}
+In \cref{tab:costsSol3} we resumed all the costs. It is
+difficult to quantitatively compare the cost of this solution with
+the previous 
+ones. This is due to the presence of the factor $len(P)$, that depends
+on the geometry of the scene. Anyway we can asserts that this solution is
+more complex than the previous two by a term
+$\bigO(len(P)|Ob|)$. 
+
+Furthermore also in this solution
+we can divide the algorithm in two parts:
+\begin{enumerate}
+\item first we can construct only once $G$ with cost $\bigO(|Ob|^2)$;
+\item then we can use it for different situations with cost
+  $|Ob|\log|Ob|+len(P)|Ob|$.
+\end{enumerate}
 
 \section{Post processing}\label{sec:postPro}\index{Post process}
 The purpose of the post processing phase is to try to simplify the
@@ -1030,7 +1176,7 @@ the obstacle in the figure don't intersects anyone of the triangles in
 $P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
 $\tilde{P}$.
 
-\subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity}
+\subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity!post process}
 For every vertex of $P$ we need to check if two triangles intersect
 with an \ac{OTF}, so we have a complexity of
 \begin{equation*}
