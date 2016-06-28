@@ -9,14 +9,14 @@ More formally we define a spline \cite{deboor}\cite{farin}\cite{salomon}\cite{ba
 $$s:[a,b]\subset\mR\rightarrow\mR$$
 as follows.
 We have a partition of that interval defined by the \emph{breakpoints}
-$$\tau = \{\tau_0,\dots,\tau_l\}$$
-such that $a=\tau_0<\tau_1<\dots<\tau_{l-1}<\tau_l=b$ forming $l$
+$$\tau = \{\tau_0,\dots,\tau_\ell\}$$
+such that $a=\tau_0<\tau_1<\dots<\tau_{\ell-1}<\tau_\ell=b$ forming $\ell$
 intervals
 $$
 I_i=
 \begin{cases}
-  [\tau_i,\tau_{i+1}) & \mbox{if } i=0,\dots,l-2\\
-    [\tau_i,\tau_{i+1}] & \mbox{if } i=l-1\\
+  [\tau_i,\tau_{i+1}) & \mbox{if } i=0,\dots,\ell-2\\
+    [\tau_i,\tau_{i+1}] & \mbox{if } i=\ell-1\\
 \end{cases}
 $$
 is possible to define the following spaces:
@@ -25,14 +25,14 @@ is the space of the functions that are polynomials of maximum degree $m$
 in each interval $I_i$ of the partition, formally:
 \begin{multline*}
   P_{m,\tau}=\{f:[a,b]\rightarrow\mR\ \mid\ \exists p_0\dots
-  p_{l-1}\in\Pi_m \ \text{such that}\\
+  p_{\ell-1}\in\Pi_m \ \text{such that}\\
   f(t)=p(t),\ \forall t\in I_i,\
-  i=0\dots l-1\}
+  i=0\dots \ell-1\}
 \end{multline*}
 where $\Pi_m$ is the space of the polynomials of degree $\le m$. The
 dimension of $P_{m,\tau}$ is
 \begin{equation*}
-  dim(P_{m,\tau})=l(m+1)
+  dim(P_{m,\tau})=\ell(m+1)
 \end{equation*}
 because the dimension of $\Pi_m$
 is $m+1$.
@@ -46,27 +46,27 @@ $$
 The dimension of this space is
 \begin{equation}
   \label{eq:dimClassicSpline}
-  l(m+1)-(l-1)\cdot m\,=\,l+m.
+  \ell(m+1)-(\ell-1)\cdot m\,=\,\ell+m.
 \end{equation}
 
 \paragraph{Generalized spline space}\index{Generalized splines} $S_{m,\tau,M}$ is the
-space of piecewise polynomial function of degree $m$ with a prescribed
+space of piecewise polynomial functions of degree $m$ with a prescribed
 regularity at each breakpoint ranging from $-1$ to $m-1$. The
 regularity is prescribed by the multiplicity vector
 $$
-M=\{m_1,\dots,m_{l-1}\},\quad m_i\in\mN,\quad 1\leq m_i\leq m+1
+M=\{m_1,\dots,m_{\ell-1}\},\quad m_i\in\mN,\quad 1\leq m_i\leq m+1
 $$
 as follows,
 \begin{multline*}
   S_{m,\tau,M}=\{f:[a,b]\rightarrow\mR\ \mid\ \exists p_0\dots
-  p_{l-1}\in\Pi_m \ \text{such that}\\
+  p_{\ell-1}\in\Pi_m \ \text{such that}\\
   f(t)=p(t),\ \forall t\in I_i,\
-  i=0\dots l-1\ \text{and}\\
-  p_{i-1}^{(j)}(\tau_i)=p_{i}^{(j)}(\tau_i),\ j=0,\dots,m-m_i,\ i=1,\dots,l-1\}.
+  i=0\dots \ell-1\ \text{and}\\
+  p_{i-1}^{(j)}(\tau_i)=p_{i}^{(j)}(\tau_i),\ j=0,\dots,m-m_i,\ i=1,\dots,\ell-1\}.
 \end{multline*}
 The dimension of the space is equal to 
 \begin{equation*}
-  dim(S_{m,\tau,M})=l(m+1)-\sum_{i=1}^{l-1}(m-m_i+1)=m+\mu +1\qquad(\mu=\sum_{i=1}^{l-1}m_i)  
+  dim(S_{m,\tau,M})=\ell(m+1)-\sum_{i=1}^{\ell-1}(m-m_i+1)=m+\mu +1\qquad(\mu=\sum_{i=1}^{\ell-1}m_i)  
 \end{equation*}
 
 and is true that
@@ -75,9 +75,9 @@ $$
 $$
 in particular:
 \begin{itemize}
-  \item if $m_i=1$ for all $i=1,\dots,l-1$, then
+  \item if $m_i=1$ for all $i=1,\dots,\ell-1$, then
     $S_{m,\tau,M}=S_{m,\tau}$;
-  \item if $m_i=m+1$ for all $i=1,\dots,l-1$, then
+  \item if $m_i=m+1$ for all $i=1,\dots,\ell-1$, then
     $S_{m,\tau,M}=P_{m,\tau}$.
 \end{itemize}
 
@@ -94,20 +94,20 @@ $$
 $$
 Is possible to demonstrate that the functions
 $$
-g_i(t)=(t-\tau_i)_+^m)\ \in S_{m,\tau},\quad i=1,\dots,l-1
+g_i(t)=(t-\tau_i)_+^m)\ \in S_{m,\tau},\quad i=1,\dots,\ell-1
 $$
 are linearly independents, and that
 $$
-1,t,t^2,\dots,t^m,(t-\tau_1)_+^m,\dots,(t-\tau_{l-1})_+^m
+1,t,t^2,\dots,t^m,(t-\tau_1)_+^m,\dots,(t-\tau_{\ell-1})_+^m
 $$
 form a basis for the classic spline space \cite{deboor}. Then a
 generic element $s\in S_{m,\tau}$ can be expressed as follows,
 \begin{equation}\label{eq:classicSplineElement}
-  s(t)=\sum_{i=0}^m c_i t^i\, +\, \sum_{j=1}^{l-1} d_j
+  s(t)=\sum_{i=0}^m c_i t^i\, +\, \sum_{j=1}^{\ell-1} d_j
   (t-\tau_j)_+^m\qquad
   \begin{split}
     &c_i\in\mR,\ i=0,\dots,m\\
-    &d_j\in\mR,\ j=1,\dots,l-1.
+    &d_j\in\mR,\ j=1,\dots,\ell-1.
   \end{split}
 \end{equation}
 
@@ -117,27 +117,27 @@ generic element $s\in S_{m,\tau}$ can be expressed as follows,
 represent any generalized spline \cite{deboor}\cite{farin}\cite{salomon}\cite{bartels}. In this
 paragraph however we consider only their definition to generate the
 classic spline space $S_{m,\tau}$. Furthermore in some textbook, for
-notational convenience, is considered the
-\emph{order}$=m+1$.
+notational convenience, the
+\emph{order}$=m+1$ is considered.
 
 For defining the \bss \cite{deboor} we need to extend the partition vector
-$\tau=\{\tau_0,\cdots,\tau_l\}$ with $m$ knots to the left and $m$ to
-the right, so we define a new vector, usually called \emph{extended knot} vector.
+$\tau=\{\tau_0,\cdots,\tau_\ell\}$ with $m$ knots to the left and $m$ to
+the right, so we define a new vector, usually called \emph{extended knot} vector,
 $$
 T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
 $$
 such that
 \begin{equation*}
-  t_0\leq\dots\leq t_{m-1}\leq \overmath{\equiv\tau_0\equiv a}{t_{m}}<\dots<\overmath{\equiv\tau_l\equiv b}{t_{n+1}}\leq t_{n+2}\leq\dots\leq t_{n+m+1}.    
+  t_0\leq\dots\leq t_{m-1}\leq \overmath{\equiv\tau_0\equiv a}{t_{m}}<\dots<\overmath{\equiv\tau_\ell\equiv b}{t_{n+1}}\leq t_{n+2}\leq\dots\leq t_{n+m+1}.    
 \end{equation*}
-$\tau$ have $l+1$ elements, so we can calculate the value of
+Since $\tau$ has $\ell+1$ elements, we can calculate the value of
 $$
-n=l+m-1,
+n=\ell+m-1.
 $$
-thus the dimension of $S_{m,\tau}$, for
+Thus the dimension of $S_{m,\tau}$, for
 \cref{eq:dimClassicSpline}, is 
 \begin{equation*}
-  dim(S_{m,\tau})=l+m=n+1  
+  dim(S_{m,\tau})=\ell+m=n+1  
 \end{equation*}
 
 The $n+1$ basis $N_{i,m+1}(t)$ of the \bss of degree $m$ are defined,
@@ -146,11 +146,11 @@ for $i=0,\dots,n$, by the recursive formula:
   N_{i,1}(t) &=
   \begin{cases}
     1,\quad \mbox{if}\quad t_i\leq t<t_{i+1}\\
-    0,\quad \mbox{otherwise}
+    0,\quad \mbox{otherwise}\qquad\qquad\qquad i=0,\dots,n+m
   \end{cases}\\
   N_{i,r}(t) &= \omega_{i,r-1}(t)\cdot N_{i,r-1}(t)\ +\
   (1-\omega_{i+1,r-1}(t))\cdot N_{i+1,r-1}(t)\\
-             &\pushright r=2,\dots,m+1
+             &\pushright i=0,\dots,n+m+1-3,\ r=2,\dots,m+1
 \end{align*}
 where
 $$
@@ -181,7 +181,7 @@ $S_{m,\tau}$. For $d=3$
     \right].
 \end{equation}
 
-$\ve{S}(t)$ can be written as follows in the
+$\ve{S}(u)$ can be written as follows in the
 truncated-powers basis
 % A parametric spline \emph{curve} $\ve{S}(t)$ is a curve in a certain
 % dimension obtained applying a spline function to a set of points
@@ -192,10 +192,10 @@ truncated-powers basis
 $d_i$ with points
 \begin{equation}\label{eq:classicSplineCurve}
   \begin{multlined}
-  \ve{S}(t)=\sum_{i=0}^m \ve{c_i}\cdot t^i\, +\, \sum_{j=1}^{l-1}
-  \ve{d_j}\cdot (t-\tau_j)_+^m\qquad,\ve{c_i}\in\mE^d,\
+  \ve{S}(u)=\sum_{i=0}^m \ve{c_i}\cdot t^i\, +\, \sum_{j=1}^{\ell-1}
+  \ve{d_j}\cdot (u-\tau_j)_+^m\qquad,\ve{c_i}\in\mE^d,\
   \ve{d_j}\in\mE^d\\
-  i=0,\dots,m;\ j=0,\dots,l-1
+  i=0,\dots,m;\ j=0,\dots,\ell-1
   \end{multlined}
 \end{equation}
 where this representation is not practical because
@@ -203,30 +203,29 @@ there isn't an intuitive correlation between the points
 $\ve{c_i}$, $\ve{d_j}$ and the curve itself. Moreover the
 determination of an interpolant to asset of argued points in $\mE^d$
 is not a well conditioned problem if this form is adopted
-\cite{deboor}. To overcome those drawbacks we can use \emph{\bss
-  basis} (\cref{sec:bsplines}).
+\cite{deboor}. To overcome those drawbacks the \emph{\bss
+  basis} is adopted (\cref{sec:bsplines}).
 
 We can apply control vertices to a spline expressed with the \bs
 basis as in \cref{eq:bsplineElement} replacing the coefficients $v_i$
-with points, in this case $\ve{S}(t)$ is represented as follows
+with points, in this case $\ve{S}(u)$ is represented as follows
 \begin{equation}\label{eq:bsplineCurve}
-  \ve{S}(t)=\sum_{i=0}^n\ve{v_i}\cdot N_{i,m+1}(t)\qquad
+  \ve{S}(u)=\sum_{i=0}^n\ve{v_i}\cdot N_{i,m+1}(u)\qquad
   ,\ve{v_i}\in\mE^d,\ i=0,\dots,n.
 \end{equation}
 The representation of \cref{eq:bsplineCurve} is more convenient
 than the previous one (\cref{eq:classicSplineCurve}) because the curve
-$\ve{S}(t)$ roughly 
-follow the shape given by the points $\ve{v_i}$. Those points are
-called \emph{control vertices} and the polygon defined by them is
-called \emph{control polygon} and they can be used to control the
-shape of the curve.
+$\ve{S}(u)$ roughly 
+follows the shape given by the points $\ve{v_i}$. Those points are
+called \emph{control vertices} because they are used to control the
+curve shape. Conformally the polygon they define is called \emph{control polygon}.
 
 \section{\bss curves properties}\label{sec:bsplineProp}\index{\bss!properties}
 In this section we describe some properties of \bs curves that we
-used for the development of the project.
+use for the development of the project.
 
 \subsection{\acf{CHP}}\label{sec:convexHull}\index{\bss!\acf{CHP}}
-The \acf{CHP} states that a \bs curve $\ve{S}(t)$ of order $m$,
+The \acf{CHP} states that a \bs curve $\ve{S}(u)$ of order $m$,
 defined by the control polygon 
 $\ve{v_0},\ve{v_1},\dots,\ve{v_n}$, is contained inside the union of the
 convex hulls composed of $m+1$ vertices of the control polygon
@@ -239,17 +238,17 @@ vertices $\ve{w_0},\ve{w_1},\dots,\ve{w_j}$ then we have
   &\cdots&\\
   C_{n-m}&=&\conv(\ve{v_{n-m}},\ve{v_{n-m+1}},\dots,\ve{v_{n}})\\
 \end{eqnarray*}
-and the area where $\ve{S}(t)$ is contained is
+and the area where $\ve{S}$ is contained is
 \begin{equation*}
-  C=C_0\cup C_1\cup C_{n-m}
+  C=C_0\cup C_1\cup\dots\cup C_{n-m}
 \end{equation*}
 or in other words must be true
 \begin{equation*}
-  \ve{S}(t)\cap C =\ve{S}(t)\qquad \forall t\in[a,b]
+  \ve{S}(u)\cap C =\ve{S}(u)\qquad \forall u\in[a,b]
 \end{equation*}
 whatever is the partition vector.
 
-\begin{myfig}{Convex hull containing \bs of grade 2}{fig:convexHull}
+\begin{myfig}{Convex hull containing \bs of degree 2}{fig:convexHull}
   \begin{tikzpicture}
     \coordinate (a) at (0,0);
     \coordinate (b) at (0.5,1.7);
@@ -280,61 +279,65 @@ whatever is the partition vector.
     \node[above right] at (f) {$\ve{v_5}$};
   \end{tikzpicture}  
 \end{myfig}
-On \cref{fig:convexHull} is visible an example of a control polygon
-and the surface where a quadratic \bs applied to
-it can be contained. Note that the \ac{CHP} holds also in
+In \cref{fig:convexHull} an example of control polygon is visible,
+together with the region $C$ (in cyan) where an associated quadratic
+\bs curve is located.
+
+Note that the \ac{CHP} holds also in
 3-dimensional
 space - i.e. a quadratic \bs in 3-dimensional space is contained
-inside a flat surface composed by the union of triangles. From grade 3
-the area where $\ve{S}(t)$ can be contained is not anymore plane
-because is composed of union of solid polyhedrons.
+inside a flat surface composed by the union of triangles. From degree 3
+the area where $\ve{S}$ is contained is not anymore plane
+because it is composed of union of solid polyhedrons.
+
+\subsection{Aligned vertices}\index{\bss!aligned vertices}\label{sec:alignedVertices}
+As in some parts of this project control polygons with sequences of
+aligned vertices have been adopted, in this section their specific
+effect on the curve shape is analyzed. 
+
+We can have the following situations:
+\paragraph{$m$ aligned control vertices}
+If $m$ control vertices $v_i,\dots,v_{i+m-1}$ of the control polygon
+are on the same line then
+the curve $\ve{S}$ touches the segment joining those vertices.
+
+\paragraph{$m+1$ aligned control vertices}
+If $m+1$ control vertices $v_i,\dots,v_{i+m}$ of the control polygon
+are on the same line then a polynomial arc of the curve $\ve{S}$
+lays on the segment joining those vertices.
 
 \subsection{Smoothness}\label{sec:smoothness}\index{Smoothness}\index{\bss!smoothness}
-The concept of smoothness consist of identifying what is the number of
-possible derivatives of the function such that the function is
+A function is said smooth of class $C^d$ if it is possible to
+calculate the $d$-th derivative of it and if such derivative is
 continue. A function $f$ that is not continue is said to be of class
 $C^{-1}$, a function that is continue until derivative $d$ is said to
 be of class $C^d$, a function that is always continue for every
 derivative is said to be of class $C^\infty$.
 
-A \bs curve of degree $m$ with $n$ control vertices consists of
+A \bs curve of degree $m$ with $n$ control vertices is composed by
 $n-m$ polynomial segments, one for each 
 interval 
 \begin{equation*}
 [t_i,t_{i+1}]\qquad i=m,\dots,n+1  
 \end{equation*}
-this mean that $\ve{S}(t)$ is $C^\infty$ for
+this mean that $\ve{S}(u)$ is $C^\infty$ for
 \begin{equation*}
-t\in(t_i,t_{i+1})\qquad i=m,\dots,n+1.
+u\in(t_i,t_{i+1})\qquad i=m,\dots,n+1.
 \end{equation*}
 Note that, if we use generalized \bs curves, an interval
-$[t_i,t_{i+1}]$ can also be of dimension $1$ if
+$[t_i,t_{i+1}]$ can also degenerate in just a point if
 we have a knot multiplicity $>1$, in
 such case there isn't a polynomial segment.
-On every breakpoint $t_i$ with $i=1,\dots,n+m-1$ we have that the curve has
-smoothness $C^{m-1}$
-and, if we use generalized \bs curves, smoothness $C^{m-r}$ where $r$ is the
-multiplicity of the knot \cite{farin}.
+On every breakpoint $\tau_i$ with $i=1,\dots,n+m$ we have that the curve has
+smoothness\footnote{If we use generalized \bs curves, it has
+  smoothness $C^{m-r}$ where $r$ is the
+multiplicity of the knot \cite{farin}.} $C^{m-1}$.
 
 In our project we don't use generalized \bs curves, so globally a
 curve of degree $m$ have smoothness
 \begin{equation*}
   C^{m-1}.
 \end{equation*}
-
-\subsection{Aligned vertices}\index{\bss!aligned vertices}\label{sec:alignedVertices}
-In our project we dealt sometimes with some problems whose solution
-involved aligning two or more control vertices of the curve. In this
-section we analyze the effects on the curve of aligning vertices.
-
-We can have the following situations:
-\paragraph{$m$ aligned control vertices}
-If $m$ control vertices $v_i,\dots,v_{i+m-1}$ of control polygon are on the same line then
-the curve $\ve{S}(t)$ touch the segment joining those vertices.
-
-\paragraph{$m+1$ aligned control vertices}
-If $m+1$ control vertices $v_i,\dots,v_{i+m}$ of control polygon are on the same line then
-the curve $\ve{S}(t)$ lay on the segment joining those vertices.
 
 \subsection{End point interpolation}\index{\bss!end point interpolation}\label{sec:clamped}
 In general a \bs curve with control vertices
@@ -352,8 +355,8 @@ another. So it should be a nice feature to have that the curve defined in
 the domain $[a,b]$ is shaped such that
 \begin{equation}\label{eq:clamped}
   \begin{cases}
-    \ve{S}(t)=\ve{v_0}& \text{for } t=a\\
-    \ve{S}(t)=\ve{v_n}& \text{for } t=b.
+    \ve{S}(u)=\ve{v_0}& \text{for } u=a\\
+    \ve{S}(u)=\ve{v_n}& \text{for } u=b.
   \end{cases}
 \end{equation}
 
@@ -374,9 +377,10 @@ we need to recognize if a certain curve is a \emph{good} or a
 \emph{bad} one. One factor that characterizes a certain curve can 
 be its smoothness (\cref{sec:smoothness}) - i.e. a $C^3$ curve
 is better than a $C^2$ curve - but this isn't
-enough for comparing curves. Usually are used for this
+enough for comparing curves. Usually
 \emph{curvature} and 
-\emph{torsion} \cite{docarmo}\cite{salomon}. Both are scalar quantities defined on
+\emph{torsion} are used for this aim
+\cite{docarmo}\cite{salomon}. Both are scalar quantities defined on
 sufficiently smooth 
 parametric curves for each value of the parameter, and they do not
 depend on the selected parametrization.
@@ -405,9 +409,10 @@ the torsion $\tau(u)$ as
 behavior of $\ve{S}(u)$ locally for each value of $u$. Curvature and
 torsion have also a geometric interpretation: for each value $\tilde{u}$ of
 the parameter $u$, the inverse $\frac{1}{\kappa(\tilde{u})}$ of the
-curvature is the radius of curvature on the point defined by
+curvature is the radius of curvature of $\ve{S}$ at
 $\ve{S}(\tilde{u})$ - i.e. the radius of the 
-osculating circle tangent in that point to the curve belongs to the
+osculating circle tangent in that point to the curve which belongs to
+the 
 plane where the
 curve is bending and
 that is situated on the inner side of its turn - $\tau(\tilde{u})$ indicate
@@ -532,7 +537,7 @@ we have that
 \begin{equation*}
   \prob{\abs{X-\mu}<r} = \prob{\abs{X-\mu}>r} = 0.5
 \end{equation*}
-So values of $X$ that deviate from $\mu$ approximately by $r$ have the
+So values of $X$ that deviate from $\mu$ less or more than $r$ have the
 same probability, and $r$ identifies the most \ac{PE} in a
 normal distribution.
 \subsubsection{\acf{PCLT}}\index{\acf{PCLT}}
@@ -595,7 +600,7 @@ is normally distributed with parameters
   \sigma&=&b\sqrt{N}.
 \end{eqnarray*}
 
-For the \emph{three sigma rule} we have that:
+For the \emph{three sigma rule} \cite{pukelsheim} we have that:
 \begin{equation*}
   \prob{\mu-3\sigma < Y <\mu +3\sigma}\approx 0.997
 \end{equation*}
@@ -630,7 +635,7 @@ In practice, since the random variables $X_i$ have the same
 distribution of $X$, it is sufficient to extract $N$ samples from $X$ for
 reaching to the same conclusions.
 
-The \ac{MCM} is constituted by the following procedure, to be adapted
+The \acf{MCM} is constituted by the following procedure, to be adapted
 according to the problems:
 \begin{enumerate}
 \item find the distribution $X$ having desired quantity $m$ as mean
@@ -664,11 +669,11 @@ committed taking $N$ samples.
 \ac{MCM} is useful to simulate events that have an high degree of
 uncertainty in the inputs or an high degree of liberty in the
 state. For instance integrating numerically a function with many
-dimensions or \ac{SA}.
+dimensions or \acf{SA} (\cref{sec:simulatedAnnealing}).
 
 \subsection{\acf{SA}}\label{sec:simulatedAnnealing}\index{\acf{SA}}
-The \ac{SA} is a method used for finding the global optimum - i.e. the
-maximum or the minimum - of a function. It is inspired by a method
+The \ac{SA} is a method used to find the global maximum or
+minimum of a function. It is inspired by a method
 used in metallurgy that consists in heating and then cooling slowly a
 material for augmenting the dimensions of the crystals and improving
 the chemico-physical properties. The function to be optimized can be
@@ -687,7 +692,7 @@ corresponds to a value of energy, for instance:
 where $B$ is some constant, $n_+$ is the number of particles with spin
 \emph{up} and $n_-$ is the number of particles with spin \emph{down}.
 
-The probability $P(\sigma)$ of finding the system in a certain
+The probability $B(\sigma)$ of finding the system in a certain
 configuration $\sigma$ is given by the distribution of
 \emph{Boltzmann-Gibbs}:
 \begin{equation}\label{eq:distBoltz}
@@ -698,7 +703,7 @@ temperature\footnote{The real Boltzmann-Gibbs distribution is
   $P(\sigma) = C \me^{-E_\sigma/kT}$ where $k$ is the \emph{Boltzmann
     constant} and $T$ is the thermodynamic temperature, but for the
   example the temperature is a parameter not correlated to the
-  physical world, so is possible to ignore $k$.} and $C$ is a
+  physical world, so it is possible to ignore $k$.} and $C$ is a
 normalization constant.
 
 The average energy of the system is then:
@@ -723,40 +728,40 @@ $s_0$, then it executes a series of iterations where a
 neighbour of the state is evaluated and, with a certain distribution
 of probability, the system is moved in the new state or not.
 
-\begin{algo}{\acf{SA}}{alg:sa}
-  \Function{anneal}{$s_0$}
-  \State $s\Ass s_0$
-  \For{$k\Ass 0,kMax$}
-  \State $T\Ass temp(\frac{k}{kMax})$
-  \State $sNew\Ass neighbour(s)$
-  \If{$uniform(0,1)<P(E(s), E(sNew), T)$}
-  \State $s\Ass sNew$
-  \EndIf
-  \EndFor
-  \State\Return $s$
-  \EndFunction
-\end{algo}
 A possible algorithm for a \ac{SA} method is \cref{alg:sa}. $s_0$ is
 the initial state; $temp$ is the function that assigns a
 temperature based on the current iteration number such that for low
 $k$ the returned temperature is high and for high $k$ the returned temperature
 is low; $neighbour$ is the function that returns a random neighbour of
 the current state; $uniform$ returns an uniformly-randomly chosen
-number in $[0,1]$; $P$ is the distribution of accepting probability,
+number in $[0,1]$; $P_a$ is the distribution of accepting probability,
 that depends on the energy of the current state, on the energy of the
 neighbour, and on the current temperature. In case of acceptation the
 neighbour becomes the current state and the process continues.
 
-The relation with the statistical thermodynamic is that $P$ is chosen
+\begin{algo}{\acf{SA}}{alg:sa}
+  \Function{anneal}{$s_0$}
+  \State $s\Ass s_0$
+  \For{$k\Ass 0,kMax$}
+  \State $T\Ass temp(\frac{k}{kMax})$
+  \State $sNew\Ass neighbour(s)$
+  \If{$uniform(0,1)<P_a(E(s), E(sNew), T)$}
+  \State $s\Ass sNew$
+  \EndIf
+  \EndFor
+  \State\Return $s$
+  \EndFunction
+\end{algo}
+The relation with the statistical thermodynamic is that $P_a$ is chosen
 such that
 \cref{eq:distBoltz} holds\footnote{A similar distribution is enough.},
 moreover $temp$ returns decreasing values of
-temperature with the succession of iterations, this is why the
+temperature with the succession of iterations. This explains the
 comparison with the metallurgy annealing.
 
-Initially $P$ was chosen such that
+Initially $P_a$ was chosen such that
 \begin{equation*}
-  P(E(s), E(sNew), T)=
+  P_a(E(s), E(sNew), T)=
   \begin{cases}
     1,& \text{if }E(sNew)<E(s)\\
     \me^{-(E(sNew)-E(s))/T},& \text{otherwise}
@@ -782,7 +787,7 @@ in a multidimensional discrete space, in that case the $x$ is a vector
 $\ve{x}=(x_1,\dots,x_n)$ of variables.
 
 For solving this class
-of problems a \emph{Lagrange relaxation} method can be used, it
+of problems a \emph{Lagrange relaxation} method can be used \cite{bertsekas}, it
 augments the variable space $X$ by a \emph{Lagrange multiplier} space
 $\Lambda$ of dimension equal to the number of constraints - one in the
 \cref{eq:opt}.
@@ -795,9 +800,9 @@ The \emph{generalized discrete Lagrangian
 where $\lambda$ is a variable in $\Lambda$, and if the dimension of
 $\Lambda$ is more than one $\lambda$ must be transposed in
 ~\cref{eq:lagrangianFun}. $H(x)$ is a non negative function
-with the property that $H(0)=0$. the purpose of it is to transform $g(x)$ in
-a non negative function, if $g(x)$ isn't already not negative. For
-instance can be $H(g(x))=|g(x)|$ or $H(g(x))=g^2(x)$.
+with the property that $H(0)=0$ and aimed to transform g in a non
+negative function. For instance, it can be  $H(g(x))=|g(x)|$ or
+$H(g(x))=g^2(x)$. 
 
 Under the previous assumptions the set of \emph{local minima}
 in \cref{eq:opt} - that respect the constraints -  coincides
@@ -818,20 +823,23 @@ optimization method (i.e. simulated annealing). Then it is chosen
 the one that minimize $f(x^*)$, $x^*$ is then the desired minimum.
 
 \section{Intersections in space}\label{sec:intersections}\index{3-D geometry}
+We work in a spatial environment with polyhedral obstacles. Thus, in
+order to define admissible paths, first of all we need routines
+performing the following three basic geometric tasks: 
+\begin{enumerate}
+\item establish if a point is in or out
+  of a convex polyhedron;
+\item \label[task]{tsk:segmentTriangle}check if a segment intersects a triangle;
+\item establish whether two triangles intersect.
+\end{enumerate}
+
 In the project we need to deal with three kinds of collision detection
 methods in 3-dimension euclidean space:
-\begin{itemize}
-\item we need to check if a point is in or out
-  of a convex polyhedron;
-\item we need to check if a segment intersects a triangle;
-\item and we need to check if a
-  triangle intersects another triangle.
-\end{itemize}
 
 \subsection{Point inside convex polyhedron in 3-d space}\index{3-D
   geometry!point inside polyhedron}
 For testing if a point $\ve{p}$ is inside a convex polyhedron $V$ with
-vertices $\ve{v_1},\ve{v_2},\dots,\ve{v_n}$ we used a method that rely
+vertices $\ve{v_1},\ve{v_2},\dots,\ve{v_n}$ we use a method that rely
 on convex hulls \cite{deberg}\cite{schneider}.
 
 \begin{algo}{Check if point $\ve{p}$ is inside convex polyhedron $V$}{alg:pointInPoly}
@@ -847,9 +855,11 @@ on convex hulls \cite{deberg}\cite{schneider}.
   \State\Return $inside$
   \EndFunction
 \end{algo}
-As in the \cref{alg:pointInPoly} first we build the convex hull of all
-the vertices of $V$ plus the point $\ve{p}$, then we check if $\ve{p}$
-is on the convex hull or not. If $\ve{p}$ is on the convex hull that
+\Cref{alg:pointInPoly} performs the first task. It first
+computes the vertices of the convex hull of all
+the vertices of $V$ plus the point $\ve{p}$ and then checks if
+$\ve{p}$ is one 
+of them or not. If $\ve{p}$ is on the convex hull that
 means that $\ve{p}$ is external\footnote{Or $\ve{p}$ coincides with a
   vertex of $V$.} to $V$ because we have extended the convex hull
 formed by the vertices of $V$. Otherwise this means that $\ve{p}$ is
@@ -868,7 +878,7 @@ then we have another negligible term $\bigO(n)$ for the cycle on \cref{ln:pointI
 We need to deal with the intersection between a segment
 $S=\overline{\ve{a_2}\ve{b_2}}$ and a triangle
 $T=\triangle\ve{a_1}\ve{b_1}\ve{c_1}$. $S$ and $T$ can be in one of
-the cases:
+the following cases also summarized in \cref{tab:intersectSegmentTriang}:
 \begin{enumerate}[label=\textbf{case \arabic*}]
 \item\label[void]{en:ist:nc:ni} $S$ and $T$ do not intersect and the plane containing
   $T$ is not in the sheaf of planes generated by the line
@@ -876,15 +886,15 @@ the cases:
 \item\label[void]{en:ist:c:ni} $S$ and $T$ do not intersect and the plane containing
   $T$ is in the sheaf of planes generated by the line
   containing $S$;
-\item\label[void]{en:ist:nc:i} $S$ and $T$ intersect in only one point and the plane containing
+\item\label[void]{en:ist:nc:i} $S$ and $T$ intersect only at one point and the plane containing
   $T$ is not in the sheaf of planes generated by the line
   containing $S$;
 \item\label[void]{en:ist:c:i} $S$ and $T$ intersect in one or infinite points and the plane
   containing $T$ is in the sheaf of planes generated by the line
   containing $S$.
 \end{enumerate}
-The discriminant between the cases is that if $S$ and $T$ are
-intersecting and if $S$ and $T$ are coplanar. The cases are resumed in
+The discriminants among the cases  are two,  presence of intersection
+and coplanarity.
 \cref{tab:intersectSegmentTriang}.
 \begin{table}
   \centering
@@ -930,11 +940,13 @@ intersecting and if $S$ and $T$ are coplanar. The cases are resumed in
     \node[right=0.2em] at (X) {$\ve{x}$};
   \end{tikzpicture}
 \end{myfig}
-In \cref{fig:segmentTriangleIntersection} is visible a
-\cref{en:ist:nc:i} relation where there is intersection in only one
-point $\ve{x}$. For calculating if there is intersection we can solve
-four equation in four unknowns \cite{schneider} where we look for
-$\ve{x}$ searching a point that is a convex linear
+In \cref{fig:segmentTriangleIntersection} a
+\cref{en:ist:nc:i} situation is shown where there is intersection in
+only one 
+point $\ve{x}$. For establishing whether $S$ and $T$ intersect, we need to
+solve 
+four equation in four unknowns \cite{schneider} where we look for a point
+$\ve{x}$ being a convex linear
 combination of $\ve{a_2}$ and $\ve{b_2}$ and at the same time a convex
 linear combination of $\ve{a_1}$,
 $\ve{b_1}$ and $\ve{c_1}$. In other words when there is a collision,
@@ -962,13 +974,12 @@ Note that the first equation of
 $\ve{a_2}$, $\ve{b_2}$, $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$, so the
 system is of five unknowns in five equations. If
 \Cref{eq:segmentTriangleIntersection1} has just one solution then we are
-on \cref{en:ist:nc:ni} or \cref{en:ist:nc:i}, if it has infinite
-solution then we are on \cref{en:ist:c:ni} or \cref{en:ist:c:i}, if
-it has not solution then $S$ or $T$ are degenerated. If
-\cref{eq:segmentTriangleIntersection1c} is satisfied for the solution(s)
-of \cref{eq:segmentTriangleIntersection1} then we are in
-\cref{en:ist:nc:i} or \cref{en:ist:c:i}, if is not satisfied then we
-are in \cref{en:ist:nc:ni} or \cref{en:ist:c:ni}.
+on \cref{en:ist:nc:ni} or \cref{en:ist:nc:i}, respectively when
+\cref{eq:segmentTriangleIntersection1c} is fulfilled or not. If it has
+infinite
+solution then we are on \cref{en:ist:c:ni} or \cref{en:ist:c:i}, again
+depending on the fulfillment of (3,16) or not. Finally, if it has not
+solution then $S$ or $T$ are degenerated.
 
 We are interested in finding only \cref{en:ist:nc:i} collisions because for
 simplicity we consider the special case of a segment that lays on the
@@ -1016,8 +1027,8 @@ in the unknowns $\alpha$, $\gamma$ and $\delta$ with the relative conditions
   \State\Return $(intersect, coordinates)$
   \EndFunction
 \end{algo}
-The \cref{alg:intersectSegmentTriangle} for calculating the
-intersection consists basically in solving
+Thus, \cref{alg:intersectSegmentTriangle} which performs \cref{tsk:segmentTriangle}
+basically consists in solving
 \cref{eq:segmentTriangleIntersection2} with the parameters $\ve{a_2}$,
 $\ve{b_2}$, $\ve{a_1}$, $\ve{b_1}$ and $\ve{c_1}$ from $S$ and $T$;
 and then in checking if the solution is admissible. The condition of
@@ -1155,14 +1166,15 @@ of the types \cite{schneider}:
 \end{algo}
 On \cref{fig:trianglesIntersection1} and
 \cref{fig:trianglesIntersection2} we can see two examples of
-\cref{en:itt:i1} and \cref{en:itt:i2}. For finding if $T_1$ and $T_2$
+\cref{en:itt:i1} and \cref{en:itt:i2}, respectively. For estabiliscing
+if $T_1$ and $T_2$
 intersect we need to check if every edge of $T_1$ intersects $T_2$
 and every edge of $T_2$ intersects $T_1$. If we found at least one
 edge that intersects with one triangle then $T_1$ and $T_2$
 intersect. \Cref{alg:intersectTriangles} executes such check, the function
 $intersect$ on \cref{ln:intersectTriangles1} and
 \cref{ln:intersectTriangles2} is the intersection check between a segment
-and a triangle described on \cref{alg:intersectSegmentTriangle}.
+and a triangle done by \cref{alg:intersectSegmentTriangle}.
 
 \end{document}
 

@@ -63,7 +63,9 @@ The \cref{tab:scenes} gives some data about the scenes.
       \hline
       \annA&10&10&0.7&\num{1e-7}&\num{1e-6}&1000&10&0&\num{5e-2}&\lenArc&\ratios{0.1}{0.1}{0.8}\\
       \annB&10&10&0.7&\num{1e-7}&\num{1e-6}&1000&10&0&\num{5e-2}&\lenPol&\ratios{0.1}{0.1}{0.8}\\
+      \annBb&10&100&0.7&\num{1e-7}&\num{1e-6}&1000&100&0&\num{5e-2}&\lenPol&\ratios{0.1}{0.1}{0.8}\\
       \annC&10&10&0.7&\num{1e-7}&\num{1e-6}&1000&10&0&\num{5e-2}&\lenArc&\ratios{0.3}{0.3}{0.4}\\
+      \annCb&10&10&0.9&\num{1e-5}&\num{1e-6}&1000&100&0&\num{5e-2}&\lenArc&\ratios{0.3}{0.3}{0.4}\\
       \hline
     \end{tabular}
     \caption{Annealing configurations.}
@@ -230,13 +232,13 @@ The \cref{tab:scenes} gives some data about the scenes.
     92&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annA&\cref{fig:test92}\\
     93&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annA&\cref{fig:test93}\\
 
-    94&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metC&\nd&\ukp&\annB&\cref{fig:test94}\\
-    95&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annB&\cref{fig:test95}\\
-    96&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annB&\cref{fig:test96}\\
+    94&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metC&\nd&\ukp&\annBb&\cref{fig:test94}\\
+    95&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annBb&\cref{fig:test95}\\
+    96&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annBb&\cref{fig:test96}\\
 
-    97&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metC&\nd&\ukp&\annC&\cref{fig:test97}\\
-    98&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annC&\cref{fig:test98}\\
-    99&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annC&\cref{fig:test99}\\
+    97&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metC&\nd&\ukp&\annCb&\cref{fig:test97}\\
+    98&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annCb&\cref{fig:test98}\\
+    99&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annCb&\cref{fig:test99}\\
     \hline
   \end{tabular}
   \caption{Resume of the tests (continue).}
@@ -444,50 +446,50 @@ The \cref{tab:scenes} gives some data about the scenes.
 
 \imaget{test82/s1.png}{test82/s2.png}{test82/c.png}{\testLabAnn{82}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annA}}{fig:test82}
 
-% \imagett{test83/s1.png}{test83/s2.png}{test83/c.png}{test83/t.png}{\testLabAnn{83}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annA}}{fig:test83}
+\imagett{test83/s1.png}{test83/s2.png}{test83/c.png}{test83/t.png}{\testLabAnn{83}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annA}}{fig:test83}
 
-% \imagett{test84/s1.png}{test84/s2.png}{test84/c.png}{test84/t.png}{\testLabAnn{84}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annA}}{fig:test84}
-
-
-% \imaget{test85/s1.png}{test85/s2.png}{test85/c.png}{\testLabAnn{85}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annB}}{fig:test85}
-
-% \imagett{test86/s1.png}{test86/s2.png}{test86/c.png}{test86/t.png}{\testLabAnn{86}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annB}}{fig:test86}
-
-% \imagett{test87/s1.png}{test87/s2.png}{test87/c.png}{test87/t.png}{\testLabAnn{87}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annB}}{fig:test87}
+\imagett{test84/s1.png}{test84/s2.png}{test84/c.png}{test84/t.png}{\testLabAnn{84}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annA}}{fig:test84}
 
 
-% \imaget{test88/s1.png}{test88/s2.png}{test88/c.png}{\testLabAnn{88}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annC}}{fig:test88}
+\imaget{test85/s1.png}{test85/s2.png}{test85/c.png}{\testLabAnn{85}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annB}}{fig:test85}
 
-% \imagett{test89/s1.png}{test89/s2.png}{test89/c.png}{test89/t.png}{\testLabAnn{89}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annC}}{fig:test89}
+\imagett{test86/s1.png}{test86/s2.png}{test86/c.png}{test86/t.png}{\testLabAnn{86}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annB}}{fig:test86}
 
-% \imagett{test90/s1.png}{test90/s2.png}{test90/c.png}{test90/t.png}{\testLabAnn{90}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annC}}{fig:test90}
+\imagett{test87/s1.png}{test87/s2.png}{test87/c.png}{test87/t.png}{\testLabAnn{87}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annB}}{fig:test87}
 
 
+\imaget{test88/s1.png}{test88/s2.png}{test88/c.png}{\testLabAnn{88}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annC}}{fig:test88}
+
+\imagett{test89/s1.png}{test89/s2.png}{test89/c.png}{test89/t.png}{\testLabAnn{89}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annC}}{fig:test89}
+
+\imagett{test90/s1.png}{test90/s2.png}{test90/c.png}{test90/t.png}{\testLabAnn{90}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annC}}{fig:test90}
 
 
 
 
 
 
-% \imaget{test91/s1.png}{test91/s2.png}{test91/c.png}{\testLabAnn{91}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annA}}{fig:test91}
-
-% \imagett{test92/s1.png}{test92/s2.png}{test92/c.png}{test92/t.png}{\testLabAnn{92}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annA}}{fig:test92}
-
-% \imagett{test93/s1.png}{test93/s2.png}{test93/c.png}{test93/t.png}{\testLabAnn{93}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annA}}{fig:test93}
 
 
-% \imaget{test94/s1.png}{test94/s2.png}{test94/c.png}{\testLabAnn{94}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annB}}{fig:test94}
+\imaget{test91/s1.png}{test91/s2.png}{test91/c.png}{\testLabAnn{91}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annA}}{fig:test91}
 
-% \imagett{test95/s1.png}{test95/s2.png}{test95/c.png}{test95/t.png}{\testLabAnn{95}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annB}}{fig:test95}
+\imagett{test92/s1.png}{test92/s2.png}{test92/c.png}{test92/t.png}{\testLabAnn{92}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annA}}{fig:test92}
 
-% \imagett{test96/s1.png}{test96/s2.png}{test96/c.png}{test96/t.png}{\testLabAnn{96}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annB}}{fig:test96}
+\imagett{test93/s1.png}{test93/s2.png}{test93/c.png}{test93/t.png}{\testLabAnn{93}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annA}}{fig:test93}
 
 
-% \imaget{test97/s1.png}{test97/s2.png}{test97/c.png}{\testLabAnn{97}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annC}}{fig:test97}
+\imaget{test94/s1.png}{test94/s2.png}{test94/c.png}{\testLabAnn{94}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annBb}}{fig:test94}
 
-% \imagett{test98/s1.png}{test98/s2.png}{test98/c.png}{test98/t.png}{\testLabAnn{98}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annC}}{fig:test98}
+\imagett{test95/s1.png}{test95/s2.png}{test95/c.png}{test95/t.png}{\testLabAnn{95}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annBb}}{fig:test95}
 
-% \imagett{test99/s1.png}{test99/s2.png}{test99/c.png}{test99/t.png}{\testLabAnn{99}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annC}}{fig:test99}
+\imagett{test96/s1.png}{test96/s2.png}{test96/c.png}{test96/t.png}{\testLabAnn{96}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annBb}}{fig:test96}
+
+
+\imaget{test97/s1.png}{test97/s2.png}{test97/c.png}{\testLabAnn{97}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annCb}}{fig:test97}
+
+\imagett{test98/s1.png}{test98/s2.png}{test98/c.png}{test98/t.png}{\testLabAnn{98}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annCb}}{fig:test98}
+
+\imagett{test99/s1.png}{test99/s2.png}{test99/c.png}{test99/t.png}{\testLabAnn{99}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annCb}}{fig:test99}
 
 
 \end{document}
