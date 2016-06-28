@@ -1,8 +1,9 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
 \chapter{Testing}\label{cha:testing}
-For evaluating the project we made the tests on \cref{tab:tests},
-where
+For evaluating the project we made the tests on
+\cref{tab:tests1}, \cref{tab:tests2}, \cref{tab:tests3},\cref{tab:tests4}.
+Where
 \begin{itemize}
 \item \emph{Scene} refers to which scene of \cref{tab:scenes} was used;
 \item $\ve{s}\rightarrow\ve{e}$ indicates the starting and ending points
@@ -17,8 +18,23 @@ where
   not (\npp);
 \item \emph{Part.} indicate if is used the uniform knot partition
   (\ukp) or the adaptive one (\akp)
-\item \emph{Config.} is used only for method 3 and indicates the
-  used annealing configuration from \cref{tab:annealingConfigs}
+\item \emph{Config.} is used only for method \metC and indicates the
+  used annealing configuration from \cref{tab:annealingConfigs}.
+\end{itemize}
+
+The \cref{tab:scenes} gives some data about the scenes.
+\begin{itemize}
+\item \emph{B.b. A} and \emph{B.b. B} are the extremes of the bounding
+  box.
+\item \emph{Min. obs. rad.} and \emph{Max. obs. rad.} are respectively
+  the minimum radius and the maximum radius of the obstacles in the
+  scene. For scenes 1, 1b, and 2 the obstacles are not-intersecting
+  tetrahedrons generated randomly with the specific parameters. The
+  scene 3 is a bucket-shaped obstacle with center in $[0.5,0.5,0.5]$,
+  with width $0.2$, height $0.4$ and thickness $0.2$.
+\item \emph{\# obs.} is the number of obstacles in the scene.
+\item \emph{Max. empty area} is the maximum empty area for the
+  distribution of the Voronoi sites as explained in \cref{sec:baseGraph}.
 \end{itemize}
 
 \begin{landscape}
@@ -31,7 +47,7 @@ where
       \sceneA&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&10&0.1\\
       \sceneAb&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&10&0.01\\
       \sceneB&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&100&0.1\\
-      \sceneBb&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&100&0.01\\
+      %\sceneBb&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&100&0.01\\
       \sceneC&\vertex{0}{0}{0}&\vertex{1}{1}{1}&\nd&\nd&1&0.1\\
       \hline
     \end{tabular}
@@ -45,9 +61,9 @@ where
       \hline
       Config.&$T_0$&Trials&warm.&min $T$&min $\Delta E$&$\lambda$ pert&$V$ pert fact&$\lambda_0$&$\lambda P$&Len type&Ratios\\
       \hline
-      \annA&10&10&0.7&\num{1e-7}&\num{1e-6}&100&10&0&\num{5e-2}&\lenArc&\ratios{0.1}{0.1}{0.8}\\
-      \annB&10&10&0.7&\num{1e-7}&\num{1e-6}&100&10&0&\num{5e-2}&\lenPol&\ratios{0.1}{0.1}{0.8}\\
-      \annC&10&10&0.7&\num{1e-7}&\num{1e-6}&100&10&0&\num{5e-2}&\lenArc&\ratios{0.3}{0.3}{0.4}\\
+      \annA&10&10&0.7&\num{1e-7}&\num{1e-6}&1000&10&0&\num{5e-2}&\lenArc&\ratios{0.1}{0.1}{0.8}\\
+      \annB&10&10&0.7&\num{1e-7}&\num{1e-6}&1000&10&0&\num{5e-2}&\lenPol&\ratios{0.1}{0.1}{0.8}\\
+      \annC&10&10&0.7&\num{1e-7}&\num{1e-6}&1000&10&0&\num{5e-2}&\lenArc&\ratios{0.3}{0.3}{0.4}\\
       \hline
     \end{tabular}
     \caption{Annealing configurations.}
@@ -89,7 +105,7 @@ where
     \hline
   \end{tabular}
   \caption{Resume of the tests.}
-  \label{tab:tests}
+  \label{tab:tests1}
 \end{table}
 
 \begin{table}
@@ -110,10 +126,121 @@ where
     34&\sceneAb&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metB&\ypp&\ukp&\nd&\cref{fig:test34}\\
     35&\sceneAb&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metB&\npp&\akp&\nd&\cref{fig:test35}\\
     36&\sceneAb&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metB&\ypp&\akp&\nd&\cref{fig:test36}\\
+
+
+
+    37&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degTwo&\metB&\npp&\ukp&\nd&\cref{fig:test37}\\
+    38&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degTwo&\metB&\ypp&\ukp&\nd&\cref{fig:test38}\\
+    39&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degTwo&\metB&\npp&\akp&\nd&\cref{fig:test39}\\
+    40&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degTwo&\metB&\ypp&\akp&\nd&\cref{fig:test40}\\
+    41&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degThree&\metB&\npp&\ukp&\nd&\cref{fig:test41}\\
+    42&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degThree&\metB&\ypp&\ukp&\nd&\cref{fig:test42}\\
+    43&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degThree&\metB&\npp&\akp&\nd&\cref{fig:test43}\\
+    44&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degThree&\metB&\ypp&\akp&\nd&\cref{fig:test44}\\
+    45&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metB&\npp&\ukp&\nd&\cref{fig:test45}\\
+    46&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metB&\ypp&\ukp&\nd&\cref{fig:test46}\\
+    47&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metB&\npp&\akp&\nd&\cref{fig:test47}\\
+    48&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metB&\ypp&\akp&\nd&\cref{fig:test48}\\
     \hline
   \end{tabular}
-  \caption{Resume of the tests.}
+  \caption{Resume of the tests (continue).}
   \label{tab:tests2}
+\end{table}
+
+
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \#&Scene&$\ve{s}\rightarrow\ve{e}$&Deg.&Met.&P. p.&Part.&Config.&figure\\
+    \hline
+    49&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metA&\npp&\ukp&\nd&\cref{fig:test49}\\
+    50&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metA&\ypp&\ukp&\nd&\cref{fig:test50}\\
+    51&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metA&\npp&\akp&\nd&\cref{fig:test51}\\
+    52&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metA&\ypp&\akp&\nd&\cref{fig:test52}\\
+    53&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metA&\npp&\ukp&\nd&\cref{fig:test53}\\
+    54&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metA&\ypp&\ukp&\nd&\cref{fig:test54}\\
+    55&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metA&\npp&\akp&\nd&\cref{fig:test55}\\
+    56&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metA&\ypp&\akp&\nd&\cref{fig:test56}\\
+    57&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metA&\npp&\ukp&\nd&\cref{fig:test57}\\
+    58&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metA&\ypp&\ukp&\nd&\cref{fig:test58}\\
+    59&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metA&\npp&\akp&\nd&\cref{fig:test59}\\
+    60&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metA&\ypp&\akp&\nd&\cref{fig:test60}\\
+
+    61&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metB&\npp&\ukp&\nd&\cref{fig:test61}\\
+    62&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metB&\ypp&\ukp&\nd&\cref{fig:test62}\\
+    63&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metB&\npp&\akp&\nd&\cref{fig:test63}\\
+    64&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metB&\ypp&\akp&\nd&\cref{fig:test64}\\
+    65&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metB&\npp&\ukp&\nd&\cref{fig:test65}\\
+    66&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metB&\ypp&\ukp&\nd&\cref{fig:test66}\\
+    67&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metB&\npp&\akp&\nd&\cref{fig:test67}\\
+    68&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metB&\ypp&\akp&\nd&\cref{fig:test68}\\
+    69&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metB&\npp&\ukp&\nd&\cref{fig:test69}\\
+    70&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metB&\ypp&\ukp&\nd&\cref{fig:test70}\\
+    71&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metB&\npp&\akp&\nd&\cref{fig:test71}\\
+    72&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metB&\ypp&\akp&\nd&\cref{fig:test72}\\    
+    \hline
+  \end{tabular}
+  \caption{Resume of the tests (continue).}
+  \label{tab:tests3}
+\end{table}
+
+
+
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \#&Scene&$\ve{s}\rightarrow\ve{e}$&Deg.&Met.&P. p.&Part.&Config.&figure\\
+    \hline
+    73&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degTwo&\metC&\nd&\ukp&\annA&\cref{fig:test73}\\
+    74&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degThree&\metC&\nd&\ukp&\annA&\cref{fig:test74}\\
+    75&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metC&\nd&\ukp&\annA&\cref{fig:test75}\\
+
+    76&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degTwo&\metC&\nd&\ukp&\annB&\cref{fig:test76}\\
+    77&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degThree&\metC&\nd&\ukp&\annB&\cref{fig:test77}\\
+    78&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metC&\nd&\ukp&\annB&\cref{fig:test78}\\
+
+    79&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degTwo&\metC&\nd&\ukp&\annC&\cref{fig:test79}\\
+    80&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degThree&\metC&\nd&\ukp&\annC&\cref{fig:test80}\\
+    81&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metC&\nd&\ukp&\annC&\cref{fig:test81}\\
+
+
+
+
+    82&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degTwo&\metC&\nd&\ukp&\annA&\cref{fig:test82}\\
+    83&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degThree&\metC&\nd&\ukp&\annA&\cref{fig:test83}\\
+    84&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metC&\nd&\ukp&\annA&\cref{fig:test84}\\
+
+    85&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degTwo&\metC&\nd&\ukp&\annB&\cref{fig:test85}\\
+    86&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degThree&\metC&\nd&\ukp&\annB&\cref{fig:test86}\\
+    87&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metC&\nd&\ukp&\annB&\cref{fig:test87}\\
+
+    88&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degTwo&\metC&\nd&\ukp&\annC&\cref{fig:test88}\\
+    89&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degThree&\metC&\nd&\ukp&\annC&\cref{fig:test89}\\
+    90&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metC&\nd&\ukp&\annC&\cref{fig:test90}\\
+
+
+
+
+
+
+
+    91&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metC&\nd&\ukp&\annA&\cref{fig:test91}\\
+    92&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annA&\cref{fig:test92}\\
+    93&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annA&\cref{fig:test93}\\
+
+    94&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metC&\nd&\ukp&\annB&\cref{fig:test94}\\
+    95&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annB&\cref{fig:test95}\\
+    96&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annB&\cref{fig:test96}\\
+
+    97&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degTwo&\metC&\nd&\ukp&\annC&\cref{fig:test97}\\
+    98&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degThree&\metC&\nd&\ukp&\annC&\cref{fig:test98}\\
+    99&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annC&\cref{fig:test99}\\
+    \hline
+  \end{tabular}
+  \caption{Resume of the tests (continue).}
+  \label{tab:tests4}
 \end{table}
 
 \newpage
@@ -156,11 +283,13 @@ where
 
 \imaget{test17/s1.png}{test17/s2.png}{test17/c.png}{\testLab{17}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\npp}{\ukp}}{fig:test17}
 
-\imagett{test18/s1.png}{test18/s2.png}{test18/c.png}{test18/t.png}{\testLab{18}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\ypp}{\ukp}}{fig:test18}
+%\imagett{test18/s1.png}{test18/s2.png}{test18/c.png}{test18/t.png}{\testLab{18}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\ypp}{\ukp}}{fig:test18}
+\imaget{test18/s1.png}{test18/s2.png}{test18/c.png}{\testLab{18}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\ypp}{\ukp}}{fig:test18}
 
 \imaget{test19/s1.png}{test19/s2.png}{test19/c.png}{\testLab{19}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\npp}{\akp}}{fig:test19}
 
-\imagett{test20/s1.png}{test20/s2.png}{test20/c.png}{test20/t.png}{\testLab{20}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\ypp}{\akp}}{fig:test20}
+%\imagett{test20/s1.png}{test20/s2.png}{test20/c.png}{test20/t.png}{\testLab{20}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\ypp}{\akp}}{fig:test20}
+\imaget{test20/s1.png}{test20/s2.png}{test20/c.png}{\testLab{20}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metB}{\ypp}{\akp}}{fig:test20}
 
 \imaget{test21/s1.png}{test21/s2.png}{test21/c.png}{\testLab{21}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metB}{\npp}{\ukp}}{fig:test21}
 
@@ -168,12 +297,13 @@ where
 
 \imaget{test23/s1.png}{test23/s2.png}{test23/c.png}{\testLab{23}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metB}{\npp}{\akp}}{fig:test23}
 
-\imagett{test24/s1.png}{test24/s2.png}{test24/c.png}{test24/t.png}{\testLab{24}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metB}{\ypp}{\akp}}{fig:test24}
+%\imagett{test24/s1.png}{test24/s2.png}{test24/c.png}{test24/t.png}{\testLab{24}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metB}{\ypp}{\akp}}{fig:test24}
+\imaget{test24/s1.png}{test24/s2.png}{test24/c.png}{\testLab{24}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metB}{\ypp}{\akp}}{fig:test24}
 
 
 
 
-
+\clearpage
 \imaget{test25/s1.png}{test25/s2.png}{test25/c.png}{\testLab{25}{\sceneAb}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degTwo}{\metB}{\npp}{\ukp}}{fig:test25}
 
 \imaget{test26/s1.png}{test26/s2.png}{test26/c.png}{\testLab{26}{\sceneAb}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degTwo}{\metB}{\ypp}{\ukp}}{fig:test26}
@@ -197,6 +327,167 @@ where
 \imaget{test35/s1.png}{test35/s2.png}{test35/c.png}{\testLab{35}{\sceneAb}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metB}{\npp}{\akp}}{fig:test35}
 
 \imaget{test36/s1.png}{test36/s2.png}{test36/c.png}{\testLab{36}{\sceneAb}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metB}{\ypp}{\akp}}{fig:test36}
+
+
+
+
+
+\imaget{test37/s1.png}{test37/s2.png}{test37/c.png}{\testLab{37}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metB}{\npp}{\ukp}}{fig:test37}
+
+\imaget{test38/s1.png}{test38/s2.png}{test38/c.png}{\testLab{38}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metB}{\ypp}{\ukp}}{fig:test38}
+
+\imaget{test39/s1.png}{test39/s2.png}{test39/c.png}{\testLab{39}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metB}{\npp}{\akp}}{fig:test39}
+
+\imaget{test40/s1.png}{test40/s2.png}{test40/c.png}{\testLab{40}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metB}{\ypp}{\akp}}{fig:test40}
+
+\imaget{test41/s1.png}{test41/s2.png}{test41/c.png}{\testLab{41}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metB}{\npp}{\ukp}}{fig:test41}
+
+\imaget{test42/s1.png}{test42/s2.png}{test42/c.png}{\testLab{42}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metB}{\ypp}{\ukp}}{fig:test42}
+
+\imaget{test43/s1.png}{test43/s2.png}{test43/c.png}{\testLab{43}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metB}{\npp}{\akp}}{fig:test43}
+
+\imaget{test44/s1.png}{test44/s2.png}{test44/c.png}{\testLab{44}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metB}{\ypp}{\akp}}{fig:test44}
+
+\imaget{test45/s1.png}{test45/s2.png}{test45/c.png}{\testLab{45}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metB}{\npp}{\ukp}}{fig:test45}
+
+\imaget{test46/s1.png}{test46/s2.png}{test46/c.png}{\testLab{46}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metB}{\ypp}{\ukp}}{fig:test46}
+
+\imaget{test47/s1.png}{test47/s2.png}{test47/c.png}{\testLab{47}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metB}{\npp}{\akp}}{fig:test47}
+
+\imaget{test48/s1.png}{test48/s2.png}{test48/c.png}{\testLab{48}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metB}{\ypp}{\akp}}{fig:test48}
+
+
+
+
+\clearpage
+\imaget{test49/s1.png}{test49/s2.png}{test49/c.png}{\testLab{49}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metA}{\npp}{\ukp}}{fig:test49}
+
+\imaget{test50/s1.png}{test50/s2.png}{test50/c.png}{\testLab{50}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metA}{\ypp}{\ukp}}{fig:test50}
+
+\imaget{test51/s1.png}{test51/s2.png}{test51/c.png}{\testLab{51}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metA}{\npp}{\akp}}{fig:test51}
+
+\imaget{test52/s1.png}{test52/s2.png}{test52/c.png}{\testLab{52}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metA}{\ypp}{\akp}}{fig:test52}
+
+\imaget{test53/s1.png}{test53/s2.png}{test53/c.png}{\testLab{53}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metA}{\npp}{\ukp}}{fig:test53}
+
+\imaget{test54/s1.png}{test54/s2.png}{test54/c.png}{\testLab{54}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metA}{\ypp}{\ukp}}{fig:test54}
+
+\imaget{test55/s1.png}{test55/s2.png}{test55/c.png}{\testLab{55}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metA}{\npp}{\akp}}{fig:test55}
+
+\imaget{test56/s1.png}{test56/s2.png}{test56/c.png}{\testLab{56}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metA}{\ypp}{\akp}}{fig:test56}
+
+\imaget{test57/s1.png}{test57/s2.png}{test57/c.png}{\testLab{57}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metA}{\npp}{\ukp}}{fig:test57}
+
+\imaget{test58/s1.png}{test58/s2.png}{test58/c.png}{\testLab{58}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metA}{\ypp}{\ukp}}{fig:test58}
+
+\imaget{test59/s1.png}{test59/s2.png}{test59/c.png}{\testLab{59}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metA}{\npp}{\akp}}{fig:test59}
+
+\imaget{test60/s1.png}{test60/s2.png}{test60/c.png}{\testLab{60}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metA}{\ypp}{\akp}}{fig:test60}
+
+
+
+
+
+\imaget{test61/s1.png}{test61/s2.png}{test61/c.png}{\testLab{61}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metB}{\npp}{\ukp}}{fig:test61}
+
+\imaget{test62/s1.png}{test62/s2.png}{test62/c.png}{\testLab{62}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metB}{\ypp}{\ukp}}{fig:test62}
+
+\imaget{test63/s1.png}{test63/s2.png}{test63/c.png}{\testLab{63}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metB}{\npp}{\akp}}{fig:test63}
+
+\imaget{test64/s1.png}{test64/s2.png}{test64/c.png}{\testLab{64}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metB}{\ypp}{\akp}}{fig:test64}
+
+\imaget{test65/s1.png}{test65/s2.png}{test65/c.png}{\testLab{65}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metB}{\npp}{\ukp}}{fig:test65}
+
+\imaget{test66/s1.png}{test66/s2.png}{test66/c.png}{\testLab{66}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metB}{\ypp}{\ukp}}{fig:test66}
+
+\imaget{test67/s1.png}{test67/s2.png}{test67/c.png}{\testLab{67}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metB}{\npp}{\akp}}{fig:test67}
+
+\imaget{test68/s1.png}{test68/s2.png}{test68/c.png}{\testLab{68}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metB}{\ypp}{\akp}}{fig:test68}
+
+\imaget{test69/s1.png}{test69/s2.png}{test69/c.png}{\testLab{69}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metB}{\npp}{\ukp}}{fig:test69}
+
+\imaget{test70/s1.png}{test70/s2.png}{test70/c.png}{\testLab{70}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metB}{\ypp}{\ukp}}{fig:test70}
+
+\imaget{test71/s1.png}{test71/s2.png}{test71/c.png}{\testLab{71}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metB}{\npp}{\akp}}{fig:test71}
+
+\imaget{test72/s1.png}{test72/s2.png}{test72/c.png}{\testLab{72}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metB}{\ypp}{\akp}}{fig:test72}
+
+
+
+
+
+
+
+\imaget{test73/s1.png}{test73/s2.png}{test73/c.png}{\testLabAnn{73}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degTwo}{\metC}{\ukp}{\annA}}{fig:test73}
+
+\imagett{test74/s1.png}{test74/s2.png}{test74/c.png}{test74/t.png}{\testLabAnn{74}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metC}{\ukp}{\annA}}{fig:test74}
+
+\imagett{test75/s1.png}{test75/s2.png}{test75/c.png}{test75/t.png}{\testLabAnn{75}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metC}{\ukp}{\annA}}{fig:test75}
+
+
+\imaget{test76/s1.png}{test76/s2.png}{test76/c.png}{\testLabAnn{76}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degTwo}{\metC}{\ukp}{\annB}}{fig:test76}
+
+\imagett{test77/s1.png}{test77/s2.png}{test77/c.png}{test77/t.png}{\testLabAnn{77}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metC}{\ukp}{\annB}}{fig:test77}
+
+\imagett{test78/s1.png}{test78/s2.png}{test78/c.png}{test78/t.png}{\testLabAnn{78}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metC}{\ukp}{\annB}}{fig:test78}
+
+
+\imaget{test79/s1.png}{test79/s2.png}{test79/c.png}{\testLabAnn{79}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degTwo}{\metC}{\ukp}{\annC}}{fig:test79}
+
+\imagett{test80/s1.png}{test80/s2.png}{test80/c.png}{test80/t.png}{\testLabAnn{80}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degThree}{\metC}{\ukp}{\annC}}{fig:test80}
+
+\imagett{test81/s1.png}{test81/s2.png}{test81/c.png}{test81/t.png}{\testLabAnn{81}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metC}{\ukp}{\annC}}{fig:test81}
+
+
+
+
+
+\imaget{test82/s1.png}{test82/s2.png}{test82/c.png}{\testLabAnn{82}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annA}}{fig:test82}
+
+% \imagett{test83/s1.png}{test83/s2.png}{test83/c.png}{test83/t.png}{\testLabAnn{83}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annA}}{fig:test83}
+
+% \imagett{test84/s1.png}{test84/s2.png}{test84/c.png}{test84/t.png}{\testLabAnn{84}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annA}}{fig:test84}
+
+
+% \imaget{test85/s1.png}{test85/s2.png}{test85/c.png}{\testLabAnn{85}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annB}}{fig:test85}
+
+% \imagett{test86/s1.png}{test86/s2.png}{test86/c.png}{test86/t.png}{\testLabAnn{86}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annB}}{fig:test86}
+
+% \imagett{test87/s1.png}{test87/s2.png}{test87/c.png}{test87/t.png}{\testLabAnn{87}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annB}}{fig:test87}
+
+
+% \imaget{test88/s1.png}{test88/s2.png}{test88/c.png}{\testLabAnn{88}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degTwo}{\metC}{\ukp}{\annC}}{fig:test88}
+
+% \imagett{test89/s1.png}{test89/s2.png}{test89/c.png}{test89/t.png}{\testLabAnn{89}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degThree}{\metC}{\ukp}{\annC}}{fig:test89}
+
+% \imagett{test90/s1.png}{test90/s2.png}{test90/c.png}{test90/t.png}{\testLabAnn{90}{\sceneB}{\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}}{\degFour}{\metC}{\ukp}{\annC}}{fig:test90}
+
+
+
+
+
+
+
+
+% \imaget{test91/s1.png}{test91/s2.png}{test91/c.png}{\testLabAnn{91}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annA}}{fig:test91}
+
+% \imagett{test92/s1.png}{test92/s2.png}{test92/c.png}{test92/t.png}{\testLabAnn{92}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annA}}{fig:test92}
+
+% \imagett{test93/s1.png}{test93/s2.png}{test93/c.png}{test93/t.png}{\testLabAnn{93}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annA}}{fig:test93}
+
+
+% \imaget{test94/s1.png}{test94/s2.png}{test94/c.png}{\testLabAnn{94}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annB}}{fig:test94}
+
+% \imagett{test95/s1.png}{test95/s2.png}{test95/c.png}{test95/t.png}{\testLabAnn{95}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annB}}{fig:test95}
+
+% \imagett{test96/s1.png}{test96/s2.png}{test96/c.png}{test96/t.png}{\testLabAnn{96}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annB}}{fig:test96}
+
+
+% \imaget{test97/s1.png}{test97/s2.png}{test97/c.png}{\testLabAnn{97}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degTwo}{\metC}{\ukp}{\annC}}{fig:test97}
+
+% \imagett{test98/s1.png}{test98/s2.png}{test98/c.png}{test98/t.png}{\testLabAnn{98}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annC}}{fig:test98}
+
+% \imagett{test99/s1.png}{test99/s2.png}{test99/c.png}{test99/t.png}{\testLabAnn{99}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annC}}{fig:test99}
 
 
 \end{document}

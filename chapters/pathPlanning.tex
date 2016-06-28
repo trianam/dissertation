@@ -46,7 +46,7 @@ shapes \cite{lavalle}.
 Furthermore, it is important to define the possible admissible
 transformations of the body, if it is 
 possible only to translate and rotate it or if its motion is composed of
-rigid kinematic chains or trees or if it is possible even to have also not
+rigid kinematic chains or trees or if it is even possible to have not
 rigid transformations (flexible materials) \cite{lavalle}.
 
 \section{Problem types}
@@ -100,7 +100,8 @@ problem also the physical constraints on the motion dynamic.
 These problems deal with moving obstacles.
 
 \paragraph{Multiple movers}
-This problem considers more than one vehicle to move. We then need to deal
+This problem considers more than one vehicle to be moved. We then need
+to deal
 with different paths and with the problem of avoiding possible
 collisions between different movers. Actually we have to avoid
 collisions between the paths followed by different movers only if
@@ -131,13 +132,13 @@ the graph \cite{dijkstra}.  Note
 that the shortest path associated to the visibility graph in a planar
 configuration is the absolute shortest path from the start to the goal
 position with respect to the considered scenario, see e.g.,
-\cite{deberg}. While this method find the optimal solution (with respect to a
+\cite{deberg}. While this method finds the optimal solution (with respect to a
 \emph{distance} criterion) in the planar case, it does not properly
 scale in a 3-dimensional setting.
 
 \subsubsection{Edge sample visibility graph}
 The edge sample visibility graph is an extension of the visibility
-graph method to the 3-dimensional case. The main idea consist of
+graph method to the 3-dimensional case. The main idea consists in
 distributing a discrete set of points along the edges of the obstacles
 by considering  a certain density. The visibility graph and related
 shortest path of this configuration are then computed, but the
