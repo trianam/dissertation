@@ -2,32 +2,23 @@
 \begin{document}
 \chapter{Scene representation}\label{cha:scene}
 The problem of scene description basically consists in fixing a
-representation of the obstacles, the path, and how to memorize all the
-elements.
+representation of the obstacles and of the path, besides in establishing the structures adopted for their storage.
 
 \section{Basic elements and path}
-First of all, we designed the project with path planning in the space
-in mind, so all the coordinates are in $\mE^3$. Also we concentrated
-on \bss because we want that the output of the algorithm, the
-path between a start point $s$ and an end point $e$, should be a \bs
-curve which is a standard representation used in \ac{CAD} and
-\ac{CAGD} systems \cite{hughes}\cite{foley}. The
-elements for identify univocally a curve
-$\ve{S}:\mR\rightarrow\mE^3$ are the
-degree $m$ of the curve, the $n$ control vertices
-\begin{equation*}
-  P=\{\ve{v_0},\dots,\ve{v_n}\}
-\end{equation*}
-that are points in $\mE^3$, and finally the partition vector of the domain
-\begin{equation*}
-  T=\{t_0,\dots,t_{n+m+1}\}
-\end{equation*}
-with the knots $t_i$, where $t_m\equiv a$ and $t_{n+1}\equiv b$ are
-the extremes of the domain $[a,b]$ of the curve.
+First of all, since we are interested in spatial path planning, all the point coordinates are in $\mE^3$. Also we concentrate
+on \bss because we want a standard representation for the output of
+the algorithm, the path between a start point $s$ and an end point
+$e$. Actually \bss
+curves are the standard adopted in \ac{CAD} and
+\ac{CAGD} systems \cite{hughes}\cite{foley}. 
 
-Regarding the degree of the curve, we gave
-to the users the possibility of choosing between quadratic curves
-($m=2$), cubic curves ($m=3$) and quartic curves ($m=4$). The users
+Now the structures which  uniquely identify a \bs curve are
+three: its degree m, the associated control polygon and the extended
+knot vector 
+
+Regarding the degree of the curve, we give
+to the users the possibility of choosing among quadratics
+($m=2$), cubics ($m=3$) and quartics ($m=4$). The users
 choose also the starting and ending points $s$ and $e$ respectively,
 associated with the parameter values $t_0=\dots=t_m$ and
 $t_{n+1}=\dots=t_{n+m+1}$.
@@ -42,7 +33,7 @@ described in \cref{sec:knotSel}.
 
 So for the curve we memorize only the control vertices $P$ and the
 degree 
-$m$. As usual when we need to plot it we tabulate $\ve{S}(t)$ for a certain
+$m$. As usual in any computer graphic system, when we want its plotting, we tabulate $\ve{S}$ for a certain
 number\footnote{Enough for having a smooth look.} of values of $t$ and
 then we draw the polygonal chain that connects them.
 
@@ -64,43 +55,42 @@ the number of \acp{OTF} in obstacle $Ob_i$.
 
 We choose this specific configuration because in this way all the
 intersections that can occur are between triangle and triangle or
-triangle and segment and they are simple to calculate. If we wanted to
-design the obstacles in a more complex way we should have provided
-methods for triangulating its faces. 
+triangle and segment and they can be easily calculated. This implies
+that, if an obstacle is a polyhedron more complex than just a
+tetrahedron, preliminarily its faces have to be triangulated.
 
-The drawback of this approach is that if we want to insert
-complex-shaped obstacles in the scene we need to triangulate the
-surface in a manual way, and insert the final \acp{OTF}. However we
-provided also methods
-of abstracting this task that provide the possibility of creating more
-complex obstacles in a simple way (\cref{sec:complexObs}).
+We provide the methods explained in \cref{sec:complexObs} for
+abstracting the creation of \acp{OTF}.
 
 Using this solution also means that we can potentially insert in the
 scene open polyhedrons\footnote{For instance a tetrahedron without one
   face} or intersecting shapes, as we don't have
 any restriction on the position of the points $\ve{p_{i,j,k}}$.
 
-\section{Tetrahedron and convex hull obstacles}\label{sec:complexObs}
-For helping the user with the construction of the scene we realized
-also two methods which build obstacles in a simplified way
+\section{Complex obstacles}\label{sec:complexObs}
+In order to simplify the scene construction, four methods for easily
+building obstacles have been realized: 
 \begin{itemize}
 \item one for building tetrahedrons;
-\item and one more general for building convex hulls.
+\item one for building parallelepipeds\footnote{aligned with the axis};  
+\item one more general for building convex hulls;
+\item a special method used for building a bucket-shaped obstacle that
+  we use in the tests.
 \end{itemize}
 
 \begin{algo}{Abstract construction of tetrahedron}{alg:tetrahedron}
-  \Procedure{buildTetrahedron}{$\ve{a}, \ve{b}, \ve{c}, \ve{d}$}
+  \Procedure{buildTetrahedron}{$Obs, \ve{a}, \ve{b}, \ve{c}, \ve{d}$}
   \State $Obs\Ass Obs\cup\{\ \{\ve{a},\ve{b},\ve{c}\},\ \{\ve{a},\ve{b},\ve{d}\},\ \{\ve{b},\ve{c},\ve{d}\},\ \{\ve{c},\ve{a},\ve{d}\}\ \}$
   \EndProcedure
 \end{algo}
 \begin{algo}{Abstract construction of convex hull
     polyhedron}{alg:convHullPoly}
-  \Procedure{buildConvexHullPolyhedron}{$\ve{p_0},\dots,\ve{p_n}$}
+  \Procedure{buildConvexHullPolyhedron}{$Obs, \ve{p_0},\dots,\ve{p_n}$}
   \State $Ob\Ass\emptyset$
   \State $facets\Ass convexHull(\{\ve{p_0},\dots,\ve{p_n}\})$
   \ForAll{$f\in facets$}
   \State $simplices\Ass triangularize(f)$
-  \ForAll{$s\in simplices$}
+  \ForAll{$\{\ve{s_0},\ve{s_1},\ve{s_2}\}\in simplices$}
   \State $Ob\Ass Ob\cup\{\ve{s_0},\ve{s_1},\ve{s_2}\}$
   \EndFor
   \EndFor
@@ -115,13 +105,10 @@ points.
 \cref{alg:convHullPoly} is more complex, first we need to build the
 convex hull of the input points (see \cite{deberg} and \cite{press}
 for details on the 
-convex hull algorithm), then we obtain a set of $facets$ that can be
-triangles but also more complex planar polygons. In the latter case we
-need
-to triangularize the $facets$ obtaining one or more $simplices$ that
-are triangles (see \cite{deberg} and \cite{press} for details on the
+convex hull algorithm), then we obtain a set of $facets$ that have to
+be triangulated (see \cite{deberg} and \cite{press} for details on the
 triangularization
-algorithms). Finally we add each simplex as a new \ac{OTF} of the
+algorithms). Finally we add each triangle as a new \ac{OTF} of the
 obstacle.
 
 \section{Bounding box}\index{Bounding box}

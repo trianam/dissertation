@@ -16,10 +16,11 @@ build such polygonal chain. Before using the chain as a control
 polygon for the \bs, it is refined and adjusted - as explained in
 detail in \cref{sec:obsAvoid} and \cref{sec:degreeInc} - in order to
 ensure that the associated \bs curve has no obstacle
-collision. Also we implemented a method for an optional adaptive
-arrangment of the breakpoints of the \bs described in
-\cref{sec:knotSel} and an optional post processing for the
-simplification of the path described in \cref{sec:postPro}.
+collision. Furthermore in \cref{sec:knotSel} w implemented a method
+for an optional adaptive 
+arrangement of the breakpoints of the \bs. Finally \cref{sec:postPro}
+is devoted to an optional post processing of the path.
+
 \section{Polygonal chain}\label{sec:polChain}\index{Polygonal chain}
 In the first phase the objective is to extract a suitable polygonal chain from
 the scene, such that the extremes coincide with the start point $\ve{s}$
@@ -30,7 +31,7 @@ dimensions of a well known bidimensional method
 \cite{bhattacharya}\cite{ho-liu}\cite{seda-pich} that use
 \acp{VD} as base.
 
-We choose a Voronoi method because it build a structure roughly
+We choose a Voronoi method because it builds a structure roughly
 equidistant from obstacles, and so we have low probability of
 collisions between the curve and the obstacles.
 
@@ -43,7 +44,7 @@ an invisible bounding box, as in \cref{fig:sites}.
 The sites are distributed using a recursive method, for each triangle
 of the scene we add three points - one for each
 vertex, if not already added before - and then we calculate the area
-of the triangle, if the area is bigger than a threshold we decompose
+of the triangle. If the area is bigger than a threshold we decompose
 the triangle in four triangles adding three more vertices on the
 midpoints of the edges of the original triangle as in
 \cref{fig:triangleDec}, and repeating the process recursively for
@@ -82,8 +83,14 @@ those points as input sites, and we build a graph
 $$G=(V,E)$$
 using the vertices
 of the Voronoi cells as graph nodes in $V$, and the edges of the cells\footnote{Rejecting potential
-  infinite edges.} as graph edges in $E$. After we prune such graph deleting every edge that
-intersects an \ac{OTF} using the methods explained in \cref{sec:intersections}.
+  infinite edges.} as graph edges in $E$. Furthermore we make $G$
+denser adding for every cell's face all the diagonals as edges (we
+connect every vertex to every other vertex in a face).
+
+After we prune such graph deleting every edge that
+intersects an \ac{OTF} using the methods explained in
+\cref{sec:intersections}. The edge-pruning process considers a margin
+around the \acp{OTF} during the collision checks.
 \image{scrGraph.png}{Scene with pruned graph.}{fig:graph}
 
 The result, visible in \cref{fig:graph}, is a graph that embraces the
@@ -204,8 +211,8 @@ The original graph $G$ is not directed and it is weighted
 with the distance from vertex to vertex. The transformed graph $G_t$ is
 directed and weighted, where if in $G$ the nodes $\ve{a}$
 and $\ve{b}$ are
-neighbouring, and the nodes $\ve{b}$ and $\ve{c}$ are neighbouring, then $G_t$
-have the two nodes $(\ve{a},\ve{b},\ve{c})$ and $(\ve{c},\ve{b},\ve{a})$. In
+neighbouring, and $\ve{b}$ and $\ve{c}$ are neighbouring, then $G_t$
+has the two nodes $(\ve{a},\ve{b},\ve{c})$ and $(\ve{c},\ve{b},\ve{a})$. In
 $G_t$ a node $(\ve{a_1},\ve{b_1},\ve{c_1})$ is a predecessor of
 $(\ve{a_2},\ve{b_2},\ve{c_2})$ if $\ve{b_1}=\ve{a_2}$ and $\ve{c_1}=\ve{b_2}$, and the weight of the arc
 from $(\ve{a_1},\ve{b_1},\ve{c_1})$ to $(\ve{a_2},\ve{b_2},\ve{c_2})$ in $G_t$ is
@@ -242,18 +249,20 @@ the weight of the arc from $\ve{a_1}$ to $\ve{b_1}(=\ve{a_2})$ in $G$.
   \State\Return $G_t$
   \EndFunction
 \end{algo}
-The necessarily steps for creating $G_t$ are visible on
-\cref{alg:createTripleGraph}.
+The steps necessary for creating $G_t$ are summarized in
+\cref{alg:createTripleGraph}. The input $G$ is the base graph
+which has vertices $V$ and edges $E$, $N_G(\ve{a})$ is the set of
+neighbours in $G$ of the vertex $\ve{a}$, and the output is $G_t$.
 
 The transformation of the graph is useful only for the obstacle
 avoidance algorithm of
 \cref{sec:inter1}, theoretically is possible to bypass such
-transformation for the algorithm on \cref{sec:inter2}.
+transformation for the algorithm described in \cref{sec:inter2}.
 
 \subsubsection{Complexity considerations}\index{Complexity!$G_t$ creation}\index{$G_t$!complexity}
 If we suppose a maximum degree $k$ for each vertex in the graph $G$ -
-i.e. each vertex in $V$ can have maximum $k$ edges attached to
-it - then the number of vertices in the transformed graph $G_t$ is 
+i.e. each vertex in $V$ can have at most $k$ edges insisting on
+it, then the number of vertices in the transformed graph $G_t$ is 
 \begin{equation}
   \label{eq:numTriples}
   |V_t|\leq |V|\cdot k\cdot(k-1)=\bigO(k^2|V|)
@@ -263,7 +272,7 @@ consider all the neighbours of $\ve{v}$ and the neighbours of the neighbours
 of $\ve{v}$ (excluded $\ve{v}$).
 
 For how we defined the triples neighbour rule in $G_t$ we have
-that each triple is a predecessor of maximum $k-1$ other triples, for
+that each triple is a predecessor of at most $k-1$ other triples. For
 instance $(\ve{a},\ve{b},\ve{c})$ in $V_t$ is the predecessor of all the triples
 $(\ve{b},\ve{c},*)$ where $*$ can be one of the $k$ neighbours
 of $\ve{c}$ in $V$ excluded $\ve{b}$. So the number of edges in $G_t$ is
@@ -278,10 +287,10 @@ Also the time cost for the creation of $G_t$ is
   \label{eq:costVt}
   \bigO(k^2|E|)=\eqCostVt
 \end{equation}
-because the \cref{alg:createTripleGraph} for creating the transformed
+because \cref{alg:createTripleGraph} for creating the transformed
 graph scans all the edges $e$ on \cref{ln:tripleFor0} and for each
 iteration
-the bigger cost is due to the two \emph{for} on \cref{ln:tripleFor1} and
+the biggest cost is due to the two \emph{for} on \cref{ln:tripleFor1} and
 \cref{ln:tripleFor2}. Each one scans triples created from at most
 $k$ neighbours
 of the vertices at the extremes of $e$.
@@ -292,8 +301,9 @@ explained in \cref{sec:polChain} as a control polygon for the
 \bs, we need to deal with a
 problem: every possible path in the graph $G$ is
 free from collisions by construction - in fact we prune the graph of
-every edge that intersects an obstacle - but this don't guarantees that
-the curve will be free from obstacles. This concept is exemplified in
+every edge that intersects an obstacle - but this does not guarantee
+that the associated curve will not cross any obstacle. This concept is
+exemplified in
 \cref{fig:intersect}.
 \begin{myfig}{Schematic of \bs that intersects an obstacle in the plane.}{fig:intersect}
   \begin{tikzpicture}
@@ -360,7 +370,7 @@ $(\ve{a},\ve{b},\ve{c})$ and $(\ve{c},\ve{b},\ve{a})$ will be removed from $G_t$
 the corresponding triangle intersects the obstacle, and the path
 $\ve{d}\rightarrow \ve{a}\rightarrow \ve{b}\rightarrow \ve{c}\rightarrow \ve{e}$ cannot be
 admissible. This doesn't preclude the nodes $\ve{a}$, $\ve{b}$ and $\ve{c}$ to be part
-of the final admissible path $\ve{d}\rightarrow \ve{a}\rightarrow \ve{b}\rightarrow \ve{e}\rightarrow \ve{c}\rightarrow \ve{e}$.
+of the final admissible path $\ve{d}\rightarrow \ve{a}\rightarrow \ve{b}\rightarrow \ve{e}\rightarrow \ve{c}\rightarrow \ve{f}$.
 \begin{myfig}{Example of triples.}{fig:exampleTriples}
   \begin{tikzpicture}
     \coordinate (D) at (-1,1);
@@ -395,9 +405,10 @@ $$
 P_t=(\ve{a_0},\ve{b_0},\ve{c_0}), (\ve{a_1},\ve{b_1},\ve{c_1}),\dots,(\ve{a_i},\ve{b_i},\ve{c_i}),\dots,(\ve{a_n},\ve{b_n},\ve{c_n})
 $$
  using
-an algorithm like Dijkstra, and then extracting the shortest
-path $P$ on the vertices taking the central vertex $\ve{b_i}$ of every
-triple $(\ve{a_i},\ve{b_i},\ve{c_i})$ of the path plus the extremes $\ve{a_0}$ and $\ve{c_n}$
+an algorithm like Dijkstra. Then the shortest
+path $P$ in $G$ is constructed by taking the central vertex $\ve{b_i}$
+of every 
+triple $(\ve{a_i},\ve{b_i},\ve{c_i})$ of $P_t$, plus the extremes $\ve{a_0}$ and $\ve{c_n}$
 of the first and last triples, obtaining
 $$
 P=\ve{a_0},\ve{b_0},\ve{b_1},\dots,\ve{b_i},\dots,\ve{b_{n-1}},\ve{b_n},\ve{c_n}.
@@ -504,7 +515,7 @@ constant as we said before then we have an overall cost of
 \begin{equation}\label{eq:costTotalOneK}
   \eqCostTotalOneK
 \end{equation}
-That derive from the collision-check controls.
+that derives from the collision-check controls.
 
 We can improve
 this result if we divide the algorithm in two parts:
@@ -537,19 +548,21 @@ this result if we divide the algorithm in two parts:
   \caption{Resume of the costs for solution one}
   \label{tab:costsSol1}
 \end{table}
-On \cref{tab:costsSol1} we resumed all the terms that contributes to
+On \cref{tab:costsSol1} we resume all the terms that contributes to
 the total costs, and the total cost itself.
 
 \subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}\index{Dijkstra}\index{Dijkstra in $G$}
 The First solution is interesting from an algorithmic point of view,
 but it is not very practical because it throws all the triples that
-intersect an obstacle. We manage to develop a
+intersect an obstacle. We managed to develop a
 solution that uses another approach: obtain the shortest path 
 from the Voronoi's graph $G$ directly using Dijkstra's algorithm,
 without removing any triple. On that path
 - that we call $P$ - we
 check every triple of consecutive vertices, and if it collides with an
-\ac{OTF} then we take countermeasures. For instance if the path
+\ac{OTF} then we take countermeasures (see
+\cref{sec:intersectionsTriangleTriangle} for the procedure implemented
+to identify collisions between two triangles). For instance if the path
 is composed from the vertices:
 \begin{equation*}
   P=(\ve{v_0},\ve{v_1},\dots,\ve{v_n})
@@ -567,17 +580,7 @@ T_{n-2} &=& \triangle \ve{v_{n-2}}\ve{v_{n-1}}\ve{v_n}
 for intersections with \acp{OTF}, where $\triangle \ve{v_i}\ve{v_j}\ve{v_k}$ denotes the
 triangle with
 vertices the points $\ve{v_i}$, $\ve{v_j}$ and $\ve{v_k}$.
-
-In \cref{sec:intersectionsTriangleTriangle} we explain how to measure
-if a triangle $T_1=\triangle \ve{a_1}\ve{b_1}\ve{c_1}$
-collides with another triangle $T_2=\triangle
-\ve{a_2}\ve{b_2}\ve{c_2}$. Furthermore, when a
-collision is found, is possible to 
-obtain also the barycentric coordinates on
-$\ve{a_2},\ve{b_2},\ve{c_2}$ of the points where the 
-edges of $T_1$ intersect $T_2$ (or vice versa the coordinates on
-$\ve{a_1},\ve{b_1},\ve{c_1}$ of the points where $T_2$ intersect $T_1$).
-
+ 
 Consider also that $G$ is pruned from all the edges that intersect any
 obstacle, so none of the edges of the triangles $T_i$ can intersect
 an \ac{OTF}. The only possibility is that edges\footnote{At most two
@@ -656,13 +659,13 @@ obtain this adding two new control vertices:
 We add those
 points in a manner such that the segment $\overline{\ve{w_1}\ve{w_2}}$ is
 parallel to the segment $\overline{\ve{v_i}\ve{v_{i+2}}}$ and such that
-$\overline{\ve{w_1}\ve{w_2}}$ pass just above the obstacle point
+$\overline{\ve{w_1}\ve{w_2}}$ passes just above the obstacle point
 $\ve{o_{near}}$ that is the nearest
 to $\ve{v_{i+1}}$ ($\ve{o_1}$ in
-\cref{fig:triangleIntersection}). Doing this keeps the
-triangle $\triangle \ve{w_1}\ve{v_{i+1}}\ve{w_2}$ - and also
-the degenerated triangles $\triangle \ve{v_i}\ve{w_1}\ve{v_{i+1}}$ and $\triangle
-\ve{v_{i+1}}\ve{w_2}\ve{v_{i+2}}$ - free from obstacles.
+\cref{fig:triangleIntersection}). The degenerate triangles $\triangle \ve{v_i}\ve{w_1}\ve{v_{i+1}}$ and $\triangle
+\ve{v_{i+1}}\ve{w_2}\ve{v_{i+2}}$, and the not degenerate triangle
+$\triangle \ve{w_1}\ve{v_{i+1}}\ve{w_2}$ replace the original triangle
+$T_i$ and they do not collide with obstacles for construction.
 
 When we check for collisions between a segment and a triangle we
 resolve a system of three unknowns in
@@ -711,7 +714,7 @@ and then, using the corresponding $\beta_{near}$, we can obtain
 ]
 In \cref{fig:sol21} and \cref{fig:sol22} we can see the effects of the
 application of this
-solution to a tract of the curve. The original tracts of control
+solution to a piece of the curve. The original pieces of control
 polygon are on the left pictures, the triangle
 composed of those vertices
 collide with the obstacle on the back. The two new vertices $\ve{w_1}$
@@ -799,10 +802,17 @@ problems in common:
 \item both reject configurations in a prudent way
   considering only the control polygon;
 \item and both don't optimize neither
-  length nor other parameters.
+  length nor other quantities.
 \end{itemize}
+Anyway such solutions have also the benefit that:
+\begin{itemize}
+\item they produce paths that are obstacle-free from construction;
+\item the application of the post processing allows often a reduction
+  of the curve length.
+\end{itemize}
+
 In this section we describe a third
-approach considered on the project, an approach based on a
+approach considered in the project, an approach based on a
 probabilistic computation.
     
 We can see the problem of finding the shortest path as a constrained
@@ -1093,96 +1103,6 @@ we can divide the algorithm in two parts:
 \item then we can use it for different situations with cost
   $|Ob|\log|Ob|+len(P)|Ob|$.
 \end{enumerate}
-
-\section{Post processing}\label{sec:postPro}\index{Post process}
-The purpose of the post processing phase is to try to simplify the
-path $P=(\ve{v_0},\dots,\ve{v_n})$ obtained in the previous phase
-removing useless vertices, trying
-to achieve a smoother path.
-
-\begin{algo}{Post processing algorithm on path $P$.}{alg:postProcess}
-  \Procedure{postProcess}{$P$}
-  \For{$i\Ass 1,n-1$}
-  \If{$i=1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}})$}
-  \If{$i=n-1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}})$}
-  \State $P\Ass P\setminus\{\ve{v_i}\}$
-  \EndIf
-  \EndIf
-  \EndFor
-  \EndProcedure
-\end{algo}
-For obtaining this we realized \cref{alg:postProcess} that
-iterates through all the vertices, excluded the extremes, and for each
-$v_i$ checks if it can be removed without consequences. With
-consequences we mean that removing $v_i$ would cause that a triangle
-in $P$ intersect one of the \acp{OTF}.
-
-\begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
-  \begin{tikzpicture}
-    \coordinate (l1) at (0,0);
-    \coordinate (a) at (1,0);
-    \coordinate (b) at (3,3);
-    \coordinate (c) at (5,4);
-    \coordinate (d) at (7,1);
-    \coordinate (e) at (9,2);
-    \coordinate (l2) at (10,2);
-    \coordinate (o1) at (4,0);
-    \coordinate (o2) at (5,1.5);
-    \coordinate (o3) at (6,0);
-
-    \path[convexHull] (a) -- (b) -- (d) -- (a);
-    \path[convexHull] (b) -- (d) -- (e) -- (b);
-
-    \draw[controlPoly] (a)  -- (b);
-    \draw[controlPoly] (d)  -- (e);
-    \draw[controlPolyTract] (l1) -- (a);
-    \draw[controlPolyTract] (e) -- (l2);
-    \draw[controlPolyTractHigh] (b) -- (d);
-    \draw[controlPolyHigh] (b) -- (c) -- (d);
-
-    \path[obstacle] (o1) -- (o2) -- (o3) -- (o1);
-    \node at (barycentric cs:o1=0.3,o2=0.3,o3=0.3) {\acs{OTF}};
-
-    \foreach \p in {a,b,d,e}
-    \filldraw[controlVert] (\p) circle (2pt);
-    \filldraw[controlVertHigh] (c) circle (3pt);
-
-    \node[below] at (a) {$\ve{v_{i-2}}$};
-    \node[above left] at (b) {$\ve{v_{i-1}}$};
-    \node[above] at (c) {$\ve{v_i}$};
-    \node[below right] at (d) {$\ve{v_{i+1}}$};
-    \node[above] at (e) {$\ve{v_{i+2}}$};
-  \end{tikzpicture}
-\end{myfig}
-For clarifying the concept consider \cref{fig:postProcess} that is a
-simplification in 2-dimensional space of the real case in
-3-dimensional space. The path to process
-is
-\begin{equation*}
-  P=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i}},\ve{v_{i+1}},\ve{v_{i+2}},\dots)
-\end{equation*}
-and we are
-considering removing $\ve{v_i}$ obtaining a modified path
-\begin{equation*}
-  \tilde{P}=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i+1}},\ve{v_{i+2}},\dots).
-\end{equation*}
-Before doing this we need to check if any triangle in $\tilde{P}$
-intersects any \ac{OTF}. In detail we need to check only the two
-triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
-$\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
-triangles in $\tilde{P}$ where already present in $P$. For instance
-the obstacle in the figure don't intersects anyone of the triangles in
-$P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
-$\tilde{P}$.
-
-\subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity!post process}
-For every vertex of $P$ we need to check if two triangles intersect
-with an \ac{OTF}, so we have a complexity of
-\begin{equation*}
-  \bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)
-\end{equation*}
-where $Ob$ is the set of obstacles and $|P|$ is the number of vertices
-in $P$.
 
 \section{Degree increase}\label{sec:degreeInc}\index{Degree
   increase}\index{\bss!higher degree}
@@ -1530,6 +1450,96 @@ Finally, adding the duplicated knots, we obtain
 \begin{equation*}
   t_i=\tau_{\min(n-m+1,\ \max(0,\ i-m))}\qquad i=0,\dots,n+m+1.
 \end{equation*}
+
+\section{Post processing}\label{sec:postPro}\index{Post process}
+The purpose of the post processing phase is to try to simplify the
+path $P=(\ve{v_0},\dots,\ve{v_n})$ obtained in the previous phase
+removing useless vertices, trying
+to achieve a smoother path.
+
+\begin{algo}{Post processing algorithm on path $P$.}{alg:postProcess}
+  \Procedure{postProcess}{$P$}
+  \For{$i\Ass 1,n-1$}
+  \If{$i=1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}})$}
+  \If{$i=n-1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}})$}
+  \State $P\Ass P\setminus\{\ve{v_i}\}$
+  \EndIf
+  \EndIf
+  \EndFor
+  \EndProcedure
+\end{algo}
+For obtaining this we realized \cref{alg:postProcess} that
+iterates through all the vertices, excluded the extremes, and for each
+$v_i$ checks if it can be removed without consequences. With
+consequences we mean that removing $v_i$ would cause that a triangle
+in $P$ intersect one of the \acp{OTF}.
+
+\begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
+  \begin{tikzpicture}
+    \coordinate (l1) at (0,0);
+    \coordinate (a) at (1,0);
+    \coordinate (b) at (3,3);
+    \coordinate (c) at (5,4);
+    \coordinate (d) at (7,1);
+    \coordinate (e) at (9,2);
+    \coordinate (l2) at (10,2);
+    \coordinate (o1) at (4,0);
+    \coordinate (o2) at (5,1.5);
+    \coordinate (o3) at (6,0);
+
+    \path[convexHull] (a) -- (b) -- (d) -- (a);
+    \path[convexHull] (b) -- (d) -- (e) -- (b);
+
+    \draw[controlPoly] (a)  -- (b);
+    \draw[controlPoly] (d)  -- (e);
+    \draw[controlPolyTract] (l1) -- (a);
+    \draw[controlPolyTract] (e) -- (l2);
+    \draw[controlPolyTractHigh] (b) -- (d);
+    \draw[controlPolyHigh] (b) -- (c) -- (d);
+
+    \path[obstacle] (o1) -- (o2) -- (o3) -- (o1);
+    \node at (barycentric cs:o1=0.3,o2=0.3,o3=0.3) {\acs{OTF}};
+
+    \foreach \p in {a,b,d,e}
+    \filldraw[controlVert] (\p) circle (2pt);
+    \filldraw[controlVertHigh] (c) circle (3pt);
+
+    \node[below] at (a) {$\ve{v_{i-2}}$};
+    \node[above left] at (b) {$\ve{v_{i-1}}$};
+    \node[above] at (c) {$\ve{v_i}$};
+    \node[below right] at (d) {$\ve{v_{i+1}}$};
+    \node[above] at (e) {$\ve{v_{i+2}}$};
+  \end{tikzpicture}
+\end{myfig}
+For clarifying the concept consider \cref{fig:postProcess} that is a
+simplification in 2-dimensional space of the real case in
+3-dimensional space. The path to process
+is
+\begin{equation*}
+  P=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i}},\ve{v_{i+1}},\ve{v_{i+2}},\dots)
+\end{equation*}
+and we are
+considering removing $\ve{v_i}$ obtaining a modified path
+\begin{equation*}
+  \tilde{P}=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i+1}},\ve{v_{i+2}},\dots).
+\end{equation*}
+Before doing this we need to check if any triangle in $\tilde{P}$
+intersects any \ac{OTF}. In detail we need to check only the two
+triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
+$\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
+triangles in $\tilde{P}$ where already present in $P$. For instance
+the obstacle in the figure don't intersects anyone of the triangles in
+$P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
+$\tilde{P}$.
+
+\subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity!post process}
+For every vertex of $P$ we need to check if two triangles intersect
+with an \ac{OTF}, so we have a complexity of
+\begin{equation*}
+  \bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)
+\end{equation*}
+where $Ob$ is the set of obstacles and $|P|$ is the number of vertices
+in $P$.
 
 \end{document}
 
