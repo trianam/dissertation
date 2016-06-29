@@ -14,15 +14,16 @@ Where
   \item Method \metB is Dijkstra in $G$;
   \item Method \metC is \acl{SA};
   \end{itemize}
-\item \emph{P. p.} indicate if the post processing is used (\ypp) or
+\item \emph{P. p.} indicates if the post processing is used (\ypp) or
   not (\npp);
-\item \emph{Part.} indicate if is used the uniform knot partition
-  (\ukp) or the adaptive one (\akp)
+\item \emph{Part.} indicates if the uniform knot partition
+  (\ukp) or the adaptive one (\akp) is used;
 \item \emph{Config.} is used only for method \metC and indicates the
   used annealing configuration from \cref{tab:annealingConfigs}.
 \end{itemize}
 
-The \cref{tab:scenes} gives some data about the scenes.
+The \cref{tab:scenes} gives some data about the scenes. The fields are
+the followings.
 \begin{itemize}
 \item \emph{B.b. A} and \emph{B.b. B} are the extremes of the bounding
   box.
@@ -35,6 +36,30 @@ The \cref{tab:scenes} gives some data about the scenes.
 \item \emph{\# obs.} is the number of obstacles in the scene.
 \item \emph{Max. empty area} is the maximum empty area for the
   distribution of the Voronoi sites as explained in \cref{sec:baseGraph}.
+\end{itemize}
+
+\cref{tab:annealingConfigs} indicates the configurations for the
+\ac{SA} phase. The fields are the followings:
+\begin{itemize}
+\item \emph{$T_0$} is the initial \emph{temperature};
+\item \emph{Trials} is the number of trials for each annealing cycle;
+\item \emph{warm.} is the warming ratio of temperature between two
+  consecutive cycles;
+\item \emph{min $T$} is the minimum temperature at which the process terminates;
+\item \emph{min $\Delta E$} is the minimum difference of energy
+  between two consecutive cycles at which the process terminates;
+\item \emph{$\lambda$ pert} is the maximum perturbation of $\lambda$
+  in every move;
+\item \emph{$V$ pert fact}  is the maximum perturbation of a path vertex
+  in every move, expressed in fraction of the control polygon length;
+\item \emph{$\lambda_0$} is the initial value of $\lambda$;
+\item \emph{$\lambda P$} is the probability of changing $\lambda$
+  instead the path in each move;
+\item \emph{Len type} indicates if it is considered the
+  control polygon (\lenPol) or the arc (\lenArc) length as optimizing quantity;
+\item \emph{Ratios} is a triple of \emph{weights} that indicates the
+  importance, during the
+  optimization, of curvature, torsion and length respectively;
 \end{itemize}
 
 \begin{landscape}
@@ -111,7 +136,7 @@ The \cref{tab:scenes} gives some data about the scenes.
     24&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metB&\ypp&\akp&\nd&\cref{fig:test24}\\
     \hline
   \end{tabular}
-  \caption{Resume of the tests.}
+  \caption{Summary of the tests.}
   \label{tab:tests1}
 \end{table}
 
@@ -150,7 +175,7 @@ The \cref{tab:scenes} gives some data about the scenes.
     48&\sceneB&\vertices{0.5}{0.5}{0.5}{0.5}{0.5}{0.95}&\degFour&\metB&\ypp&\akp&\nd&\cref{fig:test48}\\
     \hline
   \end{tabular}
-  \caption{Resume of the tests (continue).}
+  \caption{Summary of the tests (continue).}
   \label{tab:tests2}
 \end{table}
 
@@ -188,7 +213,7 @@ The \cref{tab:scenes} gives some data about the scenes.
     72&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metB&\ypp&\akp&\nd&\cref{fig:test72}\\    
     \hline
   \end{tabular}
-  \caption{Resume of the tests (continue).}
+  \caption{Summary of the tests (continue).}
   \label{tab:tests3}
 \end{table}
 
@@ -246,7 +271,7 @@ The \cref{tab:scenes} gives some data about the scenes.
     99&\sceneC&\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}&\degFour&\metC&\nd&\ukp&\annCb&\cref{fig:test99}\\
     \hline
   \end{tabular}
-  \caption{Resume of the tests (continue).}
+  \caption{Summary of the tests (continue).}
   \label{tab:tests4}
 \end{table}
 

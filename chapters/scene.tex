@@ -5,7 +5,8 @@ The problem of scene description basically consists in fixing a
 representation of the obstacles and of the path, besides in establishing the structures adopted for their storage.
 
 \section{Basic elements and path}
-First of all, since we are interested in spatial path planning, all the point coordinates are in $\mE^3$. Also we concentrate
+First of all, since we are interested in spatial path planning, all
+the point coordinates are in $\mE^3$. Also we concentrate
 on \bss because we want a standard representation for the output of
 the algorithm, the path between a start point $s$ and an end point
 $e$. Actually \bss
@@ -16,8 +17,8 @@ Now the structures which  uniquely identify a \bs curve are
 three: its degree m, the associated control polygon and the extended
 knot vector 
 
-Regarding the degree of the curve, we give
-to the users the possibility of choosing among quadratics
+Regarding the degree of the curve, we let 
+the users choose among quadratics
 ($m=2$), cubics ($m=3$) and quartics ($m=4$). The users
 choose also the starting and ending points $s$ and $e$ respectively,
 associated with the parameter values $t_0=\dots=t_m$ and
@@ -31,7 +32,7 @@ and they depend on the position of $s$ and $e$ and on the obstacles, see
 The knots are generated automatically using one of two methods
 described in \cref{sec:knotSel}.
 
-So for the curve we memorize only the control vertices $P$ and the
+Thus for the curve we memorize only the control vertices $P$ and the
 degree 
 $m$. As usual in any computer graphic system, when we want its plotting, we tabulate $\ve{S}$ for a certain
 number\footnote{Enough for having a smooth look.} of values of $t$ and
@@ -40,8 +41,8 @@ then we draw the polygonal chain that connects them.
 \section{Basic obstacle representation}\index{Obstacle}\index{\acf{OTF}}
 Apart the curve, in the scene we need to represent the obstacles. We
 call $Obs$ the set of all obstacle in scene. We choose to represent
-each obstacle $Ob\in Obs$ as a set of triangular faces that we call
-\acp{OTF}, each one containing three vertices. Resuming we have
+each obstacle $Ob\in Obs$ as a set of triangular faces called
+\acp{OTF}, each one containing three vertices. To recap, we have
 \begin{equation*}
   \begin{split}
     Obs&=\{Ob_0,\dots,Ob_{\#Obs}\}\\

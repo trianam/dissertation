@@ -195,10 +195,11 @@ $d_i$ with points
   \ve{S}(u)=\sum_{i=0}^m \ve{c_i}\cdot t^i\, +\, \sum_{j=1}^{\ell-1}
   \ve{d_j}\cdot (u-\tau_j)_+^m\qquad,\ve{c_i}\in\mE^d,\
   \ve{d_j}\in\mE^d\\
-  i=0,\dots,m;\ j=0,\dots,\ell-1
+  i=0,\dots,m;\ j=0,\dots,\ell-1.
   \end{multlined}
 \end{equation}
-where this representation is not practical because
+
+This representation is not practical because
 there isn't an intuitive correlation between the points
 $\ve{c_i}$, $\ve{d_j}$ and the curve itself. Moreover the
 determination of an interpolant to asset of argued points in $\mE^d$
@@ -288,7 +289,7 @@ Note that the \ac{CHP} holds also in
 space - i.e. a quadratic \bs in 3-dimensional space is contained
 inside a flat surface composed by the union of triangles. From degree 3
 the area where $\ve{S}$ is contained is not anymore plane
-because it is composed of union of solid polyhedrons.
+because it is composed by the union of solid polyhedrons.
 
 \subsection{Aligned vertices}\index{\bss!aligned vertices}\label{sec:alignedVertices}
 As in some parts of this project control polygons with sequences of
@@ -822,7 +823,7 @@ represented by
 optimization method (i.e. simulated annealing). Then it is chosen
 the one that minimize $f(x^*)$, $x^*$ is then the desired minimum.
 
-\section{Intersections in space}\label{sec:intersections}\index{3-D geometry}
+\section{Intersections in space}\label{sec:intersections}\index{3D geometry}
 We work in a spatial environment with polyhedral obstacles. Thus, in
 order to define admissible paths, first of all we need routines
 performing the following three basic geometric tasks: 
@@ -836,7 +837,7 @@ performing the following three basic geometric tasks:
 In the project we need to deal with three kinds of collision detection
 methods in 3-dimension euclidean space:
 
-\subsection{Point inside convex polyhedron in 3-d space}\index{3-D
+\subsection{Point inside convex polyhedron in 3D space}\index{3D
   geometry!point inside polyhedron}
 For testing if a point $\ve{p}$ is inside a convex polyhedron $V$ with
 vertices $\ve{v_1},\ve{v_2},\dots,\ve{v_n}$ we use a method that rely
@@ -873,7 +874,7 @@ where $n$ is the number of vertices of $V$, because the cost for
 constructing the convex hull is \cite{deberg} $\bigO(n\log n)$, and
 then we have another negligible term $\bigO(n)$ for the cycle on \cref{ln:pointInPolyFor}.
 
-\subsection{Segment-triangle in 3-d space}\label{sec:intersectionST}\index{3-D
+\subsection{Segment-triangle in 3D space}\label{sec:intersectionST}\index{3D
   geometry!segment-triangle intersection}\index{intersections!segment-triangle}
 We need to deal with the intersection between a segment
 $S=\overline{\ve{a_2}\ve{b_2}}$ and a triangle
@@ -1042,7 +1043,7 @@ can extract the barycentric coordinates $(\gamma, \delta,
 1-(\gamma+\delta))$ of the intersection point $\ve{x}$ on the system of
 the vertices $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$ of $T$.
 
-\subsection{Triangle-triangle in 3-d space}\label{sec:intersectionsTriangleTriangle}\index{3-D
+\subsection{Triangle-triangle in 3D space}\label{sec:intersectionsTriangleTriangle}\index{3D
   geometry!triangle-triangle intersection}\index{intersections!triangle-triangle}
 We are interested in detecting collisions between two triangles
 $T_1=\triangle \ve{a_1}\ve{b_1}\ve{c_1}$ and $T_2=\triangle\ve{a_2}\ve{b_2}\ve{c_2}$ in 3-dimensional

@@ -99,13 +99,18 @@ The result, visible in \cref{fig:graph}, is a graph that embraces the
 obstacles like a cobweb where the possible paths on it are roughly
 equidistant from the obstacles.
 
-In the bidimensional case the equivalent method implies distributing
-the sites in the edges of the polygonal obstacles and then pruning the
-graph when an edge of the graph intersect an edge of the obstacle as
-in \cref{fig:voronoi2d}.
 \imageDouble{voronoi2d-a.eps}{voronoi2d-b.eps}{Voronoi graph in 2D
   before (left) and after (right) pruning.}{fig:voronoi2d}
-We decided to extend the method in 3 dimensions distributing points in
+As visible
+in \cref{fig:voronoi2d},
+in the bidimensional case the equivalent method implies distributing
+the sites (the blue dots) in the edges of the polygonal obstacles and
+then pruning the 
+graph when an edge of the graph intersects an edge of the
+obstacle. The result is a sparse graph composed of chains around the
+obstacles (the green dots).
+
+We decide to extend the method in 3 dimensions distributing points in
 the whole \ac{OTF} surface, an alternative would be distributing
 points only along the edges of the obstacles.
 
@@ -134,20 +139,20 @@ position of the obstacles, the details are in \cref{sec:obsAvoid} and
 \cref{sec:degreeInc}.
 
 \subsubsection{Complexity considerations}\index{Complexity!$G$ creation}\index{$G$!complexity}
-Fortune's algorithm runs in time $\bigO(|Is|\log |Is|)$ \cite{deberg}
-where $Is$ is
+Fortune's algorithm runs in time $\bigO(|\sitesSet|\log |\sitesSet|)$ \cite{deberg}
+where $\sitesSet$ is
 the set 
 of input sites. If we impose a maximum area $A$ for the obstacles
 \footnote{Inserting the obstacles in a progressive order, the area of the $i$-th
 obstacle cannot be a function $f(i)$ of the number of
-the obstacles} then $|Is|=\bigO(|Ob|)$ where $Ob$ is the set of
-obstacles, because on the worst case we have that $|Is|=C\cdot A\cdot
-|Ob|$ for
-some constant $C$ that depends of the chosen density of sites per area.
+the obstacles} then $|\sitesSet|=\bigO(|\obsSet|)$ where $\obsSet$ is the set of
+obstacles, because on the worst case we have that $|\sitesSet|=C\cdot A\cdot
+|\obsSet|$ for
+some constant $C$ that depends on the chosen density of sites per area.
 
 In conclusion the time cost for the creation of the graph
 is
-\newcommand{\eqCostGraph}{\ensuremath{\bigO(|Ob|\log |Ob|)}}
+\newcommand{\eqCostGraph}{\ensuremath{\bigO(|\obsSet|\log |\obsSet|)}}
 \begin{equation}
   \label{eq:costGraph}
   \eqCostGraph
@@ -156,7 +161,7 @@ and the number of the vertices in the graph
 is 
 \begin{equation}
   \label{eq:numV}
-  |V|=\bigO(|Is|)=\bigO(|Ob|)
+  |V|=\bigO(|\sitesSet|)=\bigO(|\obsSet|)
 \end{equation}
 because the number of vertices in the resulting graph is the
 same order of number of input sites.
@@ -166,40 +171,39 @@ i.e. each vertex in $V$ is connected at most to other $k$ vertices -
 then we have that
 \begin{equation}
   \label{eq:numE}
-  |E|=\bigO(k|V|)=\bigO(k|Ob|).
+  |E|=\bigO(k|V|)=\bigO(k|\obsSet|).
 \end{equation}
 In the worst case $k=|V|$ and $|E|=\bigO(|V|^2)$ but for \acp{VD} in
 plane there is a property that if we have $n$ input sites
 that lay on a circumference, without any other site inside the
 circumference, then the center of the circumference is a vertex shared
-by $n$ cells (\cref{sec:voronoi} for details). The same property is
-extensible in space with
-spheres. We can make the assumption that no more than three sites can lay
+by $n$ cells (\cref{sec:voronoi} for details). The same property hold
+in the 3D case with respect to spheres. We can make the assumption that no more than three sites can lay
 on a circumference so no vertex can have more than three neighbours,
 or the same with four vertices in sphere, and this assumption is
 plausible because we use floating point numbers for the coordinates of
-the vertices of the obstacles, and is quite improbable that more than
+the vertices of the obstacles, and it is unlikely that more than
 four points lay on a sphere. With this assumption $k$ is a constant,
 and \cref{eq:numE} become
 \begin{equation*}
-  |E|=\bigO(|V|)=\bigO(|Ob|).
+  |E|=\bigO(|V|)=\bigO(|\obsSet|).
 \end{equation*}
 
 For pruning the graph of every edge that intersects obstacles we need
 to solve a system of three unknowns in thre equations for every edge
 and every \ac{OTF}\footnote{See \cref{sec:intersectionST}.}, so
 we have a cost of
-\newcommand{\eqCostPruning}{\ensuremath{\bigO(k|Ob|^2)}}
+\newcommand{\eqCostPruning}{\ensuremath{\bigO(k|\obsSet|^2)}}
 \begin{equation}
   \label{eq:costPruning}
-  \bigO(|E|\cdot|Ob|)=\eqCostPruning
+  \bigO(|E|\cdot|\obsSet|)=\eqCostPruning
 \end{equation}
 and if we make the assumption of $k$ constant
 \begin{equation*}
-  \bigO(|Ob|^2)
+  \bigO(|\obsSet|^2)
 \end{equation*}
 
-\subsection{Triple's graph}\label{sec:trigraph}\index{Graph!triple's graph}\index{$G_t$}
+\subsection{Graph's transformation}\label{sec:trigraph}\index{Graph!triple's graph}\index{$G_t$}
 Before calculating the shortest path on the chosen graph with Dijkstra
 \cite{dijkstra}\cite{knuth}, we
 transform it in a graph containing all the triples
@@ -284,7 +288,7 @@ of $\ve{c}$ in $V$ excluded $\ve{b}$. So the number of edges in $G_t$ is
 \end{equation}
 
 Also the time cost for the creation of $G_t$ is
-\newcommand{\eqCostVt}{\ensuremath{\bigO(k^3|Ob|)}}
+\newcommand{\eqCostVt}{\ensuremath{\bigO(k^3|\obsSet|)}}
 \begin{equation}
   \label{eq:costVt}
   \bigO(k^2|E|)=\eqCostVt
@@ -307,7 +311,7 @@ every edge that intersects an obstacle - but this does not guarantee
 that the associated curve will not cross any obstacle. This concept is
 exemplified in
 \cref{fig:intersect}.
-\begin{myfig}{Schematic of \bs that intersects an obstacle in the plane.}{fig:intersect}
+\begin{myfig}{\bs that intersects an obstacle in the plane.}{fig:intersect}
   \begin{tikzpicture}
     \path[obstacle] (1,0) -- (2,1) -- (3,0) -- (1,0);
     \draw[controlPoly] (0,0) -- (2,2) -- (4,0);
@@ -345,7 +349,7 @@ are free from collisions. The second solution described in
 \cref{sec:inter2} use the classical Dijkstra's algorithm to find
 the shortest path from $s$ to $e$ in the graph $G$, checking later for
 collisions in the triangles formed of three consecutive points in such
-path. When a collision is found some actions are taken for dealing
+path. When a collision is found we add vertices to the path for dealing
 with that.
 
 \subsection{First solution: Dijkstra's algorithm in $G_t$}\label{sec:inter1}\index{Dijkstra}\index{Dijkstra in $G_t$}
@@ -467,10 +471,10 @@ collision check\footnote{See
   \cref{sec:intersectionsTriangleTriangle}.}, so in total
 the cost is
 \begin{equation*}
-  \bigO(|V_t|\cdot |Ob|)
+  \bigO(|V_t|\cdot |\obsSet|)
 \end{equation*}
 and for \cref{eq:numV} and \cref{eq:numTriples} this is equal to
-\newcommand{\eqCostColl}{\ensuremath{\bigO(|Ob|^2 k^2)}}
+\newcommand{\eqCostColl}{\ensuremath{\bigO(|\obsSet|^2 k^2)}}
 \begin{equation}
   \label{eq:costColl}
   \eqCostColl .
@@ -478,7 +482,7 @@ and for \cref{eq:numV} and \cref{eq:numTriples} this is equal to
 
 The cost of applying Dijkstra's algorithm\footnote{In the worst case
   where no triples are removed in the cleaning phase.} in $G_t$ is \cite{bondy}\cite{lavalle}
-\newcommand{\eqCostDijkstraTriples}{\ensuremath{\bigO(k^3|Ob|+k^2|Ob|\log(k^2|Ob|)}}
+\newcommand{\eqCostDijkstraTriples}{\ensuremath{\bigO(k^3|\obsSet|+k^2|\obsSet|\log(k^2|\obsSet|)}}
 \begin{equation}
   \label{eq:costDijkstraTriples}
   \begin{split}
@@ -507,13 +511,13 @@ every Voronoi cell cannot have a vertex with more than four edges
 connected to it (see \cref{sec:voronoi} for details).
 
 If we sum all the costs we obtain:
-\newcommand{\eqCostTotalOne}{\ensuremath{\bigO(k^2|Ob|^2+k^3|Ob|)}}
+\newcommand{\eqCostTotalOne}{\ensuremath{\bigO(k^2|\obsSet|^2+k^3|\obsSet|)}}
 \begin{equation}\label{eq:costTotalOne}
   \eqCostTotalOne
 \end{equation}
 where all the other terms are absorbed in those two. If we have $k$
 constant as we said before then we have an overall cost of
-\newcommand{\eqCostTotalOneK}{\ensuremath{\bigO(|Ob|^2)}}
+\newcommand{\eqCostTotalOneK}{\ensuremath{\bigO(|\obsSet|^2)}}
 \begin{equation}\label{eq:costTotalOneK}
   \eqCostTotalOneK
 \end{equation}
@@ -523,10 +527,10 @@ We can improve
 this result if we divide the algorithm in two parts:
 \begin{enumerate}
 \item first we 
-  can construct the graph once with cost $\bigO(|Ob|^2)$;
+  can construct the graph once with cost $\bigO(|\obsSet|^2)$;
 \item then we can
   use the graph in different situations\footnote{With specific starting
-    and ending points} with cost $\bigO(|Ob|\log |Ob|)$, only for the
+    and ending points} with cost $\bigO(|\obsSet|\log |\obsSet|)$, only for the
   routing.
 \end{enumerate}
 
@@ -547,7 +551,7 @@ this result if we divide the algorithm in two parts:
     Total ($k$ constant)&\eqCostTotalOneK&\cref{eq:costTotalOneK}\\
     \hline
   \end{tabular}
-  \caption{Resume of the costs for solution one}
+  \caption{Summary of the costs for solution one}
   \label{tab:costsSol1}
 \end{table}
 On \cref{tab:costsSol1} we resume all the terms that contributes to
@@ -555,8 +559,10 @@ the total costs, and the total cost itself.
 
 \subsection{Second solution: Dijkstra's algorithm in $G$}\label{sec:inter2}\index{Dijkstra}\index{Dijkstra in $G$}
 The First solution is interesting from an algorithmic point of view,
-but it is not very practical because it throws all the triples that
-intersect an obstacle. We managed to develop a
+but it is not very practical. It ignores all the triples that
+intersect an obstacle, thus possible paths in $G$ are lost. 
+
+We managed to develop a
 solution that uses another approach: obtain the shortest path 
 from the Voronoi's graph $G$ directly using Dijkstra's algorithm,
 without removing any triple. On that path
@@ -651,9 +657,9 @@ triangle:
 \end{eqnarray*}
 where $\alpha_i+\beta_i+\gamma_i=1$ for $i=1,2,3$.
 
-We want to deal with collisions adding vertices in the control
+We want to avoid collisions adding vertices in the control
 polygon, such that consecutive triangles are free from obstacles. We
-obtain this adding two new control vertices: 
+obtain this by adding two new control vertices: 
 \begin{itemize}
 \item $\ve{w_1}$ between $\ve{v_i}$ and $\ve{v_{i+1}}$;
 \item $\ve{w_2}$ between $\ve{v_{i+1}}$ and $\ve{v_{i+2}}$.
@@ -731,36 +737,36 @@ algorithm in $G$ for obtaining $P$ with a cost \cite{bondy}\cite{lavalle}
 \begin{equation*}
   \bigO(|E|+|V|\log |V|).
 \end{equation*}
-For \cref{eq:numV} \cref{eq:numE} that cost is equal to
-\newcommand{\eqCostDijkstraG}{\ensuremath{\bigO(k|Ob|+|Ob|\log |Ob|)}}
+For \cref{eq:numV} \cref{eq:numE} this cost is equal to
+\newcommand{\eqCostDijkstraG}{\ensuremath{\bigO(k|\obsSet|+|\obsSet|\log |\obsSet|)}}
 \begin{equation}\label{eq:costDijkstraG}
   \eqCostDijkstraG
 \end{equation}
 and if we make the assumption of $k$ constant we have a cost
 \begin{equation*}
-  \bigO(|Ob|\log |Ob|).
+  \bigO(|\obsSet|\log |\obsSet|).
 \end{equation*}
 
 For checking and removing the collisions in the path we need to
-consider every face of obstacle in $Ob$ for every
+consider every face of obstacle in $\obsSet$ for every
 triangle in $P$. The cost for doing this is\footnote{If
-  $\#\acp{OTF}=\bigO(|Ob|)$ - i.e. the
+  $\#\acp{OTF}=\bigO(|\obsSet|)$ - i.e. the
   number of \acp{OTF} don't grow faster than the number of obstacles.}
-$\bigO(|P|\cdot|Ob|)$ where $|P|$ means the number of vertices
+$\bigO(|P|\cdot|\obsSet|)$ where $|P|$ means the number of vertices
 in $P$. In the worst case
-$|P|=\bigO(|V|)=\bigO(|Ob|)$ so we have a cost
-\newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)}}
+$|P|=\bigO(|V|)=\bigO(|\obsSet|)$ so we have a cost
+\newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|\obsSet|)=\bigO(|\obsSet|^2)}}
 \begin{equation}\label{eq:costCleanPath}
   \eqCostCleanPath
 \end{equation}
 
 Summing up all the costs we have 
-\newcommand{\eqCostTotalTwo}{\ensuremath{\bigO(k|Ob|^2)}}
+\newcommand{\eqCostTotalTwo}{\ensuremath{\bigO(k|\obsSet|^2)}}
 \begin{equation}\label{eq:costTotalTwo}
   \eqCostTotalTwo
 \end{equation}
 and if we consider $k$ constant
-\newcommand{\eqCostTotalTwoK}{\ensuremath{\bigO(|Ob|^2)}}
+\newcommand{\eqCostTotalTwoK}{\ensuremath{\bigO(|\obsSet|^2)}}
 \begin{equation}\label{eq:costTotalTwoK}
   \eqCostTotalTwoK .
 \end{equation}
@@ -781,20 +787,20 @@ and if we consider $k$ constant
     Total ($k$ costant)&\eqCostTotalTwoK&\cref{eq:costTotalTwoK}\\
     \hline
   \end{tabular}
-  \caption{Resume of the costs for solution two}
+  \caption{Summary of the costs for solution two}
   \label{tab:costsSol2}
 \end{table}
-On \cref{tab:costsSol2} we resumed all the terms that contributes to
+On \cref{tab:costsSol2} we summarize all the terms that contribute to
 the total costs, and the total cost itself.
 
 The cost is comparable with the one of the first solution. Furthermore,
 also in 
 this case we can divide the algorithm in two parts:
 \begin{enumerate}
-\item first we can construct only
-  once $G$ with cost $\bigO(|Ob|^2)$;
+\item first we can construct $G$ only
+  once with cost $\bigO(|\obsSet|^2)$;
 \item then we can use it for different
-  situations with cost $\bigO(|Ob|\log|Ob|+|P|\cdot|Ob|)$.
+  situations with cost $\bigO(|\obsSet|\log|\obsSet|+|P|\cdot|\obsSet|)$.
 \end{enumerate}
 
 \section{Degree increase}\label{sec:degreeInc}\index{Degree
@@ -1152,7 +1158,7 @@ Finally, adding the duplicated knots, we obtain
 \section{Post processing}\label{sec:postPro}\index{Post process}
 The purpose of the post processing phase is to try to simplify the
 path $P=(\ve{v_0},\dots,\ve{v_n})$ obtained in the previous phase
-removing useless vertices, trying
+removing useless vertices, in order
 to achieve a smoother path.
 
 \begin{algo}{Post processing algorithm on path $P$.}{alg:postProcess}
@@ -1172,7 +1178,7 @@ $v_i$ checks if it can be removed without consequences. With
 consequences we mean that removing $v_i$ would cause that a triangle
 in $P$ intersect one of the \acp{OTF}.
 
-\begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
+\begin{myfig}{Example of post process check that removes $\ve{v_i}$.}{fig:postProcess}
   \begin{tikzpicture}
     \coordinate (l1) at (0,0);
     \coordinate (a) at (1,0);
@@ -1225,7 +1231,7 @@ Before doing this we need to check if any triangle in $\tilde{P}$
 intersects any \ac{OTF}. In detail we need to check only the two
 triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
 $\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
-triangles in $\tilde{P}$ where already present in $P$. For instance
+triangles in $\tilde{P}$ are already present in $P$. For instance
 the obstacle in the figure do not intersects anyone of the triangles in
 $P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
 $\tilde{P}$.
@@ -1234,9 +1240,9 @@ $\tilde{P}$.
 For every vertex of $P$ we need to check if two triangles intersect
 with an \ac{OTF}, so we have a complexity of
 \begin{equation*}
-  \bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)
+  \bigO(|P|\cdot|\obsSet|)=\bigO(|\obsSet|^2)
 \end{equation*}
-where $Ob$ is the set of obstacles and $|P|$ is the number of vertices
+where $\obsSet$ is the set of obstacles and $|P|$ is the number of vertices
 in $P$.
 
 \section{Third solution: Simulated Annealing}\label{sec:inter3}\index{\acf{SA}}
@@ -1268,8 +1274,7 @@ minimize both the length of the control polygon (and consequently the
   arc length as quantity to minimize.}) and the peak in curvature and torsion of the \bs, under
 the constraint that the \bs must not intersect the obstacles. We
 are interested in optimizing both length and curvature and torsion
-peaks because we want a path that is short but also a path that is
-fair.
+peaks because we want a path that is short but also fair.
 
 \subsection{\acf{LR} applied to the project}\index{\acf{LR}}
 We can apply the concept explained in \cref{sec:lagrangianRelaxation}
@@ -1286,14 +1291,14 @@ path. The \cref{eq:opt} can be formulated as follows,
     & & \alpha\cdot maxCurv(P)+\beta\cdot
     maxTors(P)+\gamma\cdot normLen(P) \\
     & \text{subject to}
-    & & \left|bspline(P)\cap \bigcup_{i\in I}obstacle_i\right| = 0.
+    & & \left|bspline(P)\cap \bigcup_{i\in I}obstacle_i\right| = 0,
   \end{aligned}
 \end{equation*}
 where $maxCurv(P)$ is the peak of curvature of the \bs
 constructed using $P$ as control polygon,
 $maxTors(P)$ is the peak in absolute value of the torsion and
 $normLen(P)$ is the length of the control polygon
-$P$ normalized as percent of the length of the initial
+$P$ normalized as percentage of the length of the initial
 status\footnote{If the user chooses to minimize the
   arc length, then $normLen(P)$ becomes the length of the \bs curve.}
 . $\alpha$, $\beta$ and $\gamma$ are fixed
@@ -1334,7 +1339,7 @@ constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \exists i
 The points $\ve{p}$ of the spline are calculated in a discrete
 form, like curvature and torsion. Thus the constraint depends on the
 tabulation of the curve and
-it is also possible to have borderline cases where the calculated
+it is also possible to have borderline cases where the
 constraint doesn't reflect the real situation\footnote{For instance if
   we have very thin obstacles, a curve can pass through it having few
   points (or even none) of it inside them.}.
@@ -1349,7 +1354,7 @@ Lagrangian function corresponding to
 
 \subsection{Annealing phase}
 The target of the simulated annealing phase is to find the minimum
-saddle points in
+saddle point in
 the curve represented by the
 \cref{eq:lagrangianFunProj}.
 \begin{algo}{Annealing}{alg:annealing}
@@ -1423,11 +1428,11 @@ The $neighbour$ function chooses a neighbour of the state and it is
 defined depending on the input:
 \begin{itemize}
   \item a neighbour of $\lambda$ is a value that is equal to $\lambda$
-    plus a perturbation in a range $[-maxLambdaPert, maxLambdaPert]$;
-  \item a neighbour of the path is obtained picking randomly one of
+    plus a perturbation uniformly in range $[-maxLambdaPert, maxLambdaPert]$;
+  \item a neighbour of the path is obtained by randomly picking one of
     the vertices $\ve{v_i}$, except the extremes $\ve{v_0}$ and $\ve{v_n}$,
-    then choosing an angle in $[0,2\pi]$ and a distance
-    uniformly in a specific range, and finally moving $\ve{v_i}$ by
+    then choosing uniformly a direction in $[0,2\pi]$ and a distance
+    in a specific range, and finally moving $\ve{v_i}$ by
     the chosen values.
 \end{itemize}
 
@@ -1471,8 +1476,8 @@ where $Sp$ is the set of the tabulated points of the curve. The number
 of points in $Sp$ depends on the length of the control polygon
 $len(P)$. Thus
 we have a cost of $\bigO(len(P)+|P|)$, but in the worst case
-$|P|=\bigO(|V|)=\bigO(|Ob|)$, thus the cost is
-\newcommand{\eqCostGain}{\ensuremath{\bigO(len(P)+|P|)=\bigO(len(P)+|Ob|)}}
+$|P|=\bigO(|V|)=\bigO(|\obsSet|)$, thus the cost is
+\newcommand{\eqCostGain}{\ensuremath{\bigO(len(P)+|P|)=\bigO(len(P)+|\obsSet|)}}
 \begin{equation}
   \label{eq:costGain}
   \eqCostGain.
@@ -1481,7 +1486,7 @@ $|P|=\bigO(|V|)=\bigO(|Ob|)$, thus the cost is
 Regarding the constraint, \cref{eq:constraintLag}, we need to calculate if
 every point 
 of the curve is inside an obstacle. This means a cost of
-\newcommand{\eqCostConstraint}{\ensuremath{\bigO(len(P)|Ob|)}}
+\newcommand{\eqCostConstraint}{\ensuremath{\bigO(len(P)|\obsSet|)}}
 \begin{equation}
   \label{eq:costConstraint}
   \eqCostConstraint.
@@ -1489,19 +1494,19 @@ of the curve is inside an obstacle. This means a cost of
 
 The total cost for the calculation of the annealing phase is thus
 \begin{equation*}
-\bigO(\#steps\cdot\#trials\cdot(len(P)|Ob|)),
+\bigO(\#steps\cdot\#trials\cdot(len(P)|\obsSet|)),
 \end{equation*}
 but the number of steps and trials are bounded by
 constants\footnote{Although such constants can be very high.}. Thus
 the cost becomes
-\newcommand{\eqCostAnneal}{\ensuremath{\bigO(len(P)|Ob|)}}
+\newcommand{\eqCostAnneal}{\ensuremath{\bigO(len(P)|\obsSet|)}}
 \begin{equation}
   \label{eq:costAnneal}
   \eqCostAnneal.
 \end{equation}
 
 The total cost for the solution is
-\newcommand{\eqCostTotalThree}{\ensuremath{\bigO(k|Ob|^2+len(P)|Ob|)}}
+\newcommand{\eqCostTotalThree}{\ensuremath{\bigO(k|\obsSet|^2+len(P)|\obsSet|)}}
 \begin{equation}
   \label{eq:costTotalThree}
   \eqCostTotalThree.
@@ -1509,7 +1514,7 @@ The total cost for the solution is
 
 Likewise the previous solutions, if we have that $k$ is a constant
 then the total cost become
-\newcommand{\eqCostTotalThreeK}{\ensuremath{\bigO(|Ob|^2+len(P)|Ob|)}}
+\newcommand{\eqCostTotalThreeK}{\ensuremath{\bigO(|\obsSet|^2+len(P)|\obsSet|)}}
 \begin{equation}
   \label{eq:costTotalThreeK}
   \eqCostTotalThreeK.
@@ -1542,14 +1547,14 @@ the previous
 ones. This is due to the presence of the factor $len(P)$, that depends
 on the geometry of the scene. Anyway we can asserts that this solution is
 more complex than the previous two by a term
-$\bigO(len(P)|Ob|)$. 
+$\bigO(len(P)|\obsSet|)$. 
 
 Furthermore also in this solution
 we can divide the algorithm in two parts:
 \begin{enumerate}
-\item first we can construct only once $G$ with cost $\bigO(|Ob|^2)$;
+\item first we can construct only once $G$ with cost $\bigO(|\obsSet|^2)$;
 \item then we can use it for different situations with cost
-  $|Ob|\log|Ob|+len(P)|Ob|$.
+  $|\obsSet|\log|\obsSet|+len(P)|\obsSet|$.
 \end{enumerate}
 
 
