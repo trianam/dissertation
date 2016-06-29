@@ -4,82 +4,107 @@
 The design of \emph{motion planning} strategies plays a fundamental
 role in different applications, from robotics to scientific
 visualization. \emph{Path planning} problem is
-narrower, it includes the identification of paths that do not
+more specific, it consists in identifying paths that do not
 intersect any obstacle.
 
-In this project we are interested in generating smooth paths that are
-present literature for the planar case \cite{giannelli}.
+In this project we are interested in generating smooth
+paths. Smoothness is a desirable property that is
+frequently presented in literature for the planar case. Consider, for
+instance, the works \cite{maekawa}, \cite{ho-liu}, \cite{li} and
+\cite{giannelli}. On in the latter in particular, they used
+\acf{PH} curves that have interesting features for the \acf{CAM} field
+\cite{farouki}.
 
+In regards of spatial path planning, the smoothing problem is less
+covered in literature. For instance, in \cite{hrabar} it is not clear
+how a smooth path is obtained from the initial polynomial chain. In
+\cite{yang} the smoothness is considered, but the method is not
+optimal because it consists in alternating smoothing and
+obstacle-checking phases until an admissible solution is
+obtained. Other works, like \cite{aghababa} and \cite{kroumov}, use 
+stochastic methods to achieve smoothness.
 
- Such paths are designed using
-\bs curves, a reference standard in \ac{CAD} and \ac{CAGD}
-\cite{hughes}\cite{foley}\cite{farin}\cite{farin2}.
+\bs curves are a reference standard in \ac{CAD} and \ac{CAGD}
+\cite{hughes}\cite{foley}\cite{farin}\cite{farin2}. Thus, we decide to
+develop a 3D path planning application using this kind of curves, as
+\cite{yang} do. However, as earlier mentioned,
+\cite{yang} uses a \emph{try and check} approach to the curve
+smoothing, we present a method that finds a smooth
+curve on the first 
+attempt instead.
 
-The considered topic is highly cross-disciplinary. In fact we designed
+The considered topic is highly cross-disciplinary. In fact we design
 this project with the help of an extended set of
-competencies acquired following the courses. We applied notions of
+competencies acquired during the courses. We apply notions of
 \emph{linear algebra} for the collision checks; \emph{numerical
-  analysis} for the design of the curves; \emph{computational
+  analysis} for the curves design; \emph{computational
   geometry},
 \emph{graph theory}, \emph{probability} and \emph{algorithm theory}
-for the design of the 
-algorithms; and finally \emph{theoretical computer science} for the
-analysis of the costs.
+for the algorithms design; and, finally, \emph{theoretical computer
+  science} for cost analysis.
 
-We focused on finding a trade-off between having a short curve, a
-smooth curve, and keeping the time complexity low. We explored
-different solutions with different collocations on the trade-off
-triangle and with different qualitative effects on the curve.
+We focus on finding a trade-off between having a short curve, a
+smooth curve, and keeping the time complexity low.
+Different solutions are explored, with different qualitative effects
+on the curve.
 
-We developed a framework in Python using \ac{VTK} for the graphic
-output. We used a roadmap method based on \acp{VD} for creating a
+Regarding the scene representation, different kinds of
+polyhedral obstacle are considered.
+
+A framework in Python is developed using \ac{VTK} for the graphic
+output. We use a roadmap method based on \acp{VD} to create a
 graph (details in
-\cref{sec:baseGraph}), that is the base
-structure for the project. Using such structure we developed three
-different solutions.
+\cref{sec:baseGraph}) that is the base
+structure for the project. Using such structure, three
+different solutions are presented.
 \begin{enumerate}
 \item The first method benefits from the \acf{CHP} of \bs
-  curves (\cref{sec:convexHull}). it applies a transformation on the
+  curves (\cref{sec:convexHull}). A transformation is applied on the
   graph such that every path in it can be used as a control polygon
-  for an obstacle-free curve (\cref{sec:trigraph}). Therefore the
-  algorithm selects the shortest path on the transformed graph and
-  build the curve on it (\cref{sec:inter1}).
+  for an obstacle-free curve (\cref{sec:trigraph}). Therefore, the
+  algorithm selects the shortest path in the transformed graph and
+  builds the curve on it (\cref{sec:inter1}).
 \item The second method still benefits from the \ac{CHP},
-  but it picks the shortest path directly on the base graph. If
-  violations of the \ac{CHP} emerge on it, then rectification
+  but it picks the shortest path directly in the base graph. If
+  violations of the \ac{CHP} emerge in it, then rectification
   measures are taken (cref{sec:inter2}).
 \item The third method uses a probabilistic approach. Starting from
   the shortest path in the original graph, it performs a simulated
-  annealing optimization (\cref{sec:simulatedAnnealing}) that converge
-  in a state were the desired trade-off between having a short curve,
-  and low curvature
-  and torsion peaks, is optimal (\cref{sec:inter3}).
+  annealing optimization (\cref{sec:simulatedAnnealing}) that converges
+  in a state where we have an optimal trade-off between having a short curve,
+  and low curvature and torsion peaks (\cref{sec:inter3}).
 \end{enumerate}
 
-This document is structured as follows, we have three parts. The first
+This document consists of three parts. The first
 (\cref{prt:stateOfArt})
-Is dedicated to the state of the art, we provide an survey of
+is dedicated to the state of the art: we provide a survey of
 different topics and algorithms related to \emph{motion planning}.
 
 The
 second part (\cref{prt:project}) is committed to describing
-all the different parts of the algorithm. In detail
-\cref{cha:prerequisites} gives to the reader all the necessary notions
-to understand the following parts. \cref{cha:scene} describes how the
-environment and the resulting curve are represented. Finally in
+all the different parts of the algorithm. In details:
+\begin{itemize}
+\item \cref{cha:prerequisites} gives to the reader all the necessary notions
+  to understand the rest of the chapter;
+\item \cref{cha:scene} describes how the
+  environment and the resulting curve are represented;
+\item Finally in
 \cref{cha:algorithm} we describe how to obtain the basic structures
 (\cref{sec:polChain}), how to avoid the obstacles using the three
 methods described before (\cref{sec:obsAvoid}), and how to improve the
 obtained curve simplifying the control polygon (\cref{sec:postPro}),
 increasing the curve degree (\cref{sec:degreeInc}) and changing the
 \bs knot vector (\cref{sec:knotSel}).
+\end{itemize}
 
-The third part (\cref{prt:evaluation}) describe the instruments used
-for implementing the algorithms (cref{cha:codeStructure}) and presents
+The third part (\cref{prt:evaluation}) describes the instruments used
+to implement the algorithms (cref{cha:codeStructure}) and presents
 a series of tests with
-different scenes and configurations (\cref{cha:testing}). Furthermore
-we deduce conclusions from the execution of the tests
-(\cref{cha:conclusions}).
+different scenes and configurations (\cref{cha:testing}) with their
+conclusions (\cref{cha:conclusions}).
+
+In conclusion, \cref{cha:appendix} contains all the source code of the
+application.
 
 \end{document}
 
