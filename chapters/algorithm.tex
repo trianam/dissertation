@@ -1,6 +1,6 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
-\chapter{Algorithm}\label{cha:algorithm}
+\chapter{Algorithms}\label{cha:algorithm}
 In this chapter we analyze step-by-step the algorithms that implement
 the different parts of the program. We do this with the help of the
 test scene in \cref{fig:empty}.
@@ -39,8 +39,10 @@ collisions between the curve and the obstacles.
 First we
 start distributing points on the \acp{OTF} and on
 an invisible bounding box, as in \cref{fig:sites}.
-\imageDouble{scrSites-a.png}{scrSites-b.png}{Scene with Voronoi sites (on
-  obstacles on the left and on obstacles and bounding box on the right).}{fig:sites}
+\imageDouble{scrSites-a.png}{scrSites-b.png}{Scene with Voronoi sites
+  (distributed only on the
+  obstacles surfaces on the left, and on obstacles and bounding box on
+  the right).}{fig:sites}
 The sites are distributed using a recursive method, for each triangle
 of the scene we add three points - one for each
 vertex, if not already added before - and then we calculate the area
@@ -795,7 +797,449 @@ this case we can divide the algorithm in two parts:
   situations with cost $\bigO(|Ob|\log|Ob|+|P|\cdot|Ob|)$.
 \end{enumerate}
 
-\subsection{Third solution: \acf{SA}}\label{sec:inter3}\index{\acf{SA}}
+\section{Degree increase}\label{sec:degreeInc}\index{Degree
+  increase}\index{\bss!higher degree}
+Until now we have assumed of dealing only with quadratic \bss{} -
+i.e. of degree $m$ - because
+in that case,
+for the \ac{CHP} (\cref{sec:convexHull}), we need to check
+intersections only between  two triangles (one belonging to $P$ and the
+other to \acp{OTF}). If we want to use higher degree
+curves we can modify the
+previous algorithms for dealing with polyhedral convex hulls, but this
+implies a complexity increasing.
+
+We are interested in increasing the degree for achieving smooth
+curves with continue curvature and torsion. We adopted a compromise:
+we adapt the path obtained from the previous algorithms adding
+vertices and forcing the curve to remain in the same convex
+hull. However this approach have the drawback that we cannot achieve a
+good torsion\footnote{We can improve this with the post process.}
+because the curve changes plane in an inflection point of
+the curvature.
+
+We modify 
+\begin{equation*}
+P=(\ve{v_0},\dots,\ve{v_n})  
+\end{equation*}
+adding a certain number of aligned new vertices
+$(\ve{w_0},\ve{w_1},\dots)$ between each pair 
+$(\ve{v_i},\ve{v_{i+1}})$ of vertices in $P$ for $i=0,\dots,n-1$. The
+number of $\ve{w_j}$
+between each pair $(\ve{v_i},\ve{v_{i+1}})$ depends on the desired
+grade of the curve. In fact we need $m-2$ new vertices between each
+$(\ve{v_i},\ve{v_{i+1}})$ for 
+  \bs curves of degree $m$.
+Thus the final modified path for a \bs curve of degree $m\ge 3$ is
+\begin{equation*}
+  \tilde{P}=(\ve{v_0},\ve{w_0},\dots,\ve{w_{m-3}},\ve{v_1},\dots,\ve{v_i},\ve{w_{i(m-2)}},\dots,\ve{w_{(i+1)(m-2)-1}},\ve{v_{i+1}},\dots,\ve{v_n}).
+\end{equation*}
+
+This strategy  is used in the project only for lifting the degree from $2$ to $3$ or $4$.
+
+\begin{myfig}{Increase the degree $m$ from $2$ to $4$.}{fig:highDegree}
+  \begin{tikzpicture}
+    \coordinate (a) at (-2,0);
+    \coordinate (b) at (1,0);
+    \coordinate (c) at (3,3);
+    \coordinate (d) at (5,4);
+    \coordinate (e) at (7,1);
+    \coordinate (f) at (9,2);
+    \coordinate (g) at (12,2);
+
+    \coordinate (ab1) at ($ (a)!0.33!(b) $);
+    \coordinate (ab2) at ($ (b)!0.33!(a) $);
+    \coordinate (bc1) at ($ (b)!0.33!(c) $);
+    \coordinate (bc2) at ($ (c)!0.33!(b) $);
+    \coordinate (cd1) at ($ (c)!0.33!(d) $);
+    \coordinate (cd2) at ($ (d)!0.33!(c) $);
+    \coordinate (de1) at ($ (d)!0.33!(e) $);
+    \coordinate (de2) at ($ (e)!0.33!(d) $);
+    \coordinate (ef1) at ($ (e)!0.33!(f) $);
+    \coordinate (ef2) at ($ (f)!0.33!(e) $);
+    \coordinate (fg1) at ($ (f)!0.33!(g) $);
+    \coordinate (fg2) at ($ (g)!0.33!(f) $);
+
+    \foreach \x/\y/\z in {a/b/c,b/c/d,c/d/e,d/e/f,e/f/g}{
+      \path[convexHull] (\x) -- (\y) -- ($ (\y)!0.33!(\z) $) -- (\x);
+      \path[convexHull] ($ (\x)!0.33!(\y) $) -- (\y) -- ($ (\z)!0.33!(\y) $) -- ($ (\x)!0.33!(\y) $);
+      \path[convexHull] ($ (\y)!0.33!(\x) $) -- (\y) -- (\z) -- ($ (\y)!0.33!(\x) $);
+    }
+
+    \foreach \x/\y/\z in {a/b/c,b/c/d,c/d/e,d/e/f,e/f/g}{
+      \draw[convexHullBord] (\x) -- ($ (\y)!0.33!(\z) $);
+      \draw[convexHullBord] ($ (\x)!0.33!(\y) $) -- ($ (\z)!0.33!(\y) $);
+      \draw[convexHullBord] ($ (\y)!0.33!(\x) $) -- (\z);
+    }
+
+    \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e) -- (f) -- (g);
+
+    \foreach \p in {a,b,c,d,e,f,g}
+    \filldraw[controlVert] (\p) circle (2pt);
+
+    \foreach \g in {ab1,ab2,bc1,bc2,cd1,cd2,de1,de2,ef1,ef2,fg1,fg2}
+    \filldraw[controlVertHigh] (\g) circle (2pt);
+
+    \node[below] at (a) {$\ve{v_{0}}$};
+    \node[below] at (b) {$\ve{v_{1}}$};
+    \node[above left] at (c) {$\ve{v_{2}}$};
+    \node[above] at (d) {$\ve{v_3}$};
+    \node[below right] at (e) {$\ve{v_4}$};
+    \node[above] at (f) {$\ve{v_5}$};
+    \node[below] at (g) {$\ve{v_6}$};
+
+    \node[below] at (ab1) {$\ve{w_0}$};
+    \node[below] at (ab2) {$\ve{w_1}$};
+    \node[below right] at (bc1) {$\ve{w_2}$};
+    \node[below right=2pt] at (bc2) {$\ve{w_3}$};
+    \node[above] at (cd1) {$\ve{w_4}$};
+    \node[above] at (cd2) {$\ve{w_5}$};
+    \node[above right] at (de1) {$\ve{w_6}$};
+    \node[below left=2pt] at (de2) {$\ve{w_7}$};
+    \node[below right] at (ef1) {$\ve{w_8}$};
+    \node[below right=2pt] at (ef2) {$\ve{w_9}$};
+    \node[above] at (fg1) {$\ve{w_{10}}$};
+    \node[above] at (fg2) {$\ve{w_{11}}$};
+  \end{tikzpicture}
+\end{myfig}
+In \cref{fig:highDegree} is visible an example of path
+\begin{equation*}
+  P=(\ve{v_0},\ve{v_1},\ve{v_2},\ve{v_3},\ve{v_4},\ve{v_5},\ve{v_6}).
+\end{equation*}
+In green we have the vertices of $P$, in red the added vertices and
+the cyan area is the convex hull of the final curve.
+
+We want to adapt $P$ to quartic \bs curves, so we need to add two new
+vertices between each pair of vertices $(\ve{v_i},\ve{v_{i+1}})$ for
+$i=0,\dots,6$. Those new vertices are
+\begin{equation*}
+  (\ve{w_0},\ve{w_1},\ve{w_2},\ve{w_3},\ve{w_4},\ve{w_5},\ve{w_6},\ve{w_7},\ve{w_8},\ve{w_9},\ve{w_{10}},\ve{w_{11}}).
+\end{equation*}
+
+Note that, with this algorithm, when we increase the degree from $2$
+to $m\ge 3$ we have that the convex hull containing a \bs curve of
+degree $m$ in
+$\tilde{P}$ is a subset of the convex hull containing a \bs curve
+of degree $2$
+in $P$. This is because the polyhedrons of consecutive $m+1$ vertices in
+$\tilde{P}$ collapses in triangles contained inside the triangles
+of consecutive vertices in $P$. For instance in \cref{fig:highDegree}
+the convex hull of the first $5$ vertices
+$\ve{v_0},\ve{w_0},\ve{w_1},\ve{v_1},\ve{w_2}$ of $\tilde{P}$
+coincides with the
+triangle $\triangle \ve{v_0}\ve{v_1}\ve{w_2}$ that is contained inside
+the triangle $\triangle \ve{v_0}\ve{v_1}\ve{v_2}$ of the first $3$
+vertices of $P$.
+
+One effect of the application of this method is that a curve of
+degree $m$ in $\tilde{P}$ will touch
+every segment of the original control polygon $P$. This is because adding
+$m-2$ aligned vertices between each pair $(\ve{v_i},\ve{v_{i+1}})$
+will result in $m$ aligned vertices on each original segment
+(\cref{sec:alignedVertices}).
+
+\section{Knots selection}\label{sec:knotSel}\index{\bss!knot selection}
+In the previous sections we never discussed the criterion adopted for
+fixing the extended knot vector $T$ associated to the \bs curve.
+\begin{equation*}
+  T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
+\end{equation*}
+In this section we discuss two
+methods that we implemented.
+
+First of all, we want that
+the curve interpolates
+the chosen start and end points, that correspond to the extremes
+$\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw in
+\cref{sec:clamped} that we can archive such interpolation if we impose
+\begin{equation}\label{eq:externalKnotsFix}
+  \begin{split}
+    &t_0 = t_1 = \dots = t_{m} = a\\
+    &t_{n+1} = t_{n+2} = \dots = t_{n+m+1} = b
+  \end{split}
+\end{equation}
+where $a$ and $b$ are the extremes of the parametric domain of
+the curve.
+
+The constraint of \cref{eq:externalKnotsFix} is a mandatory
+choice, so we cannot change it. Regarding the parametric domain, we
+chose it to be $[0,1]$ because changing the extremes do not change
+the behavior of the curve, only changing the ratios of the distances
+between the knots is effective \cite{farin}. We still need to chose how to select 
+the inner $n-m$ knots $t_{m+1},\dots,t_n$, and we developed two different
+ways of doing it:
+\begin{enumerate}[label=\textbf{method \arabic*}]
+\item\label[void]{en:uniform} Use a uniform partition where $t_i-t_{i-1}=c$ for
+  $i=m+1,\dots,n+1$ for $c$ constant;
+\item\label[void]{en:adaptive} Use an adaptive partition, where we try
+  to make dense knots in
+  correspondence of points on the curve where we have dense control
+  vertices.
+\end{enumerate}
+
+\cref{en:uniform} is the easiest way of choosing a knot vector
+and is common as first choice in textbooks \cite{farin}\cite{docarmo},
+but it has the disadvantage of ignoring the geometry of the curve
+\cite{farin}. The steps to do for accomplish \cref{en:uniform} are quite
+straightforward: we need to pick the nodes
+\begin{equation*}
+  \frac{i}{n-m+1}
+\end{equation*}
+for $i=1,\dots,n-m$. Thus we concentrate on \cref{en:adaptive}.
+
+\begin{myfig}{Optimal case for a quadratic curve (we want uniform partition).}{fig:adaptive1}
+  \begin{tikzpicture}
+    \coordinate (v0) at (0,0);
+    \coordinate (v1) at (2,0);
+    \coordinate (v2) at (4,0);
+    \coordinate (v3) at (6,0);
+    \coordinate (v4) at (8,0);
+    \coordinate (v5) at (10,0);
+
+    \coordinate (t0) at (0,-1);
+    \coordinate (t4) at (10,-1);
+    \coordinate (t1) at ($ (t0)!0.25!(t4) $);
+    \coordinate (t2) at ($ (t0)!0.5!(t4) $);
+    \coordinate (t3) at ($ (t0)!0.75!(t4) $);
+
+    \foreach \v/\w in {v0/w0,v1/w1,v2/w2,v3/w3,v4/w4,v5/w5}{
+      \coordinate (\w) at ($(t0)!(\v)!(t4)$);
+      \draw[controlToKnot] (\v) -- (\w);
+    }    
+
+    \draw[controlPoly] (v0) -- (v1) -- (v2) -- (v3) -- (v4) -- (v5);
+    \draw[knotPoly] (t0) -- (t1) -- (t2) -- (t3) -- (t4);
+
+    \foreach \v/\i in {v0/0,v1/1,v2/2,v3/3,v4/4,v5/5}{
+      \filldraw[controlVert] (\v) circle (2pt);
+      \node[above] at (\v) {$\ve{v_{\i}}$};
+    }
+
+    \foreach \t/\j/\pos in {t0/{0,1,2}/below,t1/3/above,t2/4/above,t3/5/above,t4/{6,7,8}/below}{
+      \filldraw[knot] (\t) circle (2pt);
+      \node[\pos] at (\t) {$t_{\j}$};
+    }
+
+    \foreach \w/\j in {w1/1,w2/2,w3/3,w4/4}{
+      \node[below] at (\w) {$\nu_{\j}$};
+    }
+    \node[below=15pt] at (w0) {$\nu_0$};
+    \node[below=15pt] at (w5) {$\nu_5$};
+    \node[left=20pt] at (v0) {$P$};
+    \node[left=20pt] at (t0) {$\tau$};
+
+    %\filldraw[color=yellow] ($ (w1)!0.25!(w2) $) circle (2pt);
+  \end{tikzpicture}
+\end{myfig}
+\begin{myfig}{General case for a quadratic(same distances between
+    $t_i$ and enclosing $\nu_j$, $\nu_{j+1}$ as \cref{fig:adaptive1}).}{fig:adaptive2}
+  \begin{tikzpicture}
+    \coordinate (v0) at (0,0);
+    \coordinate (v1) at (1,0);
+    \coordinate (v2) at (2,0);
+    \coordinate (v3) at (4,0);
+    \coordinate (v4) at (8,0);
+    \coordinate (v5) at (10,0);
+
+    \coordinate (t0) at (0,-1);
+    \coordinate (t4) at (10,-1);
+
+    \foreach \v/\w in {v0/w0,v1/w1,v2/w2,v3/w3,v4/w4,v5/w5}{
+      \coordinate (\w) at ($(t0)!(\v)!(t4)$);
+      \draw[controlToKnot] (\v) -- (\w);
+    }    
+
+    \coordinate (t1) at ($ (w1)!0.25!(w2) $);
+    \coordinate (t2) at ($ (w2)!0.5!(w3) $);
+    \coordinate (t3) at ($ (w3)!0.75!(w4) $);
+
+    \draw[controlPoly] (v0) -- (v1) -- (v2) -- (v3) -- (v4) -- (v5);
+    \draw[knotPoly] (t0) -- (t1) -- (t2) -- (t3) -- (t4);
+
+    \foreach \v/\i in {v0/0,v1/1,v2/2,v3/3,v4/4,v5/5}{
+      \filldraw[controlVert] (\v) circle (2pt);
+      \node[above] at (\v) {$\ve{v_{\i}}$};
+    }
+
+    \foreach \t/\j/\pos in {t0/{0,1,2}/below,t1/3/above,t2/4/above,t3/5/above,t4/{6,7,8}/below}{
+      \filldraw[knot] (\t) circle (2pt);
+      \node[\pos] at (\t) {$t_{\j}$};
+    }
+
+    \foreach \w/\j in {w1/1,w2/2,w3/3,w4/4}{
+      \node[below] at (\w) {$\nu_{\j}$};
+    }
+    \node[below=15pt] at (w0) {$\nu_0$};
+    \node[below=15pt] at (w5) {$\nu_5$};
+    \node[left=20pt] at (v0) {$P$};
+    \node[left=20pt] at (t0) {$\tau$};
+  \end{tikzpicture}
+\end{myfig}
+We started from the idea that if we have a control polygon with
+uniformly-spaced vertices -
+i.e. $\norm{\ve{v_1}-\ve{v_0}}=\norm{\ve{v_2}-\ve{v_1}}=\cdots=\norm{\ve{v_n}-\ve{v_{n-1}}}$
+- then we agree on a uniform partition of the knots
+($t_{m+1}-t_m=t_{m+2}-t_{m+1}=\cdots=t_{n+1}-t_n$). In
+\cref{fig:adaptive1} there is an example of a quadratic \bs curve with
+uniformly-spaced control polygon. The above segment is a
+\emph{rectified} 
+visualization of the control polygon with six control
+vertices
+$\ve{v_0},\dots,\ve{v_5}$. The segment below represents the
+partition of the domain from $a$ (on the left) to $b$
+(on the right), with the projections $\nu_0,\dots,\nu_5$ of the control
+vertices,
+scaled in length to the parametric domain axis\footnote{$\ve{v_0}$ is
+  projected to $a$, $\ve{v_5}$ is projected to $b$, and the ratios
+  between the distances between vertices are preserved.}, and the
+knots $t_0,\dots,t_8$ on it.
+
+Starting from this situation, if
+we have a generic control polygon with segments of different length as
+in \cref{fig:adaptive2}, then we want that each $t_i$ keep the same
+distance, in ratio, between the surrounding $\nu_j$ and $\nu_{j+1}$,
+respect to the optimal case. For instance in \cref{fig:adaptive1}
+$\frac{t_3-\nu_1}{\nu_2-\nu_1}=\frac{1}{4}$ and
+$\frac{\nu_2-t_3}{\nu_2-\nu_1}=\frac{3}{4}$, this means that in
+\cref{fig:adaptive2} the same values must be preserved.
+
+The problem now is how to calculate the values of $t_i$ in the general
+case. We consider only the inner part $\tau$ of the partition vector,
+included the extremes
+\begin{equation*}
+  \tau_i = t_{i+m}\qquad i=0,\dots,n-m+1
+\end{equation*}
+where $\tau_0=a=0$ and $\tau_{n-m+1}=b=1$. In \cref{fig:adaptive1} and
+\cref{fig:adaptive2}
+$\tau=(t_2,t_3,t_4,t_5,t_6)$. Now we calculate the positions of all
+$\tau_i$ respect to the $\nu_j$ in the \emph{optimal} case. We can
+achieve that using as unit the uniform distance $\nu_j-\nu_{j-1}$ for
+calculating the positions of $\tau_i$. Purposely, we calculate
+\begin{equation}\label{eq:adaptivePos}
+  \tau_i^\nu=\frac{n}{n-m+1}\cdot i\qquad i=0,\dots,n-m+1
+\end{equation}
+obtaining the numbers $\tau_i^\nu$ whose integer part
+$\lfloor\tau_i^\nu\rfloor$ represents the index $j$ of the
+$\nu_j$ that is to the left of $\tau_i$, and the decimal part
+$(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)$ represents the distance from
+it: $\frac{\tau_i-\nu_j}{\nu_{j+1}-\nu_j}$.
+
+Now we calculate the projections $\nu_i$ in the
+\emph{generic} case.
+We start calculating the incremental distances between
+the vertices
+\begin{equation*}
+  \begin{cases}
+    d_0=0&\\
+    d_i=d_{i-1}+\norm{\ve{v_i}-\ve{v_{i-1}}}&\qquad i=1,\dots,n
+  \end{cases}
+\end{equation*}
+and, remembering that the parametric domain is $[0,1]$, we have
+\begin{equation}\label{eq:adaptiveProj}
+  \nu_i=\frac{d_i}{d_n}\qquad i=0,\dots,n.
+\end{equation}
+
+Now, using the positions in \cref{eq:adaptivePos} on the projection in
+\cref{eq:adaptiveProj}, we obtain the values
+\begin{equation*}
+  \tau_i=\nu_{\lfloor\tau_i^\nu\rfloor}+(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)(\nu_{\lfloor\tau_i^\nu\rfloor+1}-\nu_{\lfloor\tau_i^\nu\rfloor})\qquad i=0,\dots,n-m+1.
+\end{equation*}
+Finally, adding the duplicated knots, we obtain
+\begin{equation*}
+  t_i=\tau_{\min(n-m+1,\ \max(0,\ i-m))}\qquad i=0,\dots,n+m+1.
+\end{equation*}
+
+\section{Post processing}\label{sec:postPro}\index{Post process}
+The purpose of the post processing phase is to try to simplify the
+path $P=(\ve{v_0},\dots,\ve{v_n})$ obtained in the previous phase
+removing useless vertices, trying
+to achieve a smoother path.
+
+\begin{algo}{Post processing algorithm on path $P$.}{alg:postProcess}
+  \Procedure{postProcess}{$P$}
+  \For{$i\Ass 1,n-1$}
+  \If{$i=1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}})$}
+  \If{$i=n-1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}})$}
+  \State $P\Ass P\setminus\{\ve{v_i}\}$
+  \EndIf
+  \EndIf
+  \EndFor
+  \EndProcedure
+\end{algo}
+For obtaining this we realized \cref{alg:postProcess} that
+iterates through all the vertices, except the extremes, and for each
+$v_i$ checks if it can be removed without consequences. With
+consequences we mean that removing $v_i$ would cause that a triangle
+in $P$ intersect one of the \acp{OTF}.
+
+\begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
+  \begin{tikzpicture}
+    \coordinate (l1) at (0,0);
+    \coordinate (a) at (1,0);
+    \coordinate (b) at (3,3);
+    \coordinate (c) at (5,4);
+    \coordinate (d) at (7,1);
+    \coordinate (e) at (9,2);
+    \coordinate (l2) at (10,2);
+    \coordinate (o1) at (4,0);
+    \coordinate (o2) at (5,1.5);
+    \coordinate (o3) at (6,0);
+
+    \path[convexHull] (a) -- (b) -- (d) -- (a);
+    \path[convexHull] (b) -- (d) -- (e) -- (b);
+
+    \draw[controlPoly] (a)  -- (b);
+    \draw[controlPoly] (d)  -- (e);
+    \draw[controlPolyTract] (l1) -- (a);
+    \draw[controlPolyTract] (e) -- (l2);
+    \draw[controlPolyTractHigh] (b) -- (d);
+    \draw[controlPolyHigh] (b) -- (c) -- (d);
+
+    \path[obstacle] (o1) -- (o2) -- (o3) -- (o1);
+    \node at (barycentric cs:o1=0.3,o2=0.3,o3=0.3) {\acs{OTF}};
+
+    \foreach \p in {a,b,d,e}
+    \filldraw[controlVert] (\p) circle (2pt);
+    \filldraw[controlVertHigh] (c) circle (3pt);
+
+    \node[below] at (a) {$\ve{v_{i-2}}$};
+    \node[above left] at (b) {$\ve{v_{i-1}}$};
+    \node[above] at (c) {$\ve{v_i}$};
+    \node[below right] at (d) {$\ve{v_{i+1}}$};
+    \node[above] at (e) {$\ve{v_{i+2}}$};
+  \end{tikzpicture}
+\end{myfig}
+For clarifying the concept consider \cref{fig:postProcess} that is a
+simplification in 2-dimensional space of the real case in
+3-dimensional space. The path to process
+is
+\begin{equation*}
+  P=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i}},\ve{v_{i+1}},\ve{v_{i+2}},\dots)
+\end{equation*}
+and we are
+considering removing $\ve{v_i}$ obtaining a modified path
+\begin{equation*}
+  \tilde{P}=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i+1}},\ve{v_{i+2}},\dots).
+\end{equation*}
+Before doing this we need to check if any triangle in $\tilde{P}$
+intersects any \ac{OTF}. In detail we need to check only the two
+triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
+$\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
+triangles in $\tilde{P}$ where already present in $P$. For instance
+the obstacle in the figure do not intersects anyone of the triangles in
+$P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
+$\tilde{P}$.
+
+\subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity!post process}
+For every vertex of $P$ we need to check if two triangles intersect
+with an \ac{OTF}, so we have a complexity of
+\begin{equation*}
+  \bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)
+\end{equation*}
+where $Ob$ is the set of obstacles and $|P|$ is the number of vertices
+in $P$.
+
+\section{Third solution: Simulated Annealing}\label{sec:inter3}\index{\acf{SA}}
 The solutions proposed in \cref{sec:inter1} and \cref{sec:inter2} have two
 problems in common:
 \begin{itemize}
@@ -827,7 +1271,7 @@ are interested in optimizing both length and curvature and torsion
 peaks because we want a path that is short but also a path that is
 fair.
 
-\subsubsection{\acf{LR} applied to the project}\index{\acf{LR}}
+\subsection{\acf{LR} applied to the project}\index{\acf{LR}}
 We can apply the concept explained in \cref{sec:lagrangianRelaxation}
 to the project.
 
@@ -835,7 +1279,7 @@ The variable space $X$ is composed of all possible
 configuration of the path, or in other words is the vector
 $P=(\ve{v_1},\dots,\ve{v_n})$ of all $n$ ordered
 vertices $\ve{v_i}=(x_i,y_i,z_i)$ of the
-path. The \cref{eq:opt} is formulated in the problem
+path. The \cref{eq:opt} can be formulated as follows,
 \begin{equation*}
   \begin{aligned}
     & \underset{P}{\text{minimize}}
@@ -880,8 +1324,9 @@ We need to build now the Lagrangian function corresponding to
 the constraint function is not negative, and is calculated as the
 ratio
 \begin{equation}\label{eq:constraintLag}
-constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \ve{p}\in
-    obstacle_i, i\in\{1,\dots,m\}\}\ \right|}{\left|\ \{\ve{p} \in
+constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \exists i
+    \text{ s.t. } \ve{p}\in
+    obstacle_i\}\ \right|}{\left|\ \{\ve{p} \in
     spline(P)\}\ \right|}.
 \end{equation}
 
@@ -902,7 +1347,7 @@ Lagrangian function corresponding to
     L_d(P,\lambda)=gain(P)+\lambda\cdot constraint(P).
 \end{equation}
 
-\subsubsection{Annealing phase}
+\subsection{Annealing phase}
 The target of the simulated annealing phase is to find the minimum
 saddle points in
 the curve represented by the
@@ -910,7 +1355,7 @@ the curve represented by the
 \begin{algo}{Annealing}{alg:annealing}
   \Procedure{annealing}{$\ve{x}$}
   \State $\lambda\Ass initialLambda$\label{alg:annealing:initialize}
-  \State $T\Ass initialTemperature$
+  \State $T\Ass initialTemperature$\label{alg:annealing:initialize2}
   \While{not $terminationCondition()$}\label{alg:annealing:while}
   \ForAll{number of trials}\label{alg:annealing:for}
   \State $changeLambda\Ass\True$ with $changeLambdaProb$\label{alg:annealing:lambdaProb}
@@ -927,11 +1372,14 @@ the curve represented by the
   \EndProcedure
 \end{algo}
 
-The \cref{alg:annealing} is the annealing process,
+The \cref{alg:annealing} is the annealing process, the input is the
+initial status of the system $\ve{x}$ - i.e. the initial configuration
+of the control polygon.
 \begin{enumerate}
 \item $\lambda$ and the
   temperature are initialized on
-  \cref{alg:annealing:initialize};
+  \cref{alg:annealing:initialize} and \cref{alg:annealing:initialize}
+  respectively;
 \item the \emph{while} on
   \cref{alg:annealing:while} is the main loop and the terminating
   condition is given by a minimum temperature or a minimum variation of
@@ -942,7 +1390,7 @@ The \cref{alg:annealing} is the annealing process,
   tries to make a move of the state of the system;
   \begin{itemize}
   \item first on
-    \cref{alg:annealing:lambdaProb} makes the choice if moving in the
+    \cref{alg:annealing:lambdaProb} it makes the choice if moving in the
     Lagrangian space or in the space of the path;
   \item after that, based on the previous
     choice, the algorithm tries probabilistically to move the system
@@ -991,7 +1439,7 @@ The $energy$ function is equivalent to $L_d$ in the
 \end{equation}
 
 The annealing process
-find a saddle point probabilistically increasing the energy, when
+finds a saddle point by probabilistically increasing the energy, when
 $\lambda$ is moved, and 
 decreasing the energy when the points are moved.
 
@@ -1104,442 +1552,6 @@ we can divide the algorithm in two parts:
   $|Ob|\log|Ob|+len(P)|Ob|$.
 \end{enumerate}
 
-\section{Degree increase}\label{sec:degreeInc}\index{Degree
-  increase}\index{\bss!higher degree}
-Until now we assumed only quadratic \bss{} - i.e. of degree $m$ - because
-on that case,
-for the \ac{CHP} (\cref{sec:convexHull}),
-we need to check only for collisions between triangles and triangles
-(in $P$ and \acp{OTF}). If we want to use higher degree
-curves we can modify the
-previous algorithms for dealing with polyhedral convex hulls, but this
-mean increasing the complexity of the methods.
-
-We adopted a compromise: we kept the previous algorithms unchanged, and
-then if we want to apply an higher degree \bs curve we modify 
-\begin{equation*}
-P=(\ve{v_0},\dots,\ve{v_n})  
-\end{equation*}
-adding a certain number of aligned new vertices
-$(\ve{w_0},\ve{w_1},\dots)$ between each pair 
-$(\ve{v_i},\ve{v_{i+1}})$ of vertices in $P$ for $i=0,\dots,n-1$. The
-number of $\ve{w_j}$
-between each pair $(\ve{v_i},\ve{v_{i+1}})$ depends on the desired
-grade of the curve
-\begin{itemize}
-\item one new vertex between each $(\ve{v_i},\ve{v_{i+1}})$ for cubic
-  \bs curves (degree $m=3$);
-\item two new vertices between each $(\ve{v_i},\ve{v_{i+1}})$ for quartic
-  \bs curves (degree $m=4$);
-\item $m-2$ new vertices between each $(\ve{v_i},\ve{v_{i+1}})$ for
-  \bs curves of degree $m$.
-\end{itemize}
-Thus the final modified path for a \bs curve of degree $m\ge 3$ is
-\begin{equation*}
-  \tilde{P}=(\ve{v_0},\ve{w_0},\dots,\ve{w_{m-3}},\ve{v_1},\dots,\ve{v_i},\ve{w_{i(m-2)}},\dots,\ve{w_{(i+1)(m-2)-1}},\ve{v_{i+1}},\dots,\ve{v_n}).
-\end{equation*}
-In the project we implemented the degree increase to cubic and quartic
-curves.
-
-\begin{myfig}{Increase the degree $m$ from $2$ to $4$.}{fig:highDegree}
-  \begin{tikzpicture}
-    \coordinate (a) at (-2,0);
-    \coordinate (b) at (1,0);
-    \coordinate (c) at (3,3);
-    \coordinate (d) at (5,4);
-    \coordinate (e) at (7,1);
-    \coordinate (f) at (9,2);
-    \coordinate (g) at (12,2);
-
-    \coordinate (ab1) at ($ (a)!0.33!(b) $);
-    \coordinate (ab2) at ($ (b)!0.33!(a) $);
-    \coordinate (bc1) at ($ (b)!0.33!(c) $);
-    \coordinate (bc2) at ($ (c)!0.33!(b) $);
-    \coordinate (cd1) at ($ (c)!0.33!(d) $);
-    \coordinate (cd2) at ($ (d)!0.33!(c) $);
-    \coordinate (de1) at ($ (d)!0.33!(e) $);
-    \coordinate (de2) at ($ (e)!0.33!(d) $);
-    \coordinate (ef1) at ($ (e)!0.33!(f) $);
-    \coordinate (ef2) at ($ (f)!0.33!(e) $);
-    \coordinate (fg1) at ($ (f)!0.33!(g) $);
-    \coordinate (fg2) at ($ (g)!0.33!(f) $);
-
-    \foreach \x/\y/\z in {a/b/c,b/c/d,c/d/e,d/e/f,e/f/g}{
-      \path[convexHull] (\x) -- (\y) -- ($ (\y)!0.33!(\z) $) -- (\x);
-      \path[convexHull] ($ (\x)!0.33!(\y) $) -- (\y) -- ($ (\z)!0.33!(\y) $) -- ($ (\x)!0.33!(\y) $);
-      \path[convexHull] ($ (\y)!0.33!(\x) $) -- (\y) -- (\z) -- ($ (\y)!0.33!(\x) $);
-    }
-
-    \foreach \x/\y/\z in {a/b/c,b/c/d,c/d/e,d/e/f,e/f/g}{
-      \draw[convexHullBord] (\x) -- ($ (\y)!0.33!(\z) $);
-      \draw[convexHullBord] ($ (\x)!0.33!(\y) $) -- ($ (\z)!0.33!(\y) $);
-      \draw[convexHullBord] ($ (\y)!0.33!(\x) $) -- (\z);
-    }
-
-    \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e) -- (f) -- (g);
-
-    \foreach \p in {a,b,c,d,e,f,g}
-    \filldraw[controlVert] (\p) circle (2pt);
-
-    \foreach \g in {ab1,ab2,bc1,bc2,cd1,cd2,de1,de2,ef1,ef2,fg1,fg2}
-    \filldraw[controlVertHigh] (\g) circle (2pt);
-
-    \node[below] at (a) {$\ve{v_{0}}$};
-    \node[below] at (b) {$\ve{v_{1}}$};
-    \node[above left] at (c) {$\ve{v_{2}}$};
-    \node[above] at (d) {$\ve{v_3}$};
-    \node[below right] at (e) {$\ve{v_4}$};
-    \node[above] at (f) {$\ve{v_5}$};
-    \node[below] at (g) {$\ve{v_6}$};
-
-    \node[below] at (ab1) {$\ve{w_0}$};
-    \node[below] at (ab2) {$\ve{w_1}$};
-    \node[below right] at (bc1) {$\ve{w_2}$};
-    \node[below right=2pt] at (bc2) {$\ve{w_3}$};
-    \node[above] at (cd1) {$\ve{w_4}$};
-    \node[above] at (cd2) {$\ve{w_5}$};
-    \node[above right] at (de1) {$\ve{w_6}$};
-    \node[below left=2pt] at (de2) {$\ve{w_7}$};
-    \node[below right] at (ef1) {$\ve{w_8}$};
-    \node[below right=2pt] at (ef2) {$\ve{w_9}$};
-    \node[above] at (fg1) {$\ve{w_{10}}$};
-    \node[above] at (fg2) {$\ve{w_{11}}$};
-  \end{tikzpicture}
-\end{myfig}
-In \cref{fig:highDegree} is visible an example of path
-\begin{equation*}
-  P=(\ve{v_0},\ve{v_1},\ve{v_2},\ve{v_3},\ve{v_4},\ve{v_5},\ve{v_6}).
-\end{equation*}
-We want to adapt $P$ to quartic \bs curves, so we need to add two new
-vertices between each pair of vertices $(\ve{v_i},\ve{v_{i+1}})$ for
-$i=0,\dots,6$. Those new vertices are
-\begin{equation*}
-  (\ve{w_0},\ve{w_1},\ve{w_2},\ve{w_3},\ve{w_4},\ve{w_5},\ve{w_6},\ve{w_7},\ve{w_8},\ve{w_9},\ve{w_{10}},\ve{w_{11}}).
-\end{equation*}
-
-Note that, with this algorithm, when we increase the degree from $2$
-to $m\ge 3$ we have that the convex hull containing a \bs curve of
-degree $m$ in
-$\tilde{P}$ is a subset of the convex hull containing a \bs curve
-of degree $2$
-in $P$. This is because the polyhedrons of consecutive $m+1$ vertices in
-$\tilde{P}$ collapses in triangles contained inside the triangles
-of consecutive vertices in $P$. For instance in \cref{fig:highDegree}
-the convex hull of the first $5$ vertices
-$\ve{v_0},\ve{w_0},\ve{w_1},\ve{v_1},\ve{w_2}$ of $\tilde{P}$
-coincides with the
-triangle $\triangle \ve{v_0}\ve{v_1}\ve{w_2}$ that is contained inside
-the triangle $\triangle \ve{v_0}\ve{v_1}\ve{v_2}$ of the first $3$
-vertices of $P$.
-
-One effect of the application of this method is that a curve of
-degree $m$ in $\tilde{P}$ will touch
-every segment of the original control polygon $P$. This is because adding
-$m-2$ aligned vertices between each pair $(\ve{v_i},\ve{v_{i+1}})$
-will result in $m$ aligned vertices on each original segment
-(\cref{sec:alignedVertices}).
-
-\section{Knots selection}\label{sec:knotSel}\index{\bss!knot selection}
-On the previous sections we never discussed about how to select the
-knots 
-\begin{equation*}
-  T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
-\end{equation*}
-of the knots vector of the \bs. In this section we discuss two
-methods that we implemented.
-
-Before all we want that
-the curve interpolates
-the chosen start and end points, that correspond to the extremes
-$\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw in
-\cref{sec:clamped} that we can archive such interpolation if we impose
-\begin{equation}\label{eq:externalKnotsFix}
-  \begin{split}
-    &t_0 = t_1 = \dots = t_{m} = a\\
-    &t_{n+1} = t_{n+2} = \dots = t_{n+m+1} = b
-  \end{split}
-\end{equation}
-where $a$ and $b$ are the extremes of the parametric domain of
-the curve.
-
-The constraint of \cref{eq:externalKnotsFix} is a mandatory
-choice, so we cannot change it. Regarding the parametric domain, we
-chose it to be $[0,1]$ because changing the extremes don't change
-the behavior of the curve, only changing the ratios of the distances
-between the knots do it \cite{farin}. We still need to chose how to select 
-the inner $n-m$ knots $t_{m+1},\dots,t_n$, and we developed two different
-ways of doing it:
-\begin{enumerate}[label=\textbf{method \arabic*}]
-\item\label[void]{en:uniform} Use a uniform partition where $t_i-t_{i-1}=c$ for
-  $i=m+1,\dots,n+1$ for $c$ constant;
-\item\label[void]{en:adaptive} Use an adaptive partition, where we try
-  to make dense knots in
-  correspondence of points on the curve where we have dense control
-  vertices.
-\end{enumerate}
-
-\cref{en:uniform} is the easiest way of choosing a knot vector
-and is common as first choice in textbooks \cite{farin}\cite{docarmo},
-but it have the disadvantage of ignoring the geometry of the curve
-\cite{farin}. The steps to do for accomplish \cref{en:uniform} are quite
-straightforward: we need to pick the nodes
-\begin{equation*}
-  \frac{i}{n-m+1}
-\end{equation*}
-for $i=1,\dots,n-m$. Thus we concentrate on \cref{en:adaptive}.
-
-\begin{myfig}{Optimal case (we want uniform partition).}{fig:adaptive1}
-  \begin{tikzpicture}
-    \coordinate (v0) at (0,0);
-    \coordinate (v1) at (2,0);
-    \coordinate (v2) at (4,0);
-    \coordinate (v3) at (6,0);
-    \coordinate (v4) at (8,0);
-    \coordinate (v5) at (10,0);
-
-    \coordinate (t0) at (0,-1);
-    \coordinate (t4) at (10,-1);
-    \coordinate (t1) at ($ (t0)!0.25!(t4) $);
-    \coordinate (t2) at ($ (t0)!0.5!(t4) $);
-    \coordinate (t3) at ($ (t0)!0.75!(t4) $);
-
-    \foreach \v/\w in {v0/w0,v1/w1,v2/w2,v3/w3,v4/w4,v5/w5}{
-      \coordinate (\w) at ($(t0)!(\v)!(t4)$);
-      \draw[controlToKnot] (\v) -- (\w);
-    }    
-
-    \draw[controlPoly] (v0) -- (v1) -- (v2) -- (v3) -- (v4) -- (v5);
-    \draw[knotPoly] (t0) -- (t1) -- (t2) -- (t3) -- (t4);
-
-    \foreach \v/\i in {v0/0,v1/1,v2/2,v3/3,v4/4,v5/5}{
-      \filldraw[controlVert] (\v) circle (2pt);
-      \node[above] at (\v) {$\ve{v_{\i}}$};
-    }
-
-    \foreach \t/\j/\pos in {t0/{0,1,2}/below,t1/3/above,t2/4/above,t3/5/above,t4/{6,7,8}/below}{
-      \filldraw[knot] (\t) circle (2pt);
-      \node[\pos] at (\t) {$t_{\j}$};
-    }
-
-    \foreach \w/\j in {w1/1,w2/2,w3/3,w4/4}{
-      \node[below] at (\w) {$\nu_{\j}$};
-    }
-    \node[below=15pt] at (w0) {$\nu_0$};
-    \node[below=15pt] at (w5) {$\nu_5$};
-    \node[left=20pt] at (v0) {$P$};
-    \node[left=20pt] at (t0) {$\tau$};
-
-    %\filldraw[color=yellow] ($ (w1)!0.25!(w2) $) circle (2pt);
-  \end{tikzpicture}
-\end{myfig}
-\begin{myfig}{General case (same distances between
-    $t_i$ and enclosing $\nu_j$, $\nu_{j+1}$ as \cref{fig:adaptive1}).}{fig:adaptive2}
-  \begin{tikzpicture}
-    \coordinate (v0) at (0,0);
-    \coordinate (v1) at (1,0);
-    \coordinate (v2) at (2,0);
-    \coordinate (v3) at (4,0);
-    \coordinate (v4) at (8,0);
-    \coordinate (v5) at (10,0);
-
-    \coordinate (t0) at (0,-1);
-    \coordinate (t4) at (10,-1);
-
-    \foreach \v/\w in {v0/w0,v1/w1,v2/w2,v3/w3,v4/w4,v5/w5}{
-      \coordinate (\w) at ($(t0)!(\v)!(t4)$);
-      \draw[controlToKnot] (\v) -- (\w);
-    }    
-
-    \coordinate (t1) at ($ (w1)!0.25!(w2) $);
-    \coordinate (t2) at ($ (w2)!0.5!(w3) $);
-    \coordinate (t3) at ($ (w3)!0.75!(w4) $);
-
-    \draw[controlPoly] (v0) -- (v1) -- (v2) -- (v3) -- (v4) -- (v5);
-    \draw[knotPoly] (t0) -- (t1) -- (t2) -- (t3) -- (t4);
-
-    \foreach \v/\i in {v0/0,v1/1,v2/2,v3/3,v4/4,v5/5}{
-      \filldraw[controlVert] (\v) circle (2pt);
-      \node[above] at (\v) {$\ve{v_{\i}}$};
-    }
-
-    \foreach \t/\j/\pos in {t0/{0,1,2}/below,t1/3/above,t2/4/above,t3/5/above,t4/{6,7,8}/below}{
-      \filldraw[knot] (\t) circle (2pt);
-      \node[\pos] at (\t) {$t_{\j}$};
-    }
-
-    \foreach \w/\j in {w1/1,w2/2,w3/3,w4/4}{
-      \node[below] at (\w) {$\nu_{\j}$};
-    }
-    \node[below=15pt] at (w0) {$\nu_0$};
-    \node[below=15pt] at (w5) {$\nu_5$};
-    \node[left=20pt] at (v0) {$P$};
-    \node[left=20pt] at (t0) {$\tau$};
-  \end{tikzpicture}
-\end{myfig}
-We started from the idea that if we have a control polygon with
-uniformly-spaced vertices -
-i.e. $\norm{\ve{v_1}-\ve{v_0}}=\norm{\ve{v_2}-\ve{v_1}}=\cdots=\norm{\ve{v_n}-\ve{v_{n-1}}}$
-- then we agree on a uniform partition of the knots
-($t_{m+1}-t_m=t_{m+2}-t_{m+1}=\cdots=t_{n+1}-t_n$). In
-\cref{fig:adaptive1} there is an example of a cubic \bs curve with
-uniformly-spaced control polygon. The above segment is a
-\emph{rectified} 
-visualization of the control polygon with six control
-vertices
-$\ve{v_0},\dots,\ve{v_5}$. The segment below represents the
-partition of the domain from $a$ (on the left) to $b$
-(on the right), with the projections $\nu_0,\dots,\nu_5$ of the control
-vertices,
-scaled in length to the parametric domain axis\footnote{$\ve{v_0}$ is
-  projected to $a$, $\ve{v_5}$ is projected to $b$, and the ratios
-  between the distances between vertices are preserved.}, and the
-knots $t_0,\dots,t_8$ on it.
-
-Starting from this situation, if
-we have a generic control polygon with segments of different length as
-in \cref{fig:adaptive2}, then we want that each $t_i$ keep the same
-distance, in ratio, between the surrounding $\nu_j$ and $\nu_{j+1}$,
-respect to the optimal case. For instance in \cref{fig:adaptive1}
-$\frac{t_3-\nu_1}{\nu_2-\nu_1}=\frac{1}{4}$ and
-$\frac{\nu_2-t_3}{\nu_2-\nu_1}=\frac{3}{4}$, this means that in
-\cref{fig:adaptive2} the same values must be preserved.
-
-The problem now is how to calculate the values of $t_i$ in the general
-case. We consider only the inner part $\tau$ of the partition vector,
-included the extremes
-\begin{equation*}
-  \tau_i = t_{i+m}\qquad i=0,\dots,n-m+1
-\end{equation*}
-where $\tau_0=a=0$ and $\tau_{n-m+1}=b=1$. In \cref{fig:adaptive1} and
-\cref{fig:adaptive2}
-$\tau=(t_2,t_3,t_4,t_5,t_6)$. Now we calculate the positions of all
-$\tau_i$ respect to the $\nu_j$ in the \emph{optimal} case. We can
-archive that
-calculating the positions of $\tau_i$ expressed in units of $\nu_j$. In
-other terms we calculate
-\begin{equation}\label{eq:adaptivePos}
-  \tau_i^\nu=\frac{n}{n-m+1}\cdot i\qquad i=0,\dots,n-m+1
-\end{equation}
-obtaining the numbers $\tau_i^\nu$ whose integer part
-$\lfloor\tau_i^\nu\rfloor$ represents the index $j$ of the
-$\nu_j$ that is to the left of $\tau_i$, and the decimal part
-$(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)$ represents the distance from
-it: $\frac{\tau_i-\nu_j}{\nu_{j+1}-\nu_j}$.
-
-Now we calculate the projections $\nu_i$ in the
-\emph{generic} case.
-We start calculating the incremental distances between
-the vertices
-\begin{equation*}
-  \begin{cases}
-    d_0=0&\\
-    d_i=d_{i-1}+\norm{\ve{v_i}-\ve{v_{i-1}}}&\qquad i=1,\dots,n
-  \end{cases}
-\end{equation*}
-and, remembering that the parametric domain is $[0,1]$, we have
-\begin{equation}\label{eq:adaptiveProj}
-  \nu_i=\frac{d_i}{d_n}\qquad i=0,\dots,n.
-\end{equation}
-
-Now, using the positions in \cref{eq:adaptivePos} on the projection in
-\cref{eq:adaptiveProj}, we obtain the values
-\begin{equation*}
-  \tau_i=\nu_{\lfloor\tau_i^\nu\rfloor}+(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)(\nu_{\lfloor\tau_i^\nu\rfloor+1}-\nu_{\lfloor\tau_i^\nu\rfloor})\qquad i=0,\dots,n-m+1.
-\end{equation*}
-Finally, adding the duplicated knots, we obtain
-\begin{equation*}
-  t_i=\tau_{\min(n-m+1,\ \max(0,\ i-m))}\qquad i=0,\dots,n+m+1.
-\end{equation*}
-
-\section{Post processing}\label{sec:postPro}\index{Post process}
-The purpose of the post processing phase is to try to simplify the
-path $P=(\ve{v_0},\dots,\ve{v_n})$ obtained in the previous phase
-removing useless vertices, trying
-to achieve a smoother path.
-
-\begin{algo}{Post processing algorithm on path $P$.}{alg:postProcess}
-  \Procedure{postProcess}{$P$}
-  \For{$i\Ass 1,n-1$}
-  \If{$i=1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}})$}
-  \If{$i=n-1$ \IfOr \IfNot $intersect\acs{OTF}(\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}})$}
-  \State $P\Ass P\setminus\{\ve{v_i}\}$
-  \EndIf
-  \EndIf
-  \EndFor
-  \EndProcedure
-\end{algo}
-For obtaining this we realized \cref{alg:postProcess} that
-iterates through all the vertices, excluded the extremes, and for each
-$v_i$ checks if it can be removed without consequences. With
-consequences we mean that removing $v_i$ would cause that a triangle
-in $P$ intersect one of the \acp{OTF}.
-
-\begin{myfig}{Example of post process check removing $\ve{v_i}$.}{fig:postProcess}
-  \begin{tikzpicture}
-    \coordinate (l1) at (0,0);
-    \coordinate (a) at (1,0);
-    \coordinate (b) at (3,3);
-    \coordinate (c) at (5,4);
-    \coordinate (d) at (7,1);
-    \coordinate (e) at (9,2);
-    \coordinate (l2) at (10,2);
-    \coordinate (o1) at (4,0);
-    \coordinate (o2) at (5,1.5);
-    \coordinate (o3) at (6,0);
-
-    \path[convexHull] (a) -- (b) -- (d) -- (a);
-    \path[convexHull] (b) -- (d) -- (e) -- (b);
-
-    \draw[controlPoly] (a)  -- (b);
-    \draw[controlPoly] (d)  -- (e);
-    \draw[controlPolyTract] (l1) -- (a);
-    \draw[controlPolyTract] (e) -- (l2);
-    \draw[controlPolyTractHigh] (b) -- (d);
-    \draw[controlPolyHigh] (b) -- (c) -- (d);
-
-    \path[obstacle] (o1) -- (o2) -- (o3) -- (o1);
-    \node at (barycentric cs:o1=0.3,o2=0.3,o3=0.3) {\acs{OTF}};
-
-    \foreach \p in {a,b,d,e}
-    \filldraw[controlVert] (\p) circle (2pt);
-    \filldraw[controlVertHigh] (c) circle (3pt);
-
-    \node[below] at (a) {$\ve{v_{i-2}}$};
-    \node[above left] at (b) {$\ve{v_{i-1}}$};
-    \node[above] at (c) {$\ve{v_i}$};
-    \node[below right] at (d) {$\ve{v_{i+1}}$};
-    \node[above] at (e) {$\ve{v_{i+2}}$};
-  \end{tikzpicture}
-\end{myfig}
-For clarifying the concept consider \cref{fig:postProcess} that is a
-simplification in 2-dimensional space of the real case in
-3-dimensional space. The path to process
-is
-\begin{equation*}
-  P=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i}},\ve{v_{i+1}},\ve{v_{i+2}},\dots)
-\end{equation*}
-and we are
-considering removing $\ve{v_i}$ obtaining a modified path
-\begin{equation*}
-  \tilde{P}=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i+1}},\ve{v_{i+2}},\dots).
-\end{equation*}
-Before doing this we need to check if any triangle in $\tilde{P}$
-intersects any \ac{OTF}. In detail we need to check only the two
-triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
-$\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
-triangles in $\tilde{P}$ where already present in $P$. For instance
-the obstacle in the figure don't intersects anyone of the triangles in
-$P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
-$\tilde{P}$.
-
-\subsubsection{Complexity considerations}\index{Post process!complexity}\index{Complexity!post process}
-For every vertex of $P$ we need to check if two triangles intersect
-with an \ac{OTF}, so we have a complexity of
-\begin{equation*}
-  \bigO(|P|\cdot|Ob|)=\bigO(|Ob|^2)
-\end{equation*}
-where $Ob$ is the set of obstacles and $|P|$ is the number of vertices
-in $P$.
 
 \end{document}
 

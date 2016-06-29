@@ -11,6 +11,7 @@
 %\usepackage[italian]{babel}
 %\usepackage{graphicx}
 %\usepackage{hyperref}
+\usepackage{appendix}
 \usepackage{lscape}
 \usepackage{siunitx}
 \usepackage{enumitem}
@@ -383,20 +384,20 @@ shadow, minimum width=\transH, minimum height=\transW]
    commentstyle=\color{green}\ttfamily,
    morecomment=[l][\color{magenta}]{\#},
    % breaklines=false,
-   breaklines=true, breakatwhitespace=true,
+   breaklines=true, breakatwhitespace=false,
    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}},
-   frameround=fttt,
-   frame=trBL,
-   backgroundcolor=\color{yellow!20},
+   %frameround=fttt,
+   %frame=trBL,
+   backgroundcolor=\color{yellow!10},
    numbers=left,
    stepnumber=1,    
    firstnumber=1,
    numberfirstline=true,
    numberstyle=\tiny\color{black!50},
-   xleftmargin=1.75em,
-   framexleftmargin=2.1em,
+   %xleftmargin=1.75em,
+   %framexleftmargin=2.1em,
    % rulesepcolor=\color{gray},
-   rulecolor=\color{black}
+   %rulecolor=\color{black}
    % linewidth=8cm,
 }
 
@@ -429,7 +430,7 @@ shadow, minimum width=\transH, minimum height=\transW]
 %}
 
 \graphicspath{{img/}}
-\lstset{inputpath=src/}
+\lstset{inputpath=../voropath}
 
 %% \definecolor{links}{HTML}{2A1B81}
 %% \hypersetup{colorlinks,linkcolor=links,urlcolor=links}
