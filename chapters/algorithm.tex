@@ -179,8 +179,9 @@ plane there is a property that if we have $n$ input sites
 that lay on a circumference, without any other site inside the
 circumference, then the center of the circumference is a vertex shared
 by $n$ cells (\cref{sec:voronoi} for details). The same property holds
-in the 3D case with respect to spheres. We can make the assumption that no more than three sites can lay
-on a circumference so no vertex can have more than three neighbours,
+in the 3D case with respect to spheres. We can make the assumption
+that no more than three sites can lay 
+on a circumference, hence, no vertex can have more than three neighbours,
 or the same with four vertices in sphere. This assumption is
 plausible because we use floating point numbers for the coordinates of
 the vertices of the obstacles, and it is unlikely that more than
@@ -282,7 +283,7 @@ For how we define the triples neighbour rule in $G_t$ we have
 that each triple is a predecessor of $k-1$ other triples at most. For
 instance, $(\ve{a},\ve{b},\ve{c})$ in $V_t$ is the predecessor of all the triples
 $(\ve{b},\ve{c},*)$ where $*$ can be one of the $k$ neighbours
-of $\ve{c}$ in $V$ excluded $\ve{b}$. So the number of edges in $G_t$ is
+of $\ve{c}$ in $V$ excluded $\ve{b}$. Thus, the number of edges in $G_t$ is
 \begin{equation}
   \label{eq:numEdgesTriples}
   |E_t|\leq |V_t|\cdot (k-1)=\bigO(k|V_t|)=\bigO(k^3|V|).
@@ -331,10 +332,10 @@ explained in \cref{sec:bsplineProp} and assert that the
 resulting curve is contained inside the union of all the triangles of
 three consecutive control vertices of the control
 polygon. Using that property we can solve the problem of the
-collision, maintaining all the triangles associated with the control
+collision, maintaining all the triangles associated to the control
 polygon free 
 from collision with \acp{OTF}. Note that the \ac{CHP} of quadratic
-\bss is also valid in space, so the convex hull is still composed
+\bss is also valid in space, hence, the convex hull is still composed
 of triangles, like the faces of the
 obstacles. This simplifies all the checks for collisions because they
 are all between triangles in space and we can use the methods
@@ -468,7 +469,7 @@ point of view of pictures in \cref{fig:sol11} is visible.
 For each triple and each \ac{OTF} we need to solve three $3\times 3$
 linear systems for the
 collision check\footnote{See
-  \cref{sec:intersectionsTriangleTriangle}.}, so in total
+  \cref{sec:intersectionsTriangleTriangle}.}, hence, in total
 the cost is
 \begin{equation*}
   \bigO(|V_t|\cdot |\obsSet|)
@@ -957,10 +958,10 @@ In this section we discuss two
 methods implemented to establish $T$.
 
 First of all, we want
-the curve interpolates
-the chosen start and end points, that correspond to the extremes
-$\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw in
-\cref{sec:clamped} that we can archive such interpolation if we impose
+the curve to interpolate
+the chosen start and end points that correspond to the extremes
+$\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We see in
+\cref{sec:clamped} that we can achieve such interpolation if we impose
 \begin{equation}\label{eq:externalKnotsFix}
   \begin{split}
     &t_0 = t_1 = \dots = t_{m} = a\\
@@ -971,30 +972,30 @@ where $a$ and $b$ are the extremes of the parametric domain of
 the curve.
 
 The constraint of \cref{eq:externalKnotsFix} is a mandatory
-choice, so we cannot change it. Regarding the parametric domain, we
-chose it to be $[0,1]$ because changing the extremes do not change
+choice, thus we cannot change it. Regarding the parametric domain, we
+choose it to be $[0,1]$ because changing the extremes do not change
 the behavior of the curve, only changing the ratios of the distances
 between the knots is effective \cite{farin}. We still need to chose how to select 
-the inner $n-m$ knots $t_{m+1},\dots,t_n$, and we developed two different
-ways of doing it:
+the inner $n-m$ knots $t_{m+1},\dots,t_n$, and we develop two different
+ways to do this:
 \begin{enumerate}[label=\textbf{method \arabic*}]
 \item\label[void]{en:uniform} Use a uniform partition where $t_i-t_{i-1}=c$ for
   $i=m+1,\dots,n+1$ for $c$ constant;
 \item\label[void]{en:adaptive} Use an adaptive partition, where we try
-  to make dense knots in
+  to create dense knots in
   correspondence of points on the curve where we have dense control
   vertices.
 \end{enumerate}
 
-\cref{en:uniform} is the easiest way of choosing a knot vector
-and is common as first choice in textbooks \cite{farin}\cite{docarmo},
+\cref{en:uniform} is the easiest way to choose a knot vector
+and it is a common first choice in textbooks \cite{farin}\cite{docarmo},
 but it has the disadvantage of ignoring the geometry of the curve
-\cite{farin}. The steps to do for accomplish \cref{en:uniform} are quite
+\cite{farin}. The steps to accomplish \cref{en:uniform} are quite
 straightforward: we need to pick the nodes
 \begin{equation*}
   \frac{i}{n-m+1}
 \end{equation*}
-for $i=1,\dots,n-m$. Thus we concentrate on \cref{en:adaptive}.
+for $i=1,\dots,n-m$. Thus, we concentrate on \cref{en:adaptive}.
 
 \begin{myfig}{Optimal case for a quadratic curve (we want uniform partition).}{fig:adaptive1}
   \begin{tikzpicture}
@@ -1040,7 +1041,7 @@ for $i=1,\dots,n-m$. Thus we concentrate on \cref{en:adaptive}.
     %\filldraw[color=yellow] ($ (w1)!0.25!(w2) $) circle (2pt);
   \end{tikzpicture}
 \end{myfig}
-\begin{myfig}{General case for a quadratic(same distances between
+\begin{myfig}{General case for a quadratic (same distances between
     $t_i$ and enclosing $\nu_j$, $\nu_{j+1}$ as \cref{fig:adaptive1}).}{fig:adaptive2}
   \begin{tikzpicture}
     \coordinate (v0) at (0,0);
@@ -1084,7 +1085,7 @@ for $i=1,\dots,n-m$. Thus we concentrate on \cref{en:adaptive}.
     \node[left=20pt] at (t0) {$\tau$};
   \end{tikzpicture}
 \end{myfig}
-We started from the idea that if we have a control polygon with
+We start from the idea that if we have a control polygon with
 uniformly-spaced vertices -
 i.e. $\norm{\ve{v_1}-\ve{v_0}}=\norm{\ve{v_2}-\ve{v_1}}=\cdots=\norm{\ve{v_n}-\ve{v_{n-1}}}$
 - then we agree on a uniform partition of the knots
@@ -1104,10 +1105,10 @@ scaled in length to the parametric domain axis\footnote{$\ve{v_0}$ is
 knots $t_0,\dots,t_8$ on it.
 
 Starting from this situation, if
-we have a generic control polygon with segments of different length as
-in \cref{fig:adaptive2}, then we want that each $t_i$ keep the same
+we have a generic control polygon with segments of different length, as
+in \cref{fig:adaptive2}, then we want each $t_i$ to keep the same
 distance, in ratio, between the surrounding $\nu_j$ and $\nu_{j+1}$,
-respect to the optimal case. For instance in \cref{fig:adaptive1}
+respect to the optimal case. For instance, in \cref{fig:adaptive1}
 $\frac{t_3-\nu_1}{\nu_2-\nu_1}=\frac{1}{4}$ and
 $\frac{\nu_2-t_3}{\nu_2-\nu_1}=\frac{3}{4}$, this means that in
 \cref{fig:adaptive2} the same values must be preserved.
@@ -1121,9 +1122,9 @@ included the extremes
 where $\tau_0=a=0$ and $\tau_{n-m+1}=b=1$. In \cref{fig:adaptive1} and
 \cref{fig:adaptive2}
 $\tau=(t_2,t_3,t_4,t_5,t_6)$. Now we calculate the positions of all
-$\tau_i$ respect to the $\nu_j$ in the \emph{optimal} case. We can
-achieve that using as unit the uniform distance $\nu_j-\nu_{j-1}$ for
-calculating the positions of $\tau_i$. Purposely, we calculate
+$\tau_i$ respect to the $\nu_j$ in the optimal case. We can
+achieve that using as unit the uniform distance $\nu_j-\nu_{j-1}$ to
+calculate the positions of $\tau_i$. We specifically calculate
 \begin{equation}\label{eq:adaptivePos}
   \tau_i^\nu=\frac{n}{n-m+1}\cdot i\qquad i=0,\dots,n-m+1
 \end{equation}
@@ -1148,7 +1149,7 @@ and, remembering that the parametric domain is $[0,1]$, we have
   \nu_i=\frac{d_i}{d_n}\qquad i=0,\dots,n.
 \end{equation}
 
-Now, using the positions in \cref{eq:adaptivePos} on the projection in
+Using the positions in \cref{eq:adaptivePos} on the projection in
 \cref{eq:adaptiveProj}, we obtain the values
 \begin{equation*}
   \tau_i=\nu_{\lfloor\tau_i^\nu\rfloor}+(\tau_i^\nu-\lfloor\tau_i^\nu\rfloor)(\nu_{\lfloor\tau_i^\nu\rfloor+1}-\nu_{\lfloor\tau_i^\nu\rfloor})\qquad i=0,\dots,n-m+1.
@@ -1175,11 +1176,11 @@ to achieve a smoother path.
   \EndFor
   \EndProcedure
 \end{algo}
-For obtaining this we realized \cref{alg:postProcess} that
-iterates through all the vertices, except the extremes, and for each
-$v_i$ checks if it can be removed without consequences. With
-consequences we mean that removing $v_i$ would cause that a triangle
-in $P$ intersect one of the \acp{OTF}.
+To obtain this, we realize \cref{alg:postProcess} that
+iterates through all the vertices, except the extremes, and checks if each
+$v_i$ can be removed without consequences. With
+consequences we mean that removing $v_i$ would cause a triangle
+in $P$ to intersect one of the \acp{OTF}.
 
 \begin{myfig}{Example of post process check that removes $\ve{v_i}$.}{fig:postProcess}
   \begin{tikzpicture}
@@ -1218,9 +1219,9 @@ in $P$ intersect one of the \acp{OTF}.
     \node[above] at (e) {$\ve{v_{i+2}}$};
   \end{tikzpicture}
 \end{myfig}
-For clarifying the concept consider \cref{fig:postProcess} that is a
-simplification in 2-dimensional space of the real case in
-3-dimensional space. The path to process
+To clarify the concept, consider the
+simplification in 2-dimensional space in \cref{fig:postProcess}. The
+path to process 
 is
 \begin{equation*}
   P=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i}},\ve{v_{i+1}},\ve{v_{i+2}},\dots)
@@ -1230,18 +1231,18 @@ considering removing $\ve{v_i}$ obtaining a modified path
 \begin{equation*}
   \tilde{P}=(\dots,\ve{v_{i-2}},\ve{v_{i-1}},\ve{v_{i+1}},\ve{v_{i+2}},\dots).
 \end{equation*}
-Before doing this we need to check if any triangle in $\tilde{P}$
-intersects any \ac{OTF}. In detail we need to check only the two
+Before doing, this we need to check if any triangle in $\tilde{P}$
+intersects any \ac{OTF}. In detail, we need to check only the two
 triangles $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ and
 $\triangle\ve{v_{i-1}}\ve{v_{i+1}}\ve{v_{i+2}}$ because the other
 triangles in $\tilde{P}$ are already present in $P$. For instance
-the obstacle in the figure do not intersects anyone of the triangles in
+the obstacle in the figure do not intersects any of the triangles in
 $P$, but it intersects $\triangle\ve{v_{i-2}}\ve{v_{i-1}}\ve{v_{i+1}}$ in
 $\tilde{P}$.
 
 \subsection{Complexity considerations}\index{Post process!complexity}\index{Complexity!post process}
-For every vertex of $P$ we need to check if two triangles intersect
-with an \ac{OTF}, so we have a complexity of
+We need to check if two triangles intersect
+with an \ac{OTF} for every vertex of $P$, hence we have a complexity of
 \begin{equation*}
   \bigO(|P|\cdot|\obsSet|)=\bigO(|\obsSet|^2)
 \end{equation*}
@@ -1249,45 +1250,47 @@ where $\obsSet$ is the set of obstacles and $|P|$ is the number of vertices
 in $P$.
 
 \section{Third solution: Simulated Annealing}\label{sec:inter3}\index{\acf{SA}}
-The solutions proposed in \cref{sec:inter1} and \cref{sec:inter2} have two
+The solutions in \cref{sec:inter1} and \cref{sec:inter2} have two
 problems in common:
 \begin{itemize}
 \item both reject configurations in a prudent way
   considering only the control polygon;
-\item and both don't optimize neither
+\item and both do not optimize neither
   length nor other quantities.
 \end{itemize}
-Anyway such solutions have also the benefit that:
+These solutions have also the following benefits:
 \begin{itemize}
 \item they produce paths that are obstacle-free from construction;
-\item the application of the post processing allows often a reduction
-  of the curve length.
+\item the application of the post-processing often produces a reduction
+  in the curve length.
 \end{itemize}
 
-In this section we describe a third
-approach considered in the project, an approach based on a
+In this section, we describe a third
+approach based on
 probabilistic computation.
     
-We can see the problem of finding the shortest path as a constrained
-optimization problem, where a certain configuration of the control
+We can consider the problem of finding the shortest path as a constrained
+optimization problem, in which a certain configuration of the control
 vertices (and
-consequently the \bs) is the state of the system, and we want to
-minimize both the length of the control polygon (and consequently the
-\bs\footnote{We give to the user also the possibility of selecting the
-  arc length as quantity to minimize.}) and the peak in curvature and torsion of the \bs, under
+consequently the \bs) is the state of the system, and we aim to
+minimize both the length of the control polygon (and therefore the
+\bs\footnote{We give to the users also the possibility of selecting the
+  arc length as the quantity to minimize.}) and the peak in curvature and torsion of the \bs, under
 the constraint that the \bs must not intersect the obstacles. We
-are interested in optimizing both length and curvature and torsion
-peaks because we want a path that is short but also fair.
+are interested in optimizing the length of the curve and the maximum
+peaks of both curvature and torsion, because we want a path that is
+short but also fair. 
 
 \subsection{\acf{LR} applied to the project}\index{\acf{LR}}
 We can apply the concept explained in \cref{sec:lagrangianRelaxation}
 to the project.
 
-The variable space $X$ is composed of all possible
-configuration of the path, or in other words is the vector
-$P=(\ve{v_1},\dots,\ve{v_n})$ of all $n$ ordered
+The variable space $X$ is composed of all the possible
+configurations of the path, or, in other words,it is defined by all
+the possible values of the vector $P=(\ve{v_1},\dots,\ve{v_n})$ of all
+$n$ ordered 
 vertices $\ve{v_i}=(x_i,y_i,z_i)$ of the
-path. The \cref{eq:opt} can be formulated as follows,
+path. The \cref{eq:opt} can be formulated as follows:
 \begin{equation*}
   \begin{aligned}
     & \underset{P}{\text{minimize}}
@@ -1297,24 +1300,24 @@ path. The \cref{eq:opt} can be formulated as follows,
     & & \left|bspline(P)\cap \bigcup_{i\in I}obstacle_i\right| = 0,
   \end{aligned}
 \end{equation*}
-where $maxCurv(P)$ is the peak of curvature of the \bs
+where $maxCurv(P)$ is the curvature peak of the \bs
 constructed using $P$ as control polygon,
-$maxTors(P)$ is the peak in absolute value of the torsion and
+$maxTors(P)$ is the absolute value of the torsion peak and
 $normLen(P)$ is the length of the control polygon
-$P$ normalized as percentage of the length of the initial
+$P$ normalized as a percentage of the length of the initial
 status\footnote{If the user chooses to minimize the
   arc length, then $normLen(P)$ becomes the length of the \bs curve.}
 . $\alpha$, $\beta$ and $\gamma$ are fixed
-coefficients used for giving different weights in the optimization
-process to 
-the curvature peak, torsion peak and length. The normalization of
-length is necessary for decoupling the weight of the length from the
-length of path.
+coefficients used to give different weights to 
+the curvature peak, torsion peak and length during the optimization
+process. The normalization of
+length is necessary to decouple the weight of the length from the
+length of the path.
 
-Curvature and torsion, and thus also the
-relative peaks, are obtained in a discrete form. The \bs curve is
+Curvature and torsion are obtained in a discrete form. The \bs curve is
 tabulated in a number of points that depends on the length of $P$
-by a constant, then for each point the curvature and torsion values
+by a multiplied constant, then for each point the curvature and
+torsion values 
 are calculated.
 
 Regarding the constraint, $bspline(P)$
@@ -1323,13 +1326,9 @@ control polygon, and
 $obstacle_i$ is the area of the $i^{th}$ of $m$ obstacles, and
 $I=\{1,\dots,m\}$.
 
-We need to build now the Lagrangian function corresponding to
-\cref{eq:lagrangianFun}, for conciseness we define the function
-\begin{equation}\label{eq:gainLag}
-  gain(P) = \alpha\cdot maxCurv(P)+\beta\cdot
-    maxTors(P)+\gamma\cdot normLen(P)
-\end{equation}
-the constraint function is not negative, and is calculated as the
+Thus, we need to build the Lagrangian function corresponding to
+\cref{eq:lagrangianFun}.
+The constraint function is not negative and is calculated as the
 ratio
 \begin{equation}\label{eq:constraintLag}
 constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \exists i
@@ -1340,23 +1339,28 @@ constraint(P) = \frac{\left|\ \{\ve{p} \in spline(P)\ : \exists i
 
 
 The points $\ve{p}$ of the spline are calculated in a discrete
-form, like curvature and torsion. Thus the constraint depends on the
+form, like curvature and torsion. Thus, the constraint depends on the
 tabulation of the curve and
 it is also possible to have borderline cases where the
-constraint doesn't reflect the real situation\footnote{For instance if
-  we have very thin obstacles, a curve can pass through it having few
-  points (or even none) of it inside them.}.
+constraint does not reflect the real situation\footnote{For instance, if
+  we have very thin obstacles, a curve can pass through them having only few
+  points (or even none) inside.}.
 
 The
 function in \cref{eq:constraintLag} is not negative, thus the
-Lagrangian function corresponding to 
-\cref{eq:lagrangianFun} is
+Lagrangian function, corresponding to 
+\cref{eq:lagrangianFun}, is
 \begin{equation}\label{eq:lagrangianFunProj}
-    L_d(P,\lambda)=gain(P)+\lambda\cdot constraint(P).
+    L_d(P,\lambda)=gain(P)+\lambda\cdot constraint(P)
+\end{equation}
+where, for convenience,
+\begin{equation}\label{eq:gainLag}
+  gain(P) = \alpha\cdot maxCurv(P)+\beta\cdot
+    maxTors(P)+\gamma\cdot normLen(P).
 \end{equation}
 
 \subsection{Annealing phase}
-The target of the simulated annealing phase is to find the minimum
+The purpose of the simulated annealing phase is to find the minimum
 saddle point in
 the curve represented by the
 \cref{eq:lagrangianFunProj}.
@@ -1380,13 +1384,13 @@ the curve represented by the
   \EndProcedure
 \end{algo}
 
-The \cref{alg:annealing} is the annealing process, the input is the
+The \cref{alg:annealing} is the annealing process, and its input is the
 initial status of the system $\ve{x}$ - i.e. the initial configuration
-of the control polygon.
+of the control polygon. It operates this way:
 \begin{enumerate}
 \item $\lambda$ and the
   temperature are initialized on
-  \cref{alg:annealing:initialize} and \cref{alg:annealing:initialize}
+  \cref{alg:annealing:initialize} and \cref{alg:annealing:initialize2}
   respectively;
 \item the \emph{while} on
   \cref{alg:annealing:while} is the main loop and the terminating
@@ -1397,45 +1401,44 @@ of the control polygon.
   number of trials, on each iteration the algorithm probabilistically
   tries to make a move of the state of the system;
   \begin{itemize}
-  \item first on
-    \cref{alg:annealing:lambdaProb} it makes the choice if moving in the
+  \item first, on
+    \cref{alg:annealing:lambdaProb}, it chooses between moving in the
     Lagrangian space or in the space of the path;
   \item after that, based on the previous
-    choice, the algorithm tries probabilistically to move the system
+    choice, the algorithm probabilistically tries to move the system
     in a neighbouring
     state: in the
     Lagrangian space at
     \cref{alg:annealing:changeLambda} or in the path space at
     \cref{alg:annealing:changeX};
   \end{itemize}
-\item finally at the end of every trial set,
+\item finally, at the end of every trial set,
   at \cref{alg:annealing:cooling}, the temperature $T$ is cooled by
   a certain factor.
 \end{enumerate}
 
 The termination condition in \cref{alg:annealing:while} is triggered by a
 minimum variation of energy $\Delta energy$ between two consecutive
-iterations of the cycle. Also the termination is triggered when a
-minimum temperature is reached, this is for impose a limit on the
+iterations of the cycle. The termination is also triggered when a
+minimum temperature is reached, this happens to impose a limit on the
 number of cycles.
 
-The choice of the neighbour is made
-probabilistically in the meaning that if the energy increases in the
+The choice of the neighbour is
+probabilistic. If the energy increases in the
 Lagrangian space or decreases in the path space, then the probability of
 choosing the new state is 1. If the energy decreases in the Lagrangian
 space or increases in the path space, then the new state is accepted
-with a probability that is\footnote{Note that $[x]^+=\max(0,x)$.}:
+with a probability that is:
 $$\exp(-\frac{\Delta energy}{T}).$$
 
-The $neighbour$ function chooses a neighbour of the state and it is
-defined depending on the input:
+The $neighbour$ function depends on the input:
 \begin{itemize}
   \item a neighbour of $\lambda$ is a value that is equal to $\lambda$
-    plus a perturbation uniformly in range $[-maxLambdaPert, maxLambdaPert]$;
+    plus a uniform perturbation in range $[-maxLambdaPert, maxLambdaPert]$;
   \item a neighbour of the path is obtained by randomly picking one of
-    the vertices $\ve{v_i}$, except the extremes $\ve{v_0}$ and $\ve{v_n}$,
-    then choosing uniformly a direction and a distance
-    in a specific range, and finally moving $\ve{v_i}$ by
+    the vertices $\ve{v_i}$ (except the extremes $\ve{v_0}$ and $\ve{v_n}$),
+    then uniformly choosing a direction and a distance
+    in a specific range and, finally, moving $\ve{v_i}$ by
     the chosen values.
 \end{itemize}
 
@@ -1447,37 +1450,37 @@ The $energy$ function is equivalent to $L_d$ in the
 \end{equation}
 
 The annealing process
-finds a saddle point by probabilistically increasing the energy, when
+finds a saddle point by probabilistically increasing the energy when
 $\lambda$ is moved, and 
 decreasing the energy when the points are moved.
 
 \subsubsection{Complexity considerations}\index{\acf{SA}!complexity}\index{Complexity!\acf{SA}}
-For this solution we have still the costs of \cref{eq:costGraph} and
+For this solution, we still have the costs of \cref{eq:costGraph} and
 \cref{eq:costPruning} for
-the creation and pruning of the graph $G$. In addition we need to
+the creation and pruning of the graph $G$. In addition, we need to
 apply Dijkstra's
-algorithm in $G$ for obtaining the initial path $P$ with the cost of
+algorithm in $G$ to obtain the initial path $P$ with the cost of
 \cref{eq:costDijkstraG}.
 
 Regarding the annealing phase, for each \emph{step} (an
 iteration of \cref{alg:annealing:while} in \cref{alg:annealing}) we
-have a fixed number of \emph{trials} (the iterations of \cref{alg:annealing:for}). For each trial we need to
-calculate the value of the energy, \cref{eq:annealingEnergy}, that is
+have a fixed number of \emph{trials} (the iterations of \cref{alg:annealing:for}). For each trial, we need to
+calculate the value of the energy of \cref{eq:annealingEnergy} that is
 the sum of the gain and the constraint.
 
-For the gain, \cref{eq:gainLag}, we need to calculate the values of
-curvature and torsion for every tabulated point. Furthermore there is
+For the gain of \cref{eq:gainLag} we need to calculate the values of
+curvature and torsion for every tabulated point. Furthermore, there is
 also a cost\footnote{Only if
-  the user do not choose to minimize the arc length.} of
-$\bigO(|P|)$ for
-calculating the length of the control polygon. The cost for
-calculating the gain is thus
+  the users do not choose to minimize the arc length.} of
+$\bigO(|P|)$ to
+calculate the length of the control polygon. Thus, the cost for
+calculating the gain is
 \begin{equation*}
   \bigO(|Sp|+|P|)
 \end{equation*}
 where $Sp$ is the set of the tabulated points of the curve. The number
 of points in $Sp$ depends on the length of the control polygon
-$len(P)$. Thus
+$len(P)$. Thus,
 we have a cost of $\bigO(len(P)+|P|)$, but in the worst case
 $|P|=\bigO(|V|)=\bigO(|\obsSet|)$, thus the cost is
 \newcommand{\eqCostGain}{\ensuremath{\bigO(len(P)+|P|)=\bigO(len(P)+|\obsSet|)}}
@@ -1486,7 +1489,8 @@ $|P|=\bigO(|V|)=\bigO(|\obsSet|)$, thus the cost is
   \eqCostGain.
 \end{equation}
 
-Regarding the constraint, \cref{eq:constraintLag}, we need to calculate if
+In regards to the constraint of \cref{eq:constraintLag}, we need to
+calculate if 
 every point 
 of the curve is inside an obstacle. This means a cost of
 \newcommand{\eqCostConstraint}{\ensuremath{\bigO(len(P)|\obsSet|)}}
@@ -1495,12 +1499,12 @@ of the curve is inside an obstacle. This means a cost of
   \eqCostConstraint.
 \end{equation}
 
-The total cost for the calculation of the annealing phase is thus
+Hence, the total cost for the calculation of the annealing phase is
 \begin{equation*}
 \bigO(\#steps\cdot\#trials\cdot(len(P)|\obsSet|)),
 \end{equation*}
 but the number of steps and trials are bounded by
-constants\footnote{Although such constants can be very high.}. Thus
+constants\footnote{Although such constants can be very high.}. Thus,
 the cost becomes
 \newcommand{\eqCostAnneal}{\ensuremath{\bigO(len(P)|\obsSet|)}}
 \begin{equation}
@@ -1515,8 +1519,8 @@ The total cost for the solution is
   \eqCostTotalThree.
 \end{equation}
 
-Likewise the previous solutions, if we have that $k$ is a constant
-then the total cost become
+Similarly to the previous solutions, if we have that $k$ is a constant
+then the total cost becomes
 \newcommand{\eqCostTotalThreeK}{\ensuremath{\bigO(|\obsSet|^2+len(P)|\obsSet|)}}
 \begin{equation}
   \label{eq:costTotalThreeK}
@@ -1541,22 +1545,22 @@ then the total cost become
     Total ($k$ costant)&\eqCostTotalThreeK&\cref{eq:costTotalThreeK}\\
     \hline
   \end{tabular}
-  \caption{Resume of the costs for solution three}
+  \caption{Summary of the costs for solution three}
   \label{tab:costsSol3}
 \end{table}
-In \cref{tab:costsSol3} we resumed all the costs. It is
+In \cref{tab:costsSol3} we summarize all the costs. It is
 difficult to quantitatively compare the cost of this solution with
 the previous 
-ones. This is due to the presence of the factor $len(P)$, that depends
-on the geometry of the scene. Anyway we can asserts that this solution is
+ones. This is due to the presence of the factor $len(P)$ that depends
+on the geometry of the scene. however, we can affirm that this solution is
 more complex than the previous two by a term
 $\bigO(len(P)|\obsSet|)$. 
 
-Furthermore also in this solution
+Furthermore, in this solution
 we can divide the algorithm in two parts:
 \begin{enumerate}
-\item first we can construct only once $G$ with cost $\bigO(|\obsSet|^2)$;
-\item then we can use it for different situations with cost
+\item first we can construct $G$ with cost $\bigO(|\obsSet|^2)$;
+\item then we can use it for different scenarios with cost
   $|\obsSet|\log|\obsSet|+len(P)|\obsSet|$.
 \end{enumerate}
 
