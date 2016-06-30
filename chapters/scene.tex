@@ -2,25 +2,25 @@
 \begin{document}
 \chapter{Scene representation}\label{cha:scene}
 The problem of scene description basically consists in fixing a
-representation of the obstacles and of the path, besides in establishing the structures adopted for their storage.
+representation of the obstacles and of the path, besides establishing the structures adopted for their storage.
 
 \section{Basic elements and path}
 First of all, since we are interested in spatial path planning, all
-the point coordinates are in $\mE^3$. Also we concentrate
+the point coordinates are in $\mE^3$. Furthermore, we concentrate
 on \bss because we want a standard representation for the output of
 the algorithm, the path between a start point $s$ and an end point
-$e$. Actually \bss
+$e$. \bs
 curves are the standard adopted in \ac{CAD} and
 \ac{CAGD} systems \cite{hughes}\cite{foley}. 
 
-Now the structures which  uniquely identify a \bs curve are
+The structures that uniquely identify a \bs curve are
 three: its degree m, the associated control polygon and the extended
-knot vector 
+knot vector.
 
 Regarding the degree of the curve, we let 
 the users choose among quadratics
 ($m=2$), cubics ($m=3$) and quartics ($m=4$). The users
-choose also the starting and ending points $s$ and $e$ respectively,
+choose also the starting and ending points, $s$ and $e$ respectively,
 associated with the parameter values $t_0=\dots=t_m$ and
 $t_{n+1}=\dots=t_{n+m+1}$.
 
@@ -29,20 +29,20 @@ of vertices and the other vertices themselves come from the algorithm,
 and they depend on the position of $s$ and $e$ and on the obstacles, see
 \cref{sec:polChain} for details.
 
-The knots are generated automatically using one of two methods
+The knots are generated automatically using one of the two methods
 described in \cref{sec:knotSel}.
 
-Thus for the curve we memorize only the control vertices $P$ and the
+Thus, for the curve we memorize only the control vertices $P$ and the
 degree 
-$m$. As usual in any computer graphic system, when we want its plotting, we tabulate $\ve{S}$ for a certain
+$m$. As usual, in any computer graphic system, when we want its plotting, we tabulate $\ve{S}$ for a certain
 number\footnote{Enough for having a smooth look.} of values of $t$ and
 then we draw the polygonal chain that connects them.
 
 \section{Basic obstacle representation}\index{Obstacle}\index{\acf{OTF}}
-Apart the curve, in the scene we need to represent the obstacles. We
-call $Obs$ the set of all obstacle in scene. We choose to represent
+Besides the curve, in the scene we need to represent the obstacles. We
+call $Obs$ the set of all obstacles in scene. We choose to represent
 each obstacle $Ob\in Obs$ as a set of triangular faces called
-\acp{OTF}, each one containing three vertices. To recap, we have
+\acp{OTF}, each one containing three vertices. To summarize, we have
 \begin{equation*}
   \begin{split}
     Obs&=\{Ob_0,\dots,Ob_{\#Obs}\}\\
@@ -54,28 +54,28 @@ each obstacle $Ob\in Obs$ as a set of triangular faces called
 where $\#Obs$ is the number of obstacles in the scene and $\#Otf_i$ is
 the number of \acp{OTF} in obstacle $Ob_i$.
 
-We choose this specific configuration because in this way all the
+We choose this specific configuration because this way all the
 intersections that can occur are between triangle and triangle or
 triangle and segment and they can be easily calculated. This implies
 that, if an obstacle is a polyhedron more complex than just a
-tetrahedron, preliminarily its faces have to be triangulated.
+tetrahedron, its faces must to be preliminarily triangulated.
 
-We provide the methods explained in \cref{sec:complexObs} for
-abstracting the creation of \acp{OTF}.
+We provide the methods explained in \cref{sec:complexObs} to
+abstract the creation of \acp{OTF}.
 
-Using this solution also means that we can potentially insert in the
-scene open polyhedrons\footnote{For instance a tetrahedron without one
-  face} or intersecting shapes, as we don't have
+Using this solution, we can potentially insert open
+polyhedrons\footnote{For instance a tetrahedron without one
+  face} or intersecting shapes in the scene, as we do not have
 any restriction on the position of the points $\ve{p_{i,j,k}}$.
 
 \section{Complex obstacles}\label{sec:complexObs}
-In order to simplify the scene construction, four methods for easily
-building obstacles have been realized: 
+In order to simplify the scene construction, we create four methods to
+easily build obstacles:
 \begin{itemize}
-\item one for building tetrahedrons;
-\item one for building parallelepipeds\footnote{aligned with the axis};  
-\item one more general for building convex hulls;
-\item a special method used for building a bucket-shaped obstacle that
+\item one for tetrahedrons;
+\item one for parallelepipeds\footnote{Aligned with the axis.};  
+\item a more general one for convex hulls;
+\item a special method for a bucket-shaped obstacle that
   we use in the tests.
 \end{itemize}
 
@@ -98,7 +98,7 @@ building obstacles have been realized:
   \State $Obs\Ass Obs\cup Ob$
   \EndProcedure
 \end{algo}
-\cref{alg:tetrahedron} takes the four vertices of a tetrahedron to
+\cref{alg:tetrahedron} takes the four vertices of a tetrahedron
 and adds to $Obs$ a new obstacle that have all the faces of the
 unique tetrahedron that can be built with the four
 points.
@@ -113,10 +113,11 @@ algorithms). Finally we add each triangle as a new \ac{OTF} of the
 obstacle.
 
 \section{Bounding box}\index{Bounding box}
-We decided also to give to the user the possibility of adding a
+We also give to the user the possibility of adding a
 bounding box around the scene. It is built as an obstacle, using
-\acp{OTF}, in fact we provide a method that take two points $\ve{a}$
-and $\ve{b}$ and build the parallelpiped with extremes those points and with
+\acp{OTF}, in fact we provide a method that takes two points $\ve{a}$
+and $\ve{b}$ and builds the parallelpiped having those points as
+extremes and with
 all the faces triangularized like in \cref{fig:boundingBox}.
 \begin{myfig}{Bounding box with extremes $\ve{a}$ and $\ve{b}$.}{fig:boundingBox}
   \begin{tikzpicture}
@@ -154,11 +155,11 @@ all the faces triangularized like in \cref{fig:boundingBox}.
   \end{tikzpicture}
 \end{myfig}
 
-In all the project, regarding the intersections, the \acp{OTF} of the
-bounding box are considered
-exactly like the \acp{OTF} of the obstacles. The only differences are
-that the bounding box is not visible when the scene is plotted, and a
-point inside the bounding box is not considered inside obstacle.
+In regards to the intersections, the \acp{OTF} of the bounding box are
+considered exactly like the \acp{OTF} of the obstacles throughout the
+whole project. The only differences are
+that the bounding box is not visible when the scene is plotted and a
+point inside the bounding box is not considered to be inside the obstacle.
 
 \end{document}
 

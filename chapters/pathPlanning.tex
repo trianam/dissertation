@@ -3,7 +3,7 @@
 \chapter{Motion Planning}
 The problem of \emph{motion planning} consists in determining a set of
 low level tasks, given an high level goal to be fulfilled
-\cite{choset}. For instance a classic motion planning problem is the
+\cite{choset}. For instance, a classic motion planning problem is the
 \emph{piano movers'} problem that involves the motion of a free flying rigid 
 body in the 3-dimensional space
  from a start to a goal configuration by applying
@@ -16,17 +16,17 @@ famous applications but it finds utilization also in other less
 common areas like motion of digital actors or molecule design
 \cite{choset}.
 
-Initially the term motion planning referred only to the translations
+Initially, the term motion planning referred only to the translations
 and rotations of objects, ignoring the dynamics of them, but lately
-the research on this field started considering also the physical
-constraints of the object to be moved \cite{lavalle}. Usually the term
+research in this field started considering also the physical
+constraints of the object to be moved \cite{lavalle}. Usually, the term
 \emph{trajectory planning} is used to refer to the problem of taking
 the path produced by a
 motion planning algorithm and determine the time law for moving a
 robot on it by
 respecting its mechanical constraints \cite{lavalle}.
 
-For motion planning problems an important concept is the \emph{state
+An important concept for motion planning problems is the \emph{state
   space},
 that can have different dimensions, one for each degree of freedom of
 the robot. It can be a discrete or a continuous space
@@ -35,8 +35,8 @@ and, considering that there are obstacles or constraints on the scene,
 we can call $\mS_{free}\subseteq\mS$
 the portion of the state space such that all its configurations
 are admissible. On this space state we have
-the two special states $\ve{s}\in\mS$ and $\ve{e}\in\mS$ respectively of the
-desired \emph{start} and \emph{end} configurations.
+special states $\ve{s}\in\mS$ and $\ve{e}\in\mS$ for the
+desired \emph{start} and \emph{end} configurations, respectively.
 
 Another concept is the geometric design of the scene and the
 actor. The obstacles can be represented as convex
@@ -50,16 +50,17 @@ rigid kinematic chains or trees or if it is even possible to have not
 rigid transformations (flexible materials) \cite{lavalle}.
 
 \section{Problem types}
-In the literature many different problems related to motion
-planning have been introduced. In this section we present a short
-survey of the principal ones
-ordered by increasing complexity. Refer to \cite{goerzen} for the
+Many different problems related to motion
+planning have been introduced in literature. In this section we
+present a short 
+survey of the most relevant problems
+in order of increasing complexity. Refer to \cite{goerzen} for
 details.
 
 \paragraph{Point vehicle}
 The body of the object to be moved is represented as a
 point in the space. Thus the state space $\mS$ consists in the euclidean
-space $\mE^2$ if we deal with land vehicles or $\mE^3$ if we deal with
+space $\mE^2$ if we consider land vehicles or $\mE^3$ if we consider
 aerial vehicles.
 
 \paragraph{Point vehicle with differential constraints}
@@ -69,7 +70,7 @@ acceleration, velocity, curvature, etc\dots when we want to model a
 real vehicle (whose shape is still approximated with a point).
 
 \paragraph{Jogger's problem}
-This kind of problems deals with the dynamic of a jogger that has a
+This kind of problems concerns the dynamic of a jogger that has a
 limited field of view. Consequently, in this case, we do not have a
 complete view of the scene and the path is
 updated as soon as the knowledge of the scene increases.
@@ -80,10 +81,10 @@ field of view. Thus the scene updating can be done only when an
 obstacle is touched.
 
 \paragraph{Weighted regions' problem}
-This problem considers regions of the space as more desirable than
-others, rather than assuming completely obstructive obstacles as
-before. For instance this is the case of finding a path in an off-road
-behavior where the vehicle can move faster on certain terrains and
+This problem considers some regions of the space as more desirable than
+others, rather than contemplate completely obstructive obstacles. For
+instance, this is the case of finding a path in an off-road 
+environment where the vehicle can move faster on certain terrains and
 slower over different configurations.
 
 \paragraph{Mover's problem}
@@ -92,25 +93,27 @@ dimensions for the spatial rotation of the body to the state
 space.
 
 \paragraph{General vehicle with differential constraints}
-This problem is a combination of the mover's problem and the point vehicle with
-differential constraints: we add to the mover's
-problem also the physical constraints on the motion dynamic.
+This problem combines the \emph{mover's problem} and the \emph{point
+  vehicle with 
+differential constraints} by adding to the mover's
+problem the physical constraints on the motion dynamic.
 
 \paragraph{Time varying environments}
-These problems deal with moving obstacles.
+These problems regards moving obstacles.
 
 \paragraph{Multiple movers}
-This problem considers more than one vehicle. We then need
-to deal
-with different paths and with the problem of avoiding possible
-collisions between different movers. Actually we have to avoid
+This problem considers more than one vehicle. We need
+to manage
+different paths and the problem of avoiding possible
+collisions between different movers. As a matter of fact, we have to
+avoid
 collisions between the paths followed by different movers only if
-their collision point is reached by the movers at the same time.
+the collision point is reached by the movers simultaneously.
 
 \section{Algorithm types}
 We can divide the algorithms for motion planning in different types
 taking into account the specific problem they resolve. The algorithms
-belonging to a type can be further divided
+belonging to a certain type can be further divided
 in different categories.
 For more details on the different algorithms see \cite{goerzen} and
 \cite{choset}.
@@ -140,9 +143,9 @@ scale in a 3-dimensional setting.
 The edge sample visibility graph is an extension of the visibility
 graph method to the 3-dimensional case. The main idea consists in
 distributing a discrete set of points along the edges of the obstacles
-by considering  a certain density. The visibility graph and related
+by considering  a certain density. The visibility graph and the related
 shortest path of this configuration are then computed, but the
-corresponding solution is not optimal as in the planar case.
+corresponding solution is not as optimal as in the planar case.
 
 \subsubsection{Voronoi roadmap}
 This method builds a graph that is kept equidistant to the obstacles,
@@ -175,8 +178,8 @@ obstacles.
 \subsection{Potential field methods}
 This kind of methods operates assigning a potential field on every
 region of the space, the lowest potential is assigned to the goal
-point $\ve{e}$ and to the obstacles is assigned an high potential
-value. Then the path is calculated as a trajectory of a particle that
+point $\ve{e}$ and a high potential value is assigned to the
+obstacles. Then the path is calculated as a trajectory of a particle that
 reacts to those potentials, it is repelled by the obstacles and
 attracted by the end point.
 
@@ -188,22 +191,23 @@ roadmap-probabilistic method, see \cref{sec:statisticalMethods} and
 \cref{sec:inter3} for further details.
 
 \subsection{\acf{RRT}}
-This Method operates by doing a stochastic search, starting from the
+This method operates by doing a stochastic search, starting from the
 reference frame of the object to be moved and expanding a tree through the
 random sampling of the state space.
 
 \subsection{Decoupled trajectory planning}
 This kind of algorithms operates in a two-step way. First a
-discrete path through the state space is found, then the path is modified for
-adapting it to the dynamics constraints - i.e. the trajectory is constructed.
+discrete path through the state space is found, then the path is
+modified to 
+adapt it to the dynamics constraints - i.e. the trajectory is constructed.
 
 \subsection{Mathematical programming}
-This method threats the trajectory planning problem as a numerical
+This method manages the trajectory planning problem as a numerical
 optimization problem, using methods like nonlinear programming to
 find the optimal solution.
 
 \section{Path planning}
-In our project we concentrate on a subsect of the motion planning
+In our project we concentrate on a subset of the motion planning
 problem, the \emph{path planning} problem that consists \cite{choset}
 in determining a parametric curve
 \begin{equation*}

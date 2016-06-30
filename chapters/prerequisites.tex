@@ -10,16 +10,16 @@ $$s:[a,b]\subset\mR\rightarrow\mR$$
 as follows.
 We have a partition of that interval defined by the \emph{breakpoints}
 $$\tau = \{\tau_0,\dots,\tau_\ell\}$$
-such that $a=\tau_0<\tau_1<\dots<\tau_{\ell-1}<\tau_\ell=b$ forming $\ell$
-intervals
+such that $a=\tau_0<\tau_1<\dots<\tau_{\ell-1}<\tau_\ell=b$. Such
+breakpoints define $\ell$ intervals
 $$
 I_i=
 \begin{cases}
   [\tau_i,\tau_{i+1}) & \mbox{if } i=0,\dots,\ell-2\\
-    [\tau_i,\tau_{i+1}] & \mbox{if } i=\ell-1\\
+    [\tau_i,\tau_{i+1}] & \mbox{if } i=\ell-1.\\
 \end{cases}
 $$
-is possible to define the following spaces:
+It is possible to define the following spaces:
 \paragraph{Piecewise polynomial functions space} $P_{m,\tau}$
 is the space of the functions that are polynomials of maximum degree $m$
 in each interval $I_i$ of the partition, formally:
@@ -92,15 +92,15 @@ $$
   (t-\tau_i)^m, &\mbox{otherwise}.
 \end{cases}
 $$
-Is possible to demonstrate that the functions
+It is possible to demonstrate that the functions
 $$
 g_i(t)=(t-\tau_i)_+^m)\ \in S_{m,\tau},\quad i=1,\dots,\ell-1
 $$
-are linearly independents, and that
+are linearly independents, and that the set
 $$
 1,t,t^2,\dots,t^m,(t-\tau_1)_+^m,\dots,(t-\tau_{\ell-1})_+^m
 $$
-form a basis for the classic spline space \cite{deboor}. Then a
+forms a basis for the classic spline space \cite{deboor}. Then a
 generic element $s\in S_{m,\tau}$ can be expressed as follows,
 \begin{equation}\label{eq:classicSplineElement}
   s(t)=\sum_{i=0}^m c_i t^i\, +\, \sum_{j=1}^{\ell-1} d_j
@@ -113,10 +113,10 @@ generic element $s\in S_{m,\tau}$ can be expressed as follows,
 
 \subsection{\bss basis for classic
   splines}\label{sec:bsplines}\index{\bss}\index{Classic splines!\bss basis}
-\emph{\bss} are a specific basis wich can be alternatively used to
+\emph{\bss} are a specific basis which can be alternatively used to
 represent any generalized spline \cite{deboor}\cite{farin}\cite{salomon}\cite{bartels}. In this
-paragraph however we consider only their definition to generate the
-classic spline space $S_{m,\tau}$. Furthermore in some textbook, for
+paragraph, however, we consider only their definition to generate the
+classic spline space $S_{m,\tau}$. Furthermore in some textbooks, for
 notational convenience, the
 \emph{order}$=m+1$ is considered.
 
@@ -170,7 +170,7 @@ combination of \bss,
 A \emph{spline curve} in the affine space $\mE^d$ is the image of a
 parametric vector function $\ve{S}:[a,b]\rightarrow\mE^d$ whose
 components are all splines belonging to a fixed spline space
-$S_{m,\tau}$. For $d=3$
+$S_{m,\tau}$, for $d=3$
 \begin{equation}\label{eq:bsplineCurveComp}
   \ve{S}(u) = \left[
     \begin{array}{c}
@@ -202,7 +202,7 @@ $d_i$ with points
 This representation is not practical because
 there isn't an intuitive correlation between the points
 $\ve{c_i}$, $\ve{d_j}$ and the curve itself. Moreover the
-determination of an interpolant to asset of argued points in $\mE^d$
+determination of an interpolant to assess argued points in $\mE^d$
 is not a well conditioned problem if this form is adopted
 \cite{deboor}. To overcome those drawbacks the \emph{\bss
   basis} is adopted (\cref{sec:bsplines}).
@@ -288,12 +288,13 @@ Note that the \ac{CHP} holds also in
 3-dimensional
 space - i.e. a quadratic \bs in 3-dimensional space is contained
 inside a flat surface composed by the union of triangles. From degree 3
-the area where $\ve{S}$ is contained is not anymore plane
+the area where $\ve{S}$ is contained is not plane anymore
 because it is composed by the union of solid polyhedrons.
 
 \subsection{Aligned vertices}\index{\bss!aligned vertices}\label{sec:alignedVertices}
-As in some parts of this project control polygons with sequences of
-aligned vertices have been adopted, in this section their specific
+Because control polygons with sequences of
+aligned vertices have been adopted in some parts of this project, in
+this section their specific 
 effect on the curve shape is analyzed. 
 
 We can have the following situations:
@@ -319,9 +320,9 @@ A \bs curve of degree $m$ with $n$ control vertices is composed by
 $n-m$ polynomial segments, one for each 
 interval 
 \begin{equation*}
-[t_i,t_{i+1}]\qquad i=m,\dots,n+1  
+[t_i,t_{i+1}]\qquad i=m,\dots,n+1;
 \end{equation*}
-this mean that $\ve{S}(u)$ is $C^\infty$ for
+this means that $\ve{S}(u)$ is $C^\infty$ for
 \begin{equation*}
 u\in(t_i,t_{i+1})\qquad i=m,\dots,n+1.
 \end{equation*}
@@ -350,7 +351,7 @@ and extended knot vector
   T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
 \end{equation*}
 does not necessarily interpolate any control vertex $v_i$, neither the
-first and the last one. But we are
+first nor the last one. But we are
 interested in using \bs for representing paths from one point to
 another. So it should be a nice feature to have that the curve defined in
 the domain $[a,b]$ is shaped such that
@@ -361,15 +362,15 @@ the domain $[a,b]$ is shaped such that
   \end{cases}
 \end{equation}
 
-We can obtain \cite{deboor} the conditions of \cref{eq:clamped} if we impose on the
-extended partition vector $T$:
+We can obtain \cite{deboor} the conditions of \cref{eq:clamped} if we
+impose
 \begin{equation*}
   t_0=\dots= t_{m-1}= \overmath{\equiv a}{t_{m}}<\dots<
 \overmath{\equiv b}{t_{n+1}}= t_{n+2}=\dots= t_{n+m+1}
 \end{equation*}
-in other words we want
+on the extended partition vector $T$. In other words
 \begin{equation*}
-  T=\{\overbrace{a,\dots,a}^m,t_{m+1},\dots,t_{n},\overbrace{b,\dots,b}^m\}
+  T=\{\overbrace{a,\dots,a}^m,t_{m+1},\dots,t_{n},\overbrace{b,\dots,b}^m\}.
 \end{equation*}
 
 \subsection{Curvature and torsion}\index{Curvature and torsion}\index{\bss!curvature and torsion}
@@ -380,7 +381,7 @@ be its smoothness (\cref{sec:smoothness}) - i.e. a $C^3$ curve
 is better than a $C^2$ curve - but this isn't
 enough for comparing curves. Usually
 \emph{curvature} and 
-\emph{torsion} are used for this aim
+\emph{torsion} are used for this purpose
 \cite{docarmo}\cite{salomon}. Both are scalar quantities defined on
 sufficiently smooth 
 parametric curves for each value of the parameter, and they do not
@@ -396,27 +397,23 @@ given the notation $\wedge$ for the vector product and for \cref{eq:bsplineCurve
       \frac{\md}{\md u} \ve{y}(u)\\
       \frac{\md}{\md u} \ve{z}(u)
     \end{array}
-    \right].
+    \right],
 \end{equation*}
 we define the
 curvature $\kappa(u)$ and, in points with non vanishing curvature,
 the torsion $\tau(u)$ as
 \begin{empheq}[left={=\empheqbiglbrace~}]{align}
   \kappa(u) &= \frac{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}{{\norm{\dot{\ve{S}}(u)}}^3}  \label{eq:curvature}\\
-  \tau(u) &= \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}} = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}  \label{eq:torsion}
+  \tau(u) &= \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}} = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}.  \label{eq:torsion}
 \end{empheq}
 
-\cref{eq:curvature} and \cref{eq:torsion} describe completely the
+\Cref{eq:curvature} and \cref{eq:torsion} describe completely the
 behavior of $\ve{S}(u)$ locally for each value of $u$. Curvature and
 torsion have also a geometric interpretation: for each value $\tilde{u}$ of
 the parameter $u$, the inverse $\frac{1}{\kappa(\tilde{u})}$ of the
 curvature is the radius of curvature of $\ve{S}$ at
 $\ve{S}(\tilde{u})$ - i.e. the radius of the 
-osculating circle tangent in that point to the curve which belongs to
-the 
-plane where the
-curve is bending and
-that is situated on the inner side of its turn - $\tau(\tilde{u})$ indicate
+osculating circle tangent in that point. $\tau(\tilde{u})$ indicates
 (if $\kappa(\tilde{u})\neq 0$) how sharply the plane where
 the curve lies is rotating.
 
@@ -438,12 +435,12 @@ defined for $u\in[a,b]$. We can obtain such length, called \emph{arc
 \end{equation*}
 
 We can approximate this value using a discrete tabulation of the curve
-$\ve{S}(u)$ and some integrating method like the \emph{trapezoidal
+$\ve{S}(u)$ and an integrating method like the \emph{trapezoidal
   rule} \cite{press}\cite{stoer}.
 
 \section{Voronoi Diagrams}\label{sec:voronoi}\index{\acfp{VD}}
 In this section we introduce \acfp{VD}, an important structure used in
-the project. \acp{VD} \cite{deberg} provide a method for creating a
+the project. \acp{VD} \cite{deberg} provide a method to create a
 partition of the
 space using distances from a set of input points called
 \emph{sites}. Formally we have a set
@@ -466,7 +463,7 @@ other site.
 
 \image{voronoi.eps}{Example of a \ac{VD}, dashed lines are infinite edges.}{fig:voronoi}
 \Cref{fig:voronoi} is an example of the \ac{VD} built on some random
-sites, on the figure the dashed lines are edges that go to infinite.
+sites, the dashed lines in the figure are edges that go to infinite.
 
 \image{fortune.png}{Fortune's algorithm execution}{fig:fortune}
 \index{Fortune's algorithm}The most important algorithm for
@@ -480,7 +477,7 @@ focus and the sweeping line as directrix. Such parabolas, or better
 the arcs between each intersection of them, constitute
 the \emph{beach line}. A parabola disappears from the scene when the
 associated
-arc vanish. The evolution of the intersection points on the beach line
+arc vanishes. The evolution of the intersection points on the beach line
 constitutes the edges of the \ac{VD}, and each point where an arc of
 the beach line disappears constitutes a vertex of the \ac{VD}.
 Refer to \cite{deberg} and
@@ -488,27 +485,27 @@ Refer to \cite{deberg} and
 
 One property of \acp{VD} is that $V(\ve{s_i})$ can be a closed or an
 open area - i.e. the edges of the cells can be infinite - it is important
-to keep this in mind if we want to interpret $Vor(S)$ as a graph. On
+to keep this in mind if we want to interpret $Vor(S)$ as a graph. In
 that case the graph will have edges that go to infinite. We call such
 graph $G(Vor(S))$.
 
-Another property is that if we have $d+1$ sites $\ve{s_0'},\dots,\ve{s_d'}$ that lay on the
+Another property is that, if we have $d+1$ sites $\ve{s_0'},\dots,\ve{s_d'}$ that lay on the
 surface of a $(d-1)$-sphere\footnote{A circumference in $2$-dimensional
   space, a sphere in $3$-dimensional space, an hypersphere in
-  $n$-dimensional space with $n\ge 3$.} that doesn't have any other site on
+  $n$-dimensional space with $n\ge 3$.} that does not have any other site on
 the interior, then the center point of the $(d-1)$-sphere is the
 vertex shared only between the $d+1$ cells
 $V(\ve{s_0'}),\dots,V(\ve{s_d'})$ \cite{deberg}. This is not true for
 less than
 $d+1$ sites on a
 $(d-1)$-sphere because they are not enough to define it univocally,
-but is possible to have $n>d+1$ sites on a $(d-1)$-sphere, on that
-case the center of such $(d-1)$-sphere is the shared vertex of the
-cells corresponding to the $n$ sites. This is important for reasoning
+but is possible to have $n>d+1$ sites on a $(d-1)$-sphere. In that
+case, the center of the $(d-1)$-sphere is the shared vertex of the
+cells corresponding to the $n$ sites. This is important to reason
 about the topography of $G(Vor(S))$ because if we allow more than
 $d+1$ sites on a $(d-1)$-sphere then the maximum degree
-$\Delta(G(Vor(S)))$ of the graph can be arbitrarily big (until to the
-number of vertices). However the fact that we work with coordinates in
+$\Delta(G(Vor(S)))$ of the graph can be arbitrarily big (up to the
+number of vertices). However, the fact that we work with coordinates in
 $\mE^d$ legitimizes the restriction\footnote{We can also relax this
   restriction and in case create multiple nodes connected by zero-distance
   edges on the graph.} of not
@@ -516,12 +513,12 @@ allowing more than $d+1$ sites on an $(d-1)$-sphere, limiting
 $\Delta(G(Vor(S)))$ to $d+1$.
 
 \section{Statistical methods}\label{sec:statisticalMethods}
-In this section we make a short introduction to \acf{MCM}
-\cite{metropolis}\cite{sobol}\cite{newman} and \acf{SA} \cite{kirkpatrick}\cite{ho},
-two statistical methods for calculating unknown quantities and finding
-minimum of functions. Also we introduce \acf{LR} \cite{benjamin} a
-method for transforming a constrained optimization problem in an
-unconstrained optimization problem increasing the state space
+In this section we briefly introduce the \acf{MCM}
+\cite{metropolis}\cite{sobol}\cite{newman} and the \acf{SA} \cite{kirkpatrick}\cite{ho},
+two statistical methods to calculate unknown quantities and to find
+functions minima. Additionally, we introduce \acf{LR} \cite{benjamin}, a
+method to transform a constrained optimization problem in an
+unconstrained one by increasing the state space
 dimension.
 \subsection{Notes on probabilities}
 \subsubsection{\ac{PE}}\index{\acf{PE}}
@@ -536,9 +533,9 @@ for
 \end{equation*}
 we have that
 \begin{equation*}
-  \prob{\abs{X-\mu}<r} = \prob{\abs{X-\mu}>r} = 0.5
+  \prob{\abs{X-\mu}<r} = \prob{\abs{X-\mu}>r} = 0.5.
 \end{equation*}
-So values of $X$ that deviate from $\mu$ less or more than $r$ have the
+Thus values of $X$ that deviate from $\mu$ less or more than $r$ have the
 same probability, and $r$ identifies the most \ac{PE} in a
 normal distribution.
 \subsubsection{\acf{PCLT}}\index{\acf{PCLT}}
@@ -551,7 +548,7 @@ $X_1,X_2,\dots,X_N$, with same mean and same variance
 
 Consider the sum of those random variables:
 \begin{equation*}
-  Y = X_1+X_2+\cdots+X_N
+  Y = X_1+X_2+\cdots+X_N;
 \end{equation*}
 we have that
 \begin{eqnarray*}
@@ -559,7 +556,7 @@ we have that
   \variance{Y}&=&\variance{X_1+X_2+\cdots+X_N}=Nb^2.
 \end{eqnarray*}
 
-Consider now a normally distributed random variable $Z$ with
+Consider a normally distributed random variable $Z$ with
 parameters:
 \begin{eqnarray*}
   \mu&=&Nm\\
@@ -567,23 +564,23 @@ parameters:
 \end{eqnarray*}
 with \ac{PDF} $p_Z(x)$.
 
-The \emph{\ac{PCLT}} affirms that for $N$ big
-enough, and for every interval $(x_1,x_2)$:
+The \emph{\ac{PCLT}} affirms that, for $N$ big
+enough, and for every interval $(x_1,x_2)$, applies:
 \begin{equation}\label{eq:tcl}
   \prob{x_1<Y<x_2}\approx\int_{x_1}^{x_2}p_Z(x) \md x.
 \end{equation}
-So the sum of an elevate number of identically-distributed random
+Thus, the sum of an elevate number of identically-distributed random
 variables is a random variable with normal distribution with mean $Nm$
-and variance $Nb^2$ even if
+and variance $Nb^2$, even if
 $X_1,X_2,\dots,X_N$ aren't normally distributed.
 
 \subsection{\acf{MCM}}\index{\acf{MCM}}
-Suppose that you need to calculate an unknown quantity $m$, you need
+If we suppose to calculate an unknown quantity $m$, we need
 to find a random variable $X$ such that:
 \begin{equation*}
   \expected{X} = m.
 \end{equation*}
-If you have such distribution with variance:
+If we have such distribution with variance:
 \begin{equation*}
   \variance{X} = b^2
 \end{equation*}
@@ -609,7 +606,7 @@ that is
 \begin{equation*}
   \prob{Nm-3b\sqrt{N} < Y < Nm+3b\sqrt{N}}\approx 0.997
 \end{equation*}
-dividing by $N$:
+dividing by $N$
 \begin{equation*}
   \prob{m-\frac{3b}{\sqrt{N}} < \frac{Y}{N} <
     m+\frac{3b}{\sqrt{N}}}\approx 0.997
@@ -618,14 +615,14 @@ that is
 \begin{equation*}
   \prob{\abs{\frac{Y}{N}-m} <\frac{3b}{\sqrt{N}}}\approx 0.997
 \end{equation*}
-and so:
+results in
 \begin{equation}\label{eq:mc}
   \prob{\abs{\frac{1}{N}\sum_{i=1}^NX_i-m} <\frac{3b}{\sqrt{N}}}\approx 0.997.
 \end{equation}
 
-\Cref{eq:mc} asserts that, if you extract a sample for each random
+\Cref{eq:mc} asserts that, if we extract a sample for each random
 variable $X_i$, the arithmetic mean of those values is approximately
-equal to $m$. Moreover the error of such approximation is equal to
+equal to $m$. Moreover, the error of such approximation is equal to
 $3b/\sqrt{N}$, that tend to $0$ increasing $N$. It is also possible to
 further 
 reduce the uncertainty ($1-0.997=0.003$) by increasing the number $k$ of
@@ -633,8 +630,8 @@ sigma used for the
 approximation and evaluating the error $kb/\sqrt{N}$.
 
 In practice, since the random variables $X_i$ have the same
-distribution of $X$, it is sufficient to extract $N$ samples from $X$ for
-reaching to the same conclusions.
+distribution of $X$, it is sufficient to extract $N$ samples from $X$ to
+reach the same conclusions.
 
 The \acf{MCM} is constituted by the following procedure, to be adapted
 according to the problems:
@@ -642,16 +639,17 @@ according to the problems:
 \item find the distribution $X$ having desired quantity $m$ as mean
   value and $b^2$ as variance;
 \item extract $N$ samples from $X$, with $N$ big enough to have an
-  error small as desired;
+  error as small as desired;
 \item the arithmetic mean of those $N$ samples is the approximation of
   the desired value $m$.
 \end{enumerate}
-Basically we transformed the problem from \emph{calculate $m$} to \emph{find
+Essentially, we transforme the problem from \emph{calculating $m$} to
+\emph{finding
   the distribution $X$}, or anyway the $N$ samples distributed
 accordingly to $X$.
 
 If we want to characterize more in detail the error committed taking
-$N$ samples, we can recur to \ac{PE}. If we set $k=0.6745$ then we
+$N$ samples, we can use to \ac{PE}. If we set $k=0.6745$ then we
 have that
 \begin{equation*}
   \prob{\abs{\frac{1}{N}\sum_{i=1}^NX_i-m} <\frac{0.6745\cdot b}{\sqrt{N}}}\approx 0.5
@@ -669,20 +667,21 @@ committed taking $N$ samples.
 
 \ac{MCM} is useful to simulate events that have an high degree of
 uncertainty in the inputs or an high degree of liberty in the
-state. For instance integrating numerically a function with many
+state: for instance, numerically integrate a function with many
 dimensions or \acf{SA} (\cref{sec:simulatedAnnealing}).
 
 \subsection{\acf{SA}}\label{sec:simulatedAnnealing}\index{\acf{SA}}
 The \ac{SA} is a method used to find the global maximum or
 minimum of a function. It is inspired by a method
 used in metallurgy that consists in heating and then cooling slowly a
-material for augmenting the dimensions of the crystals and improving
-the chemico-physical properties. The function to be optimized can be
+material to increase the size of the crystals and improving
+the chemico-physical properties. The function that must be optimized
+can be
 defined in a multiple-dimensional space.
 
 \subsubsection{Statistical thermodynamic}
-For describing the base principles of statistical thermodynamic we
-consider an example. In a one-dimensional lattice every point
+To describe the basic principles of statistical thermodynamic we
+consider the following example. In a one-dimensional lattice every point
 is a particle with a value of spin that can be \emph{up} or
 \emph{down}. If the lattice has $N$ points then the system can be in
 $2^N$ different configurations, where each one of those configurations
@@ -735,9 +734,9 @@ temperature based on the current iteration number such that for low
 $k$ the returned temperature is high and for high $k$ the returned temperature
 is low; $neighbour$ is the function that returns a random neighbour of
 the current state; $uniform$ returns an uniformly-randomly chosen
-number in $[0,1]$; $P_a$ is the distribution of accepting probability,
+number in $[0,1]$; $P_a$ is the distribution of accepting probability
 that depends on the energy of the current state, on the energy of the
-neighbour, and on the current temperature. In case of acceptation the
+neighbour, and on the current temperature. In case of acceptance, the
 neighbour becomes the current state and the process continues.
 
 \begin{algo}{\acf{SA}}{alg:sa}
@@ -768,7 +767,7 @@ Initially $P_a$ was chosen such that
     \me^{-(E(sNew)-E(s))/T},& \text{otherwise}
   \end{cases}
 \end{equation*}
-but this isn't strictly necessary for developing a \ac{SA} method.
+but this isn't strictly necessary to develop a \ac{SA} method.
 
 \subsection{\acf{LR}}\label{sec:lagrangianRelaxation}\index{\acl{LR}}
 A general constrained discrete optimization problem can be expressed in
@@ -778,7 +777,7 @@ the form:
 & \underset{x}{\text{minimize}}
 & & f(x) \\
 & \text{subject to}
-& & g(x)=0.
+& & g(x)=0
 \end{aligned}
 \end{equation}
 where $x\in X$ is the state of the system in a discrete space $X$, $f(x)$
@@ -787,25 +786,26 @@ minimize, and $g(x)=0$ is the constraint. The functions can also be
 in a multidimensional discrete space, in that case the $x$ is a vector
 $\ve{x}=(x_1,\dots,x_n)$ of variables.
 
-For solving this class
-of problems a \emph{Lagrange relaxation} method can be used \cite{bertsekas}, it
-augments the variable space $X$ by a \emph{Lagrange multiplier} space
-$\Lambda$ of dimension equal to the number of constraints - one in the
+To solve this class
+of problems a \emph{Lagrange relaxation} method can be used
+\cite{bertsekas}: it expands
+the variable space $X$ by a \emph{Lagrange multiplier} space
+$\Lambda$, equal in dimension to the number of constraints - one in the
 \cref{eq:opt}.
 
 The \emph{generalized discrete Lagrangian
-  function} corresponding to the \cref{eq:opt} is:
+  function}, corresponding to the \cref{eq:opt}, is:
 \begin{equation}\label{eq:lagrangianFun}
   L_d(x,\lambda)=f(x)+\lambda H(g(x))
 \end{equation}
-where $\lambda$ is a variable in $\Lambda$, and if the dimension of
-$\Lambda$ is more than one $\lambda$ must be transposed in
+where $\lambda$ is a variable in $\Lambda$; if the dimension of
+$\Lambda$ is more than one $\lambda$, it must be transposed in
 ~\cref{eq:lagrangianFun}. $H(x)$ is a non negative function
 with the property that $H(0)=0$ and aimed to transform g in a non
 negative function. For instance, it can be  $H(g(x))=|g(x)|$ or
 $H(g(x))=g^2(x)$. 
 
-Under the previous assumptions the set of \emph{local minima}
+Under the previous assumptions, the set of \emph{local minima}
 in \cref{eq:opt} - that respect the constraints -  coincides
 with the set of \emph{discrete saddle point}
 in the augmented space. A point $(x^*,\lambda^*)$ is a discrete saddle
@@ -814,14 +814,12 @@ point if:
   L_d(x^*,\lambda)\leq L_d(x^*,\lambda^*)\leq L_d(x,\lambda^*)
 \end{equation*}
 for all $x\in\mathcal{N}(x^*)$ and for all $\lambda\in\Lambda$, where
-$\mathcal{N}(x^*)$ is the set of all neighbours of $x^*$.
+$\mathcal{N}(x^*)$ is the set of all $x^*$'s neighbours.
 
-For resolving the optimization \cref{eq:opt} it is necessary to
-calculate all the discrete saddle points $(x^*,\lambda^*)$ on the surface
-represented by
-\cref{eq:lagrangianFun} using some
-optimization method (i.e. simulated annealing). Then it is chosen
-the one that minimize $f(x^*)$, $x^*$ is then the desired minimum.
+To solve the optimization \cref{eq:opt} it is necessary to calculate,
+among the saddle points, the global minimum for $f$. We can use an
+optimization method, like \ac{SA}, that descends in $X$ and ascends in
+$\Lambda$.
 
 \section{Intersections in space}\label{sec:intersections}\index{3D geometry}
 We work in a spatial environment with polyhedral obstacles. Thus, in
@@ -834,13 +832,13 @@ performing the following three basic geometric tasks:
 \item establish whether two triangles intersect.
 \end{enumerate}
 
-In the project we need to deal with three kinds of collision detection
-methods in 3-dimension euclidean space:
+In the project we need to consider three kinds of collision detection
+methods in 3-dimension euclidean space.
 
 \subsection{Point inside convex polyhedron in 3D space}\index{3D
   geometry!point inside polyhedron}
-For testing if a point $\ve{p}$ is inside a convex polyhedron $V$ with
-vertices $\ve{v_1},\ve{v_2},\dots,\ve{v_n}$ we use a method that rely
+To test if a point $\ve{p}$ is inside a convex polyhedron $V$ with
+vertices $\ve{v_1},\ve{v_2},\dots,\ve{v_n}$, we use a method that rely
 on convex hulls \cite{deberg}\cite{schneider}.
 
 \begin{algo}{Check if point $\ve{p}$ is inside convex polyhedron $V$}{alg:pointInPoly}
@@ -870,9 +868,10 @@ The cost of this algorithm is
 \begin{equation*}
   \bigO(n\log n)
 \end{equation*}
-where $n$ is the number of vertices of $V$, because the cost for
-constructing the convex hull is \cite{deberg} $\bigO(n\log n)$, and
-then we have another negligible term $\bigO(n)$ for the cycle on \cref{ln:pointInPolyFor}.
+where $n$ is the number of vertices of $V$, because the cost to 
+construct the convex hull is \cite{deberg} $\bigO(n\log n)$, and
+then we have another negligible term $\bigO(n)$ for the cycle on
+\cref{ln:pointInPolyFor}.
 
 \subsection{Segment-triangle in 3D space}\label{sec:intersectionST}\index{3D
   geometry!segment-triangle intersection}\index{intersections!segment-triangle}
@@ -894,7 +893,7 @@ the following cases also summarized in \cref{tab:intersectSegmentTriang}:
   containing $T$ is in the sheaf of planes generated by the line
   containing $S$.
 \end{enumerate}
-The discriminants among the cases  are two,  presence of intersection
+The discriminating factors among the cases are two: the presence of intersection
 and coplanarity.
 \cref{tab:intersectSegmentTriang}.
 \begin{table}
@@ -944,13 +943,13 @@ and coplanarity.
 In \cref{fig:segmentTriangleIntersection} a
 \cref{en:ist:nc:i} situation is shown where there is intersection in
 only one 
-point $\ve{x}$. For establishing whether $S$ and $T$ intersect, we need to
+point $\ve{x}$. To establish whether $S$ and $T$ intersect, we need to
 solve 
-four equation in four unknowns \cite{schneider} where we look for a point
+four equations in four unknowns \cite{schneider} where we look for a point
 $\ve{x}$ being a convex linear
 combination of $\ve{a_2}$ and $\ve{b_2}$ and at the same time a convex
 linear combination of $\ve{a_1}$,
-$\ve{b_1}$ and $\ve{c_1}$. In other words when there is a collision,
+$\ve{b_1}$ and $\ve{c_1}$. In other words, when there is a collision,
 then there is a solution for the unknowns
 $\alpha$, $\beta$, $\gamma$, $\delta$, $\zeta$ of the system
 \begin{equation}\label[system]{eq:segmentTriangleIntersection1}
@@ -972,19 +971,20 @@ with the further conditions
 \end{equation}
 Note that the first equation of
 \cref{eq:segmentTriangleIntersection1} has vectorial coefficients
-$\ve{a_2}$, $\ve{b_2}$, $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$, so the
-system is of five unknowns in five equations. If
+$\ve{a_2}$, $\ve{b_2}$, $\ve{a_1}$, $\ve{b_1}$, $\ve{c_1}$, thus we
+have a system with five unknowns in five equations. If
 \Cref{eq:segmentTriangleIntersection1} has just one solution then we are
-on \cref{en:ist:nc:ni} or \cref{en:ist:nc:i}, respectively when
-\cref{eq:segmentTriangleIntersection1c} is fulfilled or not. If it has
+in \cref{en:ist:nc:ni} when \cref{eq:segmentTriangleIntersection1c} is
+fulfilled or in \cref{en:ist:nc:i} when it is not. If it has
 infinite
-solution then we are on \cref{en:ist:c:ni} or \cref{en:ist:c:i}, again
-depending on the fulfillment of (3,16) or not. Finally, if it has not
-solution then $S$ or $T$ are degenerated.
+solutions then we are on \cref{en:ist:c:ni} or \cref{en:ist:c:i},
+depending again on the fulfillment of
+\cref{eq:segmentTriangleIntersection1c}. Finally, if it has no
+solution, then $S$ or $T$ are degenerated.
 
-We are interested in finding only \cref{en:ist:nc:i} collisions because for
-simplicity we consider the special case of a segment that lays on the
-surface of a triangle as not colliding with it, and for coherence we
+We are interested in finding only \cref{en:ist:nc:i} collisions because, for
+simplicity, we consider the special case of a segment that lays on the
+surface of a triangle as nonintersecting with it, and, for coherence, we
 restrict the conditions of \cref{eq:segmentTriangleIntersection1c} to
 \begin{equation}
   \begin{cases}
@@ -1028,8 +1028,9 @@ in the unknowns $\alpha$, $\gamma$ and $\delta$ with the relative conditions
   \State\Return $(intersect, coordinates)$
   \EndFunction
 \end{algo}
-Thus, \cref{alg:intersectSegmentTriangle} which performs \cref{tsk:segmentTriangle}
-basically consists in solving
+Thus, \cref{alg:intersectSegmentTriangle} which performs
+\cref{tsk:segmentTriangle} 
+essentially consists in solving
 \cref{eq:segmentTriangleIntersection2} with the parameters $\ve{a_2}$,
 $\ve{b_2}$, $\ve{a_1}$, $\ve{b_1}$ and $\ve{c_1}$ from $S$ and $T$;
 and then in checking if the solution is admissible. The condition of
@@ -1037,7 +1038,7 @@ and then in checking if the solution is admissible. The condition of
 \cref{eq:segmentTriangleIntersection2} has solution and if that
 is unique.
 
-We have also the positive secondary effect that from the solution
+We also have the positive secondary effect that from the solution
 $(\alpha,\gamma,\delta)$ of \cref{eq:segmentTriangleIntersection2} we
 can extract the barycentric coordinates $(\gamma, \delta,
 1-(\gamma+\delta))$ of the intersection point $\ve{x}$ on the system of
@@ -1053,13 +1054,13 @@ triangles, we have the cases:
 \item\label[void]{en:itt:c} $T_1$ and $T_2$ are contained by the same plane;
 \item\label[void]{en:itt:nc} $T_1$ and $T_2$ are contained by different planes.
 \end{enumerate}
-To simplify the problem we decided - analogously to the case of
+To simplify the problem we decide - similarly to the case of
 intersection between segment and triangle - that when we are on \cref{en:itt:c}
-we consider $T_1$ and $T_2$ not intersecting in any case, also if from a
+we consider $T_1$ and $T_2$ not intersecting in any case, even if from a
 geometrical point of view they share points. After this premise we can
 assert that the possible relation between $T_1$ and $T_2$ can be
 exclusively one
-of the types \cite{schneider}:
+of the following types \cite{schneider}:
 \begin{enumerate}[label=\textbf{type \arabic*}, start=0]
 \item\label[void]{en:itt:i0} $T_1$ and $T_2$ do not intersect;
 \item\label[void]{en:itt:i1} two edges of $T_1$ intersect the plane
@@ -1167,11 +1168,11 @@ of the types \cite{schneider}:
 \end{algo}
 On \cref{fig:trianglesIntersection1} and
 \cref{fig:trianglesIntersection2} we can see two examples of
-\cref{en:itt:i1} and \cref{en:itt:i2}, respectively. For estabiliscing
+\cref{en:itt:i1} and \cref{en:itt:i2}, respectively. To establish
 if $T_1$ and $T_2$
 intersect we need to check if every edge of $T_1$ intersects $T_2$
-and every edge of $T_2$ intersects $T_1$. If we found at least one
-edge that intersects with one triangle then $T_1$ and $T_2$
+and if every edge of $T_2$ intersects $T_1$. If we find at least one
+edge that intersects with one triangle, then $T_1$ and $T_2$
 intersect. \Cref{alg:intersectTriangles} executes such check, the function
 $intersect$ on \cref{ln:intersectTriangles1} and
 \cref{ln:intersectTriangles2} is the intersection check between a segment
