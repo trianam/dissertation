@@ -789,7 +789,7 @@ and, if we consider $k$ constant,
     Total ($k$ costant)&\eqCostTotalTwoK&\cref{eq:costTotalTwoK}\\
     \hline
   \end{tabular}
-  \caption{Summary of the costs for solution two}
+  \caption{Summary of the costs for solution two.}
   \label{tab:costsSol2}
 \end{table}
 On \cref{tab:costsSol2} we summarize all the terms that contribute to
@@ -806,21 +806,20 @@ this case we can divide the algorithm in two parts:
 
 \section{Degree increase}\label{sec:degreeInc}\index{Degree
   increase}\index{\bss!higher degree}
-Until now we have assumed of dealing only with quadratic \bss{} -
-i.e. of degree $m$ - because
-in that case,
+We have hitherto assumed we are dealing only with quadratic \bss{} -
+i.e. of degree $2$ - because,
 for the \ac{CHP} (\cref{sec:convexHull}), we need to check
 intersections only between  two triangles (one belonging to $P$ and the
 other to \acp{OTF}). If we want to use higher degree
-curves we can modify the
-previous algorithms for dealing with polyhedral convex hulls, but this
-implies a complexity increasing.
+curves, we can modify the
+previous algorithms to deal with polyhedral convex hulls, but this
+implies an increase in complexity.
 
-We are interested in increasing the degree for achieving smooth
-curves with continue curvature and torsion. We adopted a compromise:
+We are interested in increasing the degree to achieve smooth
+curves with continue curvature and torsion. We adopt a compromise:
 we adapt the path obtained from the previous algorithms adding
 vertices and forcing the curve to remain in the same convex
-hull. However this approach have the drawback that we cannot achieve a
+hull. However, this approach have the disadvantage that we cannot achieve a
 good torsion\footnote{We can improve this with the post process.}
 because the curve changes plane in an inflection point of
 the curvature.
@@ -842,7 +841,7 @@ Thus the final modified path for a \bs curve of degree $m\ge 3$ is
   \tilde{P}=(\ve{v_0},\ve{w_0},\dots,\ve{w_{m-3}},\ve{v_1},\dots,\ve{v_i},\ve{w_{i(m-2)}},\dots,\ve{w_{(i+1)(m-2)-1}},\ve{v_{i+1}},\dots,\ve{v_n}).
 \end{equation*}
 
-This strategy  is used in the project only for lifting the degree from $2$ to $3$ or $4$.
+This strategy  is used in this project only to lift the degree from $2$ to $3$ or $4$.
 
 \begin{myfig}{Increase the degree $m$ from $2$ to $4$.}{fig:highDegree}
   \begin{tikzpicture}
@@ -909,14 +908,15 @@ This strategy  is used in the project only for lifting the degree from $2$ to $3
     \node[above] at (fg2) {$\ve{w_{11}}$};
   \end{tikzpicture}
 \end{myfig}
-In \cref{fig:highDegree} is visible an example of path
+An example of path
 \begin{equation*}
-  P=(\ve{v_0},\ve{v_1},\ve{v_2},\ve{v_3},\ve{v_4},\ve{v_5},\ve{v_6}).
+  P=(\ve{v_0},\ve{v_1},\ve{v_2},\ve{v_3},\ve{v_4},\ve{v_5},\ve{v_6})
 \end{equation*}
-In green we have the vertices of $P$, in red the added vertices and
+is visible in \cref{fig:highDegree}.
+We have the vertices of $P$ in green, the added vertices in red and
 the cyan area is the convex hull of the final curve.
 
-We want to adapt $P$ to quartic \bs curves, so we need to add two new
+We want to adapt $P$ to quartic \bs curves, hence we need to add two new
 vertices between each pair of vertices $(\ve{v_i},\ve{v_{i+1}})$ for
 $i=0,\dots,6$. Those new vertices are
 \begin{equation*}
@@ -928,9 +928,9 @@ to $m\ge 3$ we have that the convex hull containing a \bs curve of
 degree $m$ in
 $\tilde{P}$ is a subset of the convex hull containing a \bs curve
 of degree $2$
-in $P$. This is because the polyhedrons of consecutive $m+1$ vertices in
-$\tilde{P}$ collapses in triangles contained inside the triangles
-of consecutive vertices in $P$. For instance in \cref{fig:highDegree}
+in $P$. This happens because the polyhedrons of consecutive $m+1$ vertices in
+$\tilde{P}$ collapse in triangles contained inside the triangles
+of consecutive vertices in $P$. For instance, in \cref{fig:highDegree}
 the convex hull of the first $5$ vertices
 $\ve{v_0},\ve{w_0},\ve{w_1},\ve{v_1},\ve{w_2}$ of $\tilde{P}$
 coincides with the
@@ -939,22 +939,24 @@ the triangle $\triangle \ve{v_0}\ve{v_1}\ve{v_2}$ of the first $3$
 vertices of $P$.
 
 One effect of the application of this method is that a curve of
-degree $m$ in $\tilde{P}$ will touch
+degree $m$ in $\tilde{P}$ touches
 every segment of the original control polygon $P$. This is because adding
 $m-2$ aligned vertices between each pair $(\ve{v_i},\ve{v_{i+1}})$
 will result in $m$ aligned vertices on each original segment
 (\cref{sec:alignedVertices}).
 
 \section{Knots selection}\label{sec:knotSel}\index{\bss!knot selection}
-In the previous sections we never discussed the criterion adopted for
-fixing the extended knot vector $T$ associated to the \bs curve.
+In the previous sections we never discuss the criterion adopted to
+determine the extended knot vector $T$
 \begin{equation*}
   T=\{t_0,\dots,t_{m-1},t_{m},\dots,t_{n+1},t_{n+2},\dots,t_{n+m+1}\}
 \end{equation*}
-In this section we discuss two
-methods that we implemented.
+associated to the \bs curve.
 
-First of all, we want that
+In this section we discuss two
+methods implemented to establish $T$.
+
+First of all, we want
 the curve interpolates
 the chosen start and end points, that correspond to the extremes
 $\ve{v_0}$ and $\ve{v_n}$ of the extracted path $P$. We saw in
