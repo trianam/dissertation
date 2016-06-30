@@ -1,7 +1,101 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
 \chapter{Conclusions}\label{cha:conclusions}
-We evince from the tests that
+In this chapter we describe the evidences that emerge from the tests,
+furthermore we discuss possible future improvements of the project.
+
+\section{Tests analysis}
+We present three scenes for doing the tests. Scene \sceneA consists
+in 10 obstacles randomly disposed, scene \sceneAb is the same scene
+with a more dense graph, scene \sceneB have 100 obstacle and \sceneC has
+only one bucket-shaped obstacle.
+
+We set the starting and ending points
+to be at the extremes of the bounding box for scene \sceneA and scene
+\sceneAb - 
+i.e. the objective of the tests in such scenes is to cross the area
+with the obstacles. For scene \sceneB we set the starting point in the
+centre of the crowded area, and the objective is to manage to exit
+from the area. For scene \sceneC we set the starting point inside the bucket
+and we want to arrive under it.
+
+Starting with the test for methods \metA and \metB, we manage to test
+all the possible configuration of scenes, degree, method, post
+processing and knot partition. For method \metC we tested 5 different
+parameter sets for the \ac{SA}.
+
+Regarding the performances, the fastest method is \metB, for having an
+idea of the temporal scales consider that, on a quad core Intel
+i5-2430M CPU at 2.40GHz with 8 Gb of RAM, an execution in scene
+\sceneA, with post processing and adaptive knot partitions, takes:
+\begin{itemize}
+\item 76 seconds for method \metA;
+\item 11 seconds for method \metB.
+\end{itemize}
+It is difficult to compare method \metC because of the different
+parameter sets, anyway an execution of it in scene \sceneA, with
+configuration \annA, takes 168 seconds.
+
+First of all we notice that the application of the adaptive partition
+results in a deterioration of the curvature plots - i.e. an increase
+of the curvature peaks - for the experiments with scenes \sceneA,
+\sceneAb and \sceneB. Instead it results in an improvement with
+experiments with \sceneC.
+
+The post processing fulfills the
+objective of simplify the path. Consider for instance test 33
+(\cref{fig:test33}) where the curvature plot has different
+peaks. After the application of post processing we obtain test 34
+(\cref{fig:test34}) where the curvature peaks are mitigated.
+
+Regarding the degree increase algorithm, it is working for the
+curvature: the plots are continue for degree 3 and continue and
+smooth for degree 4. Unfortunately it is not working for the torsion
+(not shown on the tests) because by adding aligned vertices we force
+plane changes on zero-curvature points, where the torsion is not
+defined.
+
+Solution three produces high quality curves (see tests from 74 to 99),
+with low peaks of curvature and torsion. Furthermore this solution do
+not suffer from the problem with degree increase mentioned before, and
+the plots of the torsion are good.
+
+An important drawback of this
+solution is that the collision check is made in a discrete way, thus,
+depending on the parameters, it is possible that the path intersects
+an obstacle without noticing it.
+Other drawbacks are the slower
+execution time and the difficulty in finding the right values of the
+annealing parameters. In fact wrong values of warming, or insufficient
+trials can \emph{freeze} the system in a not optimal
+status. Furthermore it is necessary to adapt the parameters to
+different problems. For instance the configuration \annB and \annC are
+not fitted for tests from 94 to 99, using those settings is not enough
+to let the system converge in an admissible state.
+
+
+
+\section{Future improvements}
+Considering the different benefits and drawback of the implemented
+solutions, we advice to insists in mixed approaches to the
+problem, analytical and stochastic.
+
+An interesting new possible solution can be implementing a
+stochastic optimization on the path obtained from solution 1 or
+solution 2, that is obstacle-free guaranteed. Such hypothetical stochastic
+optimization must avoid states that violates the \ac{CHP}, and it can
+work directly on the state space, without the Lagrangian
+relaxation. In fact in that scenario the initial status is already
+obstacle-free, furthermore we believe that the optimization process do
+not need to explore too much the state space trespassing obstacle
+zones.
+
+We believe that the described process can be very effective in
+improving curvature, torsion and length of the path. It can obtain
+curves with the quality of the implemented third solution, without the
+drawbacks of it: the slow computation and the possible collision
+errors due to the discretization of the inclusion checks.
+
 \end{document}
 
 %%% Local Variables:
