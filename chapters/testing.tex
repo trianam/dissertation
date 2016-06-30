@@ -91,6 +91,7 @@ the followings.
       \annBb&10&100&0.7&\num{1e-7}&\num{1e-6}&1000&100&0&\num{5e-2}&\lenPol&\ratios{0.1}{0.1}{0.8}\\
       \annC&10&10&0.7&\num{1e-7}&\num{1e-6}&1000&10&0&\num{5e-2}&\lenArc&\ratios{0.3}{0.3}{0.4}\\
       \annCb&10&10&0.9&\num{1e-5}&\num{1e-6}&1000&100&0&\num{5e-2}&\lenArc&\ratios{0.3}{0.3}{0.4}\\
+      \annD&10&100&0,7&\num{1e-3}&\num{1e-1}&\nd&100&\nd&\nd&\lenPol&\ratios{0.1}{0.1}{0.8}\\
       \hline
     \end{tabular}
     \caption{Annealing configurations.}
@@ -273,6 +274,24 @@ the followings.
   \end{tabular}
   \caption{Summary of the tests (continue).}
   \label{tab:tests4}
+\end{table}
+
+
+
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \#&Scene&$\ve{s}\rightarrow\ve{e}$&Deg.&Met.&P. p.&Part.&Config.&figure\\
+    \hline
+    100&\sceneA&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metD&\nd&\ukp&\annD&\cref{fig:test100}\\
+    101&\sceneAb&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metD&\nd&\ukp&\annD&\cref{fig:test100}\\
+    102&\sceneB&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metD&\nd&\ukp&\annD&\cref{fig:test100}\\
+    103&\sceneC&\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}&\degFour&\metD&\nd&\ukp&\annD&\cref{fig:test100}\\
+    \hline
+  \end{tabular}
+  \caption{Summary of the tests (continue).}
+  \label{tab:tests5}
 \end{table}
 
 \newpage
@@ -520,6 +539,10 @@ the followings.
 \imagett{test98/s1.png}{test98/s2.png}{test98/c.png}{test98/t.png}{\testLabAnn{98}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degThree}{\metC}{\ukp}{\annCb}}{fig:test98}
 
 \imagett{test99/s1.png}{test99/s2.png}{test99/c.png}{test99/t.png}{\testLabAnn{99}{\sceneC}{\vertices{0.5}{0.5}{0.4}{0.5}{0.5}{0.2}}{\degFour}{\metC}{\ukp}{\annCb}}{fig:test99}
+
+
+
+\imagett{test100/s1.png}{test100/s2.png}{test100/c.png}{test100/t.png}{\testLabAnn{100}{\sceneA}{\vertices{0.2}{0.2}{0.2}{0.9}{0.9}{0.9}}{\degFour}{\metD}{\ukp}{\annD}}{fig:test100}
 
 
 \end{document}
