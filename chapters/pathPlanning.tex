@@ -1,6 +1,6 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
-\chapter{Motion Planning}
+\chapter{Motion Planning}\index{Motion planning}
 The problem of \emph{motion planning} consists in determining a set of
 low level tasks, given an high level goal to be fulfilled
 \cite{choset}. For instance, a classic motion planning problem is the
@@ -29,7 +29,7 @@ respecting its mechanical constraints \cite{lavalle}.
 An important concept for motion planning problems is the \emph{state
   space},
 that can have different dimensions, one for each degree of freedom of
-the robot. It can be a discrete or a continuous space
+the object to move. It can be a discrete or a continuous space
 \cite{lavalle}. We can call the space state $\mS$
 and, considering that there are obstacles or constraints on the scene,
 we can call $\mS_{free}\subseteq\mS$
@@ -49,7 +49,7 @@ possible only to translate and rotate it or if its motion is composed of
 rigid kinematic chains or trees or if it is even possible to have not
 rigid transformations (flexible materials) \cite{lavalle}.
 
-\section{Problem types}
+\section{Problem types}\index{Motion planning!problem types}
 Many different problems related to motion
 planning have been introduced in literature. In this section we
 present a short 
@@ -110,7 +110,7 @@ avoid
 collisions between the paths followed by different movers only if
 the collision point is reached by the movers simultaneously.
 
-\section{Algorithm types}
+\section{Algorithm types}\index{Motion planning!algorithm types}
 We can divide the algorithms for motion planning in different types
 taking into account the specific problem they resolve. The algorithms
 belonging to a certain type can be further divided
@@ -206,7 +206,7 @@ This method manages the trajectory planning problem as a numerical
 optimization problem, using methods like nonlinear programming to
 find the optimal solution.
 
-\section{Path planning}
+\section{Path planning}\index{Path planning}
 In our project we concentrate on a subset of the motion planning
 problem, the \emph{path planning} problem that consists \cite{choset}
 in determining a parametric curve
