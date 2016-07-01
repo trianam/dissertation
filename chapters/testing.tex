@@ -1,9 +1,9 @@
 \documentclass[dissertation.tex]{subfiles}
 \begin{document}
 \chapter{Testing}\label{cha:testing}
-We execute the tests summarized in
-\cref{tab:tests1}, \cref{tab:tests2},
-\cref{tab:tests3},\cref{tab:tests4} for evaluating the project. The
+We execute the tests summarized in Tables
+\ref{tab:tests1}, \ref{tab:tests2},
+\ref{tab:tests3} and\ref{tab:tests4} for evaluating the algorithms of the project. The
 focus of the testing phase is to assess the validity of the different
 algorithm, thus we present a detailed series of tests trying to cover
 all the functionalities.
@@ -11,7 +11,9 @@ all the functionalities.
 Each
 table presents the following fields.
 \begin{itemize}
-\item \emph{Scene} refers to which scene of \cref{tab:scenes} was used;
+\item \emph{Scene} specifies the considered scene among those listed
+  in Tables \ref{tab:tests1}, \ref{tab:tests2},
+\ref{tab:tests3} and\ref{tab:tests4};
 \item $\ve{s}\rightarrow\ve{e}$ indicates the starting and ending points
 \item \emph{Deg.} is the degree of the \bs curve;
 \item \emph{Met.} is the method used, where
@@ -25,28 +27,31 @@ table presents the following fields.
 \item \emph{Part.} indicates if the uniform knot partition
   (\ukp) or the adaptive one (\akp) is used;
 \item \emph{Config.} is used only for method \metC and indicates the
-  used annealing configuration from \cref{tab:annealingConfigs}.
+  used annealing configuration among those listed in \cref{tab:annealingConfigs}.
 \end{itemize}
 
-The \cref{tab:scenes} gives some data about the scenes. The fields are
+\cref{tab:scenes} gives some details about the scenes. The fields are
 the followings.
 \begin{itemize}
+\item \emph{Scene} specifies the name of the scene
 \item \emph{B.b. A} and \emph{B.b. B} are the extremes of the bounding
   box.
-\item \emph{Min. obs. rad.} and \emph{Max. obs. rad.} are respectively
-  the minimum radius and the maximum radius of the obstacles in the
-  scene. For scenes 1, 1b, and 2 the obstacles are not-intersecting
-  tetrahedrons generated randomly with the specific parameters. The
-  scene 3 is a bucket-shaped obstacle with center in $[0.5,0.5,0.5]$,
-  with width $0.2$, height $0.4$ and thickness $0.2$.
+\item \emph{Obs. shapes} indicates the shape of the obstacles in the
+  scene\footnote{Scene \sceneC has only one bucket-shaped obstacle
+    with center in $[0.5,0.5,0.5]$, with width $0.2$, height $0.4$ and
+    thickness $0.02$.}; 
 \item \emph{\# obs.} is the number of obstacles in the scene.
 \item \emph{Max. empty area} is the maximum empty area for the
-  distribution of the Voronoi sites as explained in \cref{sec:baseGraph}.
+  distribution of the Voronoi sites on the \acp{OTF} of the obstacles
+  (see \cref{sec:baseGraph});
+\item \emph{Figure} is the reference to the figure of the scene that
+  contemplates also the graph $G$.
 \end{itemize}
 
 \cref{tab:annealingConfigs} indicates the configurations for the
 \ac{SA} phase. The fields are the followings:
 \begin{itemize}
+\item \emph{Config.} specifies the name of the configuration set;
 \item \emph{$T_0$} is the initial \emph{temperature};
 \item \emph{Trials} is the number of trials for each annealing cycle;
 \item \emph{warm.} is the warming ratio of temperature between two
@@ -68,20 +73,24 @@ the followings.
   optimization, of curvature, torsion and length respectively;
 \end{itemize}
 
-All the results of the tests are visible in \cref{cha:tests}.
+
+All the results of the tests are visible in the figures presented in
+\cref{cha:tests}. The used visualization for the tests with scene
+\sceneB is different from the others to enhance the visualization of
+the curve. Only the edges of the obstacles are drawn. 
 
 \begin{landscape}
   \begin{table}
     \centering
     \begin{tabular}{|c|c|c|c|c|c|c|}
       \hline
-      Scene&B.b. A&B.b. B& Min. obs. rad.& Max. obs. rad.& \# obs.& Max. empty area\\
+      Scene&B.b. A&B.b. B& Obs. shape& \# obs.& Max. empty area& Figure\\
       \hline
-      \sceneA&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&10&0.1\\
-      \sceneAb&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&10&0.01\\
-      \sceneB&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&100&0.1\\
+      \sceneA&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&Tetrahedrons&10&0.1&\cref{fig:scene1}\\
+      \sceneAb&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&Tetrahedrons&10&0.01&\cref{fig:scene1b}\\
+      \sceneB&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&Tetrahedrons&100&0.1&\cref{fig:scene2}\\
       %\sceneBb&\vertex{-0.1}{-0.1}{-0.1}&\vertex{1.1}{1.1}{1.1}&0.2&0.4&100&0.01\\
-      \sceneC&\vertex{0}{0}{0}&\vertex{1}{1}{1}&\nd&\nd&1&0.1\\
+      \sceneC&\vertex{0}{0}{0}&\vertex{1}{1}{1}&Polyhedron&1&0.1&\cref{fig:scene3}\\
       \hline
     \end{tabular}
     \caption{Testing scenes.}
@@ -287,5 +296,5 @@ All the results of the tests are visible in \cref{cha:tests}.
 
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../dissertation"
+%%% TeX-master: "../dissertation.tex"
 %%% End:

@@ -10,8 +10,14 @@ intersect any obstacle.
 In this project we are interested in generating smooth
 paths. Smoothness is a desirable property that is
 frequently presented in literature for the planar case. Consider, for
-instance, the works \cite{maekawa}, \cite{ho-liu}, \cite{li} and
-\cite{giannelli}. On in the latter in particular, they used
+instance, the papers \cite{maekawa}, \cite{ho-liu}, \cite{li} and
+\cite{giannelli}. The first considers an interesting combined
+approach to the problem: analytical to find a smooth curve, and
+stochastic to locate a desired cusp on it. On the second they
+concentrates in finding a curvature bounded path starting from a
+\acf{VD} constructed according to the environment. The third work concentrates in
+the process of transforming an existing polyline path in a smooth
+curve. On the last, they used
 \acf{PH} curves that have interesting features for the \acf{CAM} field
 \cite{farouki}.
 
@@ -24,7 +30,7 @@ obstacle-checking phases until an admissible solution is
 obtained. Other works, like \cite{aghababa} and \cite{kroumov}, use 
 stochastic methods to achieve smoothness.
 
-\bs curves are a reference standard in \ac{CAD} and \ac{CAGD}
+\bs curves are a reference standard in \acf{CAD} and \acf{CAGD}
 \cite{hughes}\cite{foley}\cite{farin}\cite{farin2}. Thus, we decide to
 develop a 3D path planning application using this kind of curves, as
 \cite{yang} do. However, as earlier mentioned,
@@ -51,8 +57,8 @@ on the curve.
 Regarding the scene representation, different kinds of
 polyhedral obstacle are considered.
 
-A framework in Python is developed using \ac{VTK} for the graphic
-output. We use a roadmap method based on \acp{VD} to create a
+A framework in Python is developed using \acf{VTK} for the graphic
+output. We use a roadmap method based on \acfp{VD} to create a
 graph (details in
 \cref{sec:baseGraph}) that is the base
 structure for the project. Using such structure, three
@@ -67,7 +73,7 @@ different solutions are presented.
 \item The second method still benefits from the \ac{CHP},
   but it picks the shortest path directly in the base graph. If
   violations of the \ac{CHP} emerge in it, then rectification
-  measures are taken (cref{sec:inter2}).
+  measures are taken (\cref{sec:inter2}).
 \item The third method uses a probabilistic approach. Starting from
   the shortest path in the original graph, it performs a simulated
   annealing optimization (\cref{sec:simulatedAnnealing}) that converges
@@ -98,7 +104,7 @@ increasing the curve degree (\cref{sec:degreeInc}) and changing the
 \end{itemize}
 
 The third part (\cref{prt:evaluation}) describes the instruments used
-to implement the algorithms (cref{cha:codeStructure}) and presents
+to implement the algorithms (\cref{cha:codeStructure}) and presents
 a series of tests with
 different scenes and configurations (\cref{cha:testing}) with their
 conclusions (\cref{cha:conclusions}).

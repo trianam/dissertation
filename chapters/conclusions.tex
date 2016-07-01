@@ -52,6 +52,12 @@ of the curvature peaks - for the experiments with scenes \sceneA,
 improvement. Thus, this method is not always reliable in terms
 of the curve fairing.
 
+We notice that the curvature presents peaks near the start and/or the
+end on some tests. See for instance tests 1, 3, 5. The cause of this
+is the attachment method of start and ending points. In fact they are
+attached to the nearest vertex of $G$, but it can be also too close
+and in a bad direction, adding a deleterious hook to the control polygon.
+
 The post-processing fulfills the
 purpose of simplifying the path. Consider, for instance, test 33
 (\cref{fig:test33}) where the curvature plot has different
@@ -96,9 +102,19 @@ creation of the scene. A run on the scene have complexity
 \end{itemize}
 
 \section{Future improvements}
-Considering the different benefits and drawback of the implemented
-solutions, we advice to insist on a mixed approach to the
-problem, analytical and stochastic.
+The present work contemplates many possible improvements. One of them
+is to provide a better method to attach the start and ending
+points. For instance one possibility is to connect them to all the
+visible vertices of $G$.
+
+Another possible improvement is to design another algorithm for the
+adaptive knot partition. The current one does not improve enough the
+fairness of the curve.
+
+Considering the different benefits and drawbacks of the implemented
+solutions, would be interesting to further elaborate the idea of a
+mixed approach to the 
+problem: analytical and stochastic.
 
 An new interesting solution might be implementing a
 stochastic optimization on the path obtained from solution 1 or

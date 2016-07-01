@@ -118,21 +118,15 @@ points only along the edges of the obstacles.
 We attach the desired start and end
 points $\ve{s}$ and $\ve{e}$ on the obtained graph $G$ and we can obtain a path between the two points using an
 algorithm like Dijkstra \cite{dijkstra}\cite{knuth}. To attach $\ve{s}$
-and $\ve{e}$ we design two
-alternative methods:
-\begin{itemize}
-\item the first method finds the vertex $\ve{v_n}\in V_{vis}\subseteq V$ such
+and $\ve{e}$ we finds the vertex $\ve{v_n}\in V_{vis}\subseteq V$ such
   that $dist(\ve{s},\ve{v_n})\leq dist(\ve{s},\ve{v_i})$, $\forall
   \ve{v_i}\in V_{vis}$, where
   \begin{equation*}
     V_{vis}=\{\ve{v}\in V\ :\ \overline{\ve{s} \ve{v_i}}\ \text{do not
       intersects any obstacle}\},
   \end{equation*}
-  then adds $\ve{s}$ to $V$ and the edge $(\ve{s},\ve{v_n})$ to $E$;
-  similarly for $\ve{e}$;
-\item the second method adds $\ve{s}$ to $V$ and all the edges $(\ve{s},\ve{v_i})$
-  $\forall \ve{v_i}\in V_{vis}$; similarly for $\ve{e}$.
-\end{itemize}
+  then adds $\ve{s}$ to $V$ and the edge $(\ve{s},\ve{v_n})$ to $E$.
+  Similarly for $\ve{e}$.
 
 Before using that path as a control polygon,
 we need to take into account the degree of the \bs and the
