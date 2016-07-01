@@ -1,0 +1,56 @@
+\documentclass{letter}
+\usepackage[a4paper,left=1.5cm, right=1.5cm, top=5cm, bottom=2.5cm]{geometry}
+
+\begin{document}
+\pagenumbering{gobble}
+\begin{tabular}{ll}
+  \textbf{Cognome candidato: }& Martina\\
+  \textbf{Nome candidato: }& Stefano\\
+  &\\
+  \textbf{Titolo della tesi: }& B-Spline methods for the design of smooth spatial
+  paths with obstacle avoidance\\
+  &\small(Metodi B-spline per il disegno di percorsi
+  regolari in ambienti tridimensionali contenenti ostacoli)\\
+  &\\
+  \textbf{Relatore: }& Alessandra Sestini (alessandra.sestini@unifi.it)\\
+  \textbf{Correlatore: }& Carlotta Giannelli
+                          (carlotta.giannelli@unifi.it)\\
+  &\\
+  &\\
+  &\\
+  &\\
+  \textbf{Riassunto: }&
+\end{tabular}
+
+\begin{center}
+  \begin{minipage}{0.7\linewidth}
+    Il problema del \emph{path planning} consiste nel trovare una curva
+    che interpoli due punti dati, tale che non intersechi degli ostacoli in
+    un ambiente. Tale problema ha significative applicazioni in robotica e
+    visualizzazione scientifica. Inoltre, \`e importante avere
+    certe qualit\`a di smoothness, quindi ci focalizziamo
+    nell'ottenere una curva con delle buone caratteristiche di
+    curvatura e torsione.
+
+    Per la rappresentazione abbiamo usato le curve B-spline, che sono
+    uno standard affermato nel mondo del Computer-Aided Design (CAD) e
+    del Computer-Aided Geometric Design (CAGD).
+
+    Abbiamo realizzato differenti algoritmi per risolvere il
+    problema. Inoltre abbiamo elaborato la relativa analisi di
+    complessit\`a. Il risultato \`e altamente interdisciplinare,
+    abbiamo integrato, infatti, approcci analitici e stocastici.
+
+    Abbiamo inoltre implementato tali algoritmi in una applicazione in
+    Python 3, usando VTK come libreria grafica. Infine abbiamo testato
+    sistematicamente, su differenti scenari, tale applicazione.
+  \end{minipage}
+\end{center}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
