@@ -160,43 +160,6 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]
-  \frametitle{Dijkstra algorithm}
-  \begin{pblock}
-def dijkstra(graph, start, end):
-  path = []
-  Q = priorityQueue.PQueue()
-  dist = {}
-  prev = {}
-  for node in graph.nodes(): #populate the queue
-    if node != start:
-      dist[node] = inf
-      Q.add(node, inf)
-    else:
-      dist[node] = 0
-      Q.add(node, 0)
-  while True:  #main loop
-    u = Q.pop() #take nearest node and remove from queue
-    if u == end or dist[u] == inf: #finished (good or bad)
-      break
-    #all neighbors still in queue
-    for v in Q.filterGet(lambda node: node in graph.neighbors(u)):
-      tmpDist = dist[u] + graph[u][v]['weight']
-      if tmpDist < dist[v]: #if distance shorter update values
-        dist[v] = tmpDist
-        prev[v] = u
-        Q.add(v, tmpDist) #update distance also in queue
-  u = end
-  while u in prev:  #backward recreation of path
-      u = prev[u]
-      path[:0] = [u]
-  if path:
-      path[len(path):] = [end]
-      path[:0] = [start]
-  return path
-  \end{pblock}  
-\end{frame}
-
 \section{Background}
 
 \begin{frame}
@@ -325,44 +288,24 @@ def dijkstra(graph, start, end):
 
 \begin{frame}
   \frametitle{First implementation}
-  \begin{tikzpicture}[remember picture,overlay]
-    \path[textArrow]<11-> ([xshift=-5.5mm,yshift=1mm]tloop2.west) to [out=180, in=180,distance=7mm] ([xshift=-5.5mm,yshift=1mm]tloop1.west);
-  \end{tikzpicture}
-  A variation of \alert{Dijkstra} algorithm is developed where:\pause
-  \begin{enumerate}
-  \item create an ordered \alert{triple} for each three consecutive nodes in the graph\pause
-  \item check if the \alert{triangle} corresponding to each triple
-    \alert{intersect} an obstacle\pause
-  \item populate the \alert{priority queue} with obstacle free
-    \alert{triples}\pause
+  \begin{block}{Graph transformation (\alert{$G\rightarrow G_t$})}
     \begin{itemize}
-    \item the initial weight is \alert{$0$} for triples where the
-      \alert{first} node is the \alert{start} node\pause
-    \item is \alert{$\infty$} otherwise\pause
+    \item Triples \alert{$(a,b,c)$} of neighboring nodes in $G$ become
+      nodes in $G_t$\pause
+    \item Arcs in $G_t$ between triples in the form
+      \alert{$(a,b,c)\rightarrow(b,c,d)$}\pause
+      \begin{itemize}
+      \item weighted with the distance of the edge
+        \alert{$a\leftrightarrow b$} in $G$\pause
+      \end{itemize}
     \end{itemize}
-  \item\label{item:trijkstraLoop}\tikz[remember picture] \node[coordinate] (tloop1) {};pop the triple with \alert{lowest} weight from the priority
-    queue\pause
-  \item update the weight and pointer to previous of all \alert{neighbouring} triples\pause
-    \begin{itemize}
-    \item a triple $B$ is \alert{subsequent} to a triple $A$ if
-      \alert{$(A[2]=B[1])\land (A[3]=B[2])$}\pause
-    \item the \alert{weight} of a neighbour is \alert{$W(B)=W(A)+dist(A[1],A[2])$}\pause
-    \end{itemize}
-  \item\tikz[remember picture] \node[coordinate] (tloop2) {};repeat from point~\ref{item:trijkstraLoop} until popped a
-    special \alert{ending} triple or a triple with weight
-    \alert{$\infty$}\pause
-  \item the shortest \alert{path} (with free triangular convex hull)
-    can be 
-    obtained following the \alert{previous} pointer from the
-    \alert{ending} triple,
-    and \alert{deconstructing} the triples
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Example}
+  \end{block}
+  \begin{itemize}
+  \item \alert{Prune} all the triples that intersect an obstacle\pause
+  \item \alert{Shortest} path in the remaining triples\pause
+  \end{itemize}
   \begin{center}
-    \includegraphics[width=0.75\textwidth, trim=110 30 50 50, clip]{img/screenFinal2.eps}
+    \includegraphics[width=0.4\textwidth, trim=110 30 50 50, clip]{img/screenFinal2.eps}
   \end{center}
 \end{frame}
 
@@ -539,6 +482,11 @@ def dijkstra(graph, start, end):
     \end{tikzpicture}
   \end{center}
  \end{frame}
+
+\begin{frame}
+  \frametitle{Optimization process}
+
+\end{frame}
 
 \begin{frame}
   \frametitle{Used technologies}
