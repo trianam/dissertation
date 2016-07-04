@@ -48,11 +48,11 @@
 \begin{frame}
   \frametitle{Voronoi diagrams}
   \begin{description}
-  \item[Input:] A set of points in plane (or space) called
+  \item[Input:] Set of points in plane (or space) called
     \alert{sites}
-  \item[Output:]<2-> A partition of the plane (or space) such that each
-    point of a \alert{region} is nearer to a certain site respect to
-    the others
+  \item[Output:]<2-> partition of the plane (or space) such that each
+    point of a \alert{region} is closer to a certain site respect to
+    others
   \end{description}
   \begin{columns}
     \begin{column}{0.5\textwidth}
@@ -69,7 +69,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{B-spline}
+  \frametitle{B-spline curves}
   \begin{center}
     \includegraphics[width=0.9\textwidth, trim=110 30 50 50, clip]{img/bspline.eps}
   \end{center}
@@ -78,45 +78,49 @@
   \item \alert{parametric} curves\pause
   \item follow the shape of a \alert{control poligon}\pause
   \item can interpolate the
-    \alert{extremes} of the control polygon
+    \alert{extremes} of control polygon
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{B-splines details}
+  \frametitle{B-spline curves details}
   \begin{itemize}
-  \item \alert{Order $k$} ($= degree + 1$)\pause
+  \item Degree \alert{$m$}\pause
   \item Extended \alert{partition} (of parametric
     space \alert{$[a,b]$})
     $$
-    T=\{t_0,\dots,t_{k-2},\alert{t_{k-1}},\dots,\alert{t_{n+1}},t_{n+2},\dots,t_{n+k}\}
+    T=\{t_0,\dots,t_{m-1},\alert{t_{m}},\dots,\alert{t_{n+1}},t_{n+2},\dots,t_{n+m+1}\}
     $$
     {\tiny
       $$
-      t_0\leq\dots\leq t_{k-2}\leq t_{k-1}\alert{(\equiv a)} <\dots<
-      t_{n+1}\alert{(\equiv b)} \leq t_{n+2}\leq\dots\leq t_{n+k}
+      t_0\leq\dots\leq t_{m-1}\leq t_{m}\alert{(\equiv a)} <\dots<
+      t_{n+1}\alert{(\equiv b)} \leq t_{n+2}\leq\dots\leq t_{n+m+1}
       $$
     }\pause
-  \item \alert{$n+1$ basis}
-    {\small
+  \item \alert{$n+1$ basis} (of $S_{m,\tau}=P_{m,\tau}\cap C^{m-1}$)
+    {\tiny
       \begin{align*}
         \alert{N_{i,1}(t)} &=
                      \begin{cases}
                        1,\quad \mbox{if}\quad t_i\leq t<t_{i+1}\\
-                       0,\quad \mbox{otherwise}
+                       0,\quad \mbox{otherwise}\qquad\qquad\qquad i=0,\dots,n+m
                      \end{cases}\\
-        \alert{N_{i,k}(t)} &= \omega_{i,k-1}(t)\cdot \alert{N_{i,k-1}(t)}\ +\
-                     (1-\omega_{i+1,k-1}(t))\cdot \alert{N_{i+1,k-1}(t)}
+        \alert{N_{i,r}(t)} &= \omega_{i,r-1}(t)\cdot \alert{N_{i,r-1}(t)}\ +\
+                     (1-\omega_{i+1,r-1}(t))\cdot \alert{N_{i+1,r-1}(t)}\\
+                   &\pushright i=0,\dots,n+m+1-3,\ r=2,\dots,m+1
       \end{align*}
     }
     {\tiny
       $$
-      \omega_{i,k}(t) = \frac{t-t_i}{t_{i+k}-t_i}.
+      \omega_{i,r}(t) = \begin{cases}
+        \frac{t-t_i}{t_{i+r}-t_i},&\mbox{if }t_i\neq t_{i+r}\\
+        0, &\mbox{otherwise}
+      \end{cases}
       $$
     }\pause
-  \item B-spline
+  \item B-spline $\ve{S}:[a,b]\subset\mR\rightarrow\mE^d$
     $$
-    \alert{\mathbf{S}(t)}=\sum_{i=0}^n\alert{\mathbf{v_i}}\cdot N_{i,k}(t),
+    \alert{\mathbf{S}(t)}=\sum_{i=0}^n\alert{\mathbf{v_i}}\cdot N_{i,k}(t)
     $$
   \end{itemize}
 \end{frame}
@@ -124,12 +128,11 @@
 \begin{frame}
   \frametitle{Useful properties of B-spline curves}
   \begin{itemize}
-  \item \alert{Clamped} if $t_0=\dots =t_{k-1}$ and $t_{n+1}=\dots
-    =t_{n+k}$\pause
-  \item \alert{Continuity} $C^{k-2}$ between polynomials (or $C^{m-1}$)\pause
-  \item Contained
-    inside the union of \alert{convex hulls} composed of consecutive
-    \alert{$k$} vertexes of control polygon
+  \item \alert{Interpolates} extremes if $t_0=\dots =t_{m}$ and $t_{n+1}=\dots
+    =t_{n+m+1}$\pause
+  \item \alert{Continuity} $C^{m-1}$ between polynomials\pause
+  \item Contained in \alert{convex hulls} of 
+    \alert{$m+1$} consecutive vertices
     \begin{center}
       \begin{tikzpicture}
         \coordinate (a) at (0,0);
@@ -154,9 +157,9 @@
         \filldraw[controlVert] (\p) circle (2pt);
       \end{tikzpicture}
     \end{center}\pause
-  \item Touch to the segment between \alert{$k-1$ aligned} control
-    vertexes\pause
-  \item Lay down in the segment between \alert{$k$ aligned} control vertexes
+  \item Touches segment between \alert{$m$ aligned}
+    vertices\pause
+  \item Lays in segment between \alert{$m+1$ aligned} vertices
   \end{itemize}
 \end{frame}
 
@@ -169,35 +172,34 @@
     point in 3D space with obstacles using \alert{Voronoi} diagrams.
   \end{block}\pause
   \begin{enumerate}
-  \item Distribute \alert{points} in the surfaces of obstacles
+  \item Distribute \alert{points} in obstacles surfaces
     \begin{itemize}
-    \item and optionally in the surface of bounding box\pause
+    \item and bounding box\pause
     \end{itemize}
-  \item Build \alert{Voronoi} diagram using those points as
-    source\pause
-  \item Transform the Voronoi diagram in a \alert{graph}
+  \item \alert{Voronoi} diagram using those points\pause
+  \item Transform Voronoi diagram in \alert{graph}
     \begin{itemize}
-    \item cells \alert{vertexes} as \alert{nodes}
-    \item cells \alert{edges} as \alert{arcs} (infinite edges
+    \item cells \alert{vertices} $\rightarrow$ \alert{nodes}
+    \item cells \alert{edges} $\rightarrow$ \alert{arcs} (infinite edges
       ignored)\pause
     \end{itemize}
-  \item \alert{Prune} the arcs that crosses an obstacle's
-    surface\pause
-  \item Attach the \alert{start} and \alert{end} points to the
-    graph as nodes\pause
-  \item Calculate the shortest path from start node to end node using
-    \alert{Dijkstra}'s algorithm.
+  \item \alert{Prune} arcs that cross obstacles\pause
+  \item Attach \alert{start} and \alert{end}\pause
+  \item Shortest path from start to end
+    \begin{itemize}
+    \item \alert{Dijkstra}'s algorithm
+    \end{itemize}
   \end{enumerate}
 \end{frame}
 
 \begin{frame}
   \frametitle{Example}
   \begin{center}
-    \includegraphics[width=0.75\textwidth, trim=110 30 50 50, clip]<1>{img/screen1.eps}
-    \includegraphics[width=0.75\textwidth, trim=110 30 50 50, clip]<2>{img/screen2.eps}
-    \includegraphics[width=0.75\textwidth, trim=110 30 50 50, clip]<3>{img/screen3.eps}
-    \includegraphics[width=0.75\textwidth, trim=110 30 50 50, clip]<4>{img/screen4.eps}
-    \includegraphics[width=0.75\textwidth, trim=110 30 50 50, clip]<5>{img/screen5.eps}
+    \includegraphics[width=0.9\textwidth]<1>{img/scrEmpty.png}
+    \includegraphics[width=0.9\textwidth]<2>{img/scrSites-a.png}
+    \includegraphics[width=0.9\textwidth]<3>{img/scrSites-b.png}
+    \includegraphics[width=0.9\textwidth]<4>{img/scrGraph-a.png}
+    \includegraphics[width=0.9\textwidth]<5>{img/scrGraph-b.png}
   \end{center}
 \end{frame}
 
@@ -206,16 +208,14 @@
 \begin{frame}
   \frametitle{Improvement}
   \begin{block}{Idea}
-    Make a \alert{smoother} curve instead of finding the polygonal chain
-    of the shortest path in the structure
+    \alert{Smoother} curve instead of polygonal chain
   \end{block}
   \pause
   \begin{itemize}
-  \item we can use a \alert{B-Spline} that \pause
+  \item Use a \alert{B-Spline} that \pause
     \begin{itemize}
-    \item \alert{interpolate} the start and end vertexes\pause
-    \item use the shortest path found with
-      Dijkstra as \alert{control polygon}
+    \item \alert{interpolate} the start and end\pause
+    \item Shortest path as \alert{control polygon}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -223,12 +223,12 @@
 \begin{frame}
   \frametitle{Problem}  
   \begin{itemize}
-  \item The \alert{control polygon} is free from obstacles by
+  \item \alert{Control polygon} obstacle-free by
     construction\pause
     \begin{itemize}
-    \item (the graph is pruned of the arcs that cross an obstacle's surface)\pause
+    \item (pruned of arcs that cross obstacles)\pause
     \end{itemize}
-  \item But the \alert{curve} is not guaranteed to be free from obstacles\pause
+  \item \alert{Curve} not obstacle-free guaranteed\pause
   \end{itemize}
   \begin{center}
     \begin{tikzpicture}
@@ -246,9 +246,9 @@
 \begin{frame}
   \frametitle{Solution}
   \begin{itemize}
-  \item A \alert{B-Spline} of order \alert{$k$} is contained
-    inside the union of \alert{convex hulls} composed of consecutive
-    \alert{$k$} vertexes of control polygon\pause
+  \item A \alert{B-Spline} of degree \alert{$m$} is contained
+    inside the union of \alert{convex hulls} of
+    \alert{$m+1$} consecutive vertices\pause
   \end{itemize}
   \begin{center}
     \begin{tikzpicture}
@@ -277,11 +277,8 @@
   \pause
   \begin{block}{Idea}
     \begin{itemize}
-    \item we can use a \alert{quadratic} B-Spline (grade 2, order 3) to smooth the
-      path\pause
-    \item and \alert{keep} triangles formed by three
-      consecutive points
-      \alert{free} from obstacles
+    \item Use a \alert{quadratic} B-Spline to smooth path\pause
+    \item \alert{Keep} triangles in control polygon \alert{obstacle-free}
     \end{itemize}
   \end{block}
 \end{frame}
@@ -305,27 +302,62 @@
   \item \alert{Shortest} path in the remaining triples\pause
   \end{itemize}
   \begin{center}
-    \includegraphics[width=0.4\textwidth, trim=110 30 50 50, clip]{img/screenFinal2.eps}
+    \begin{tikzpicture}
+      \coordinate (D) at (-1,1);
+      \coordinate (A) at (0,0);
+      \coordinate (B) at (2,2);
+      \coordinate (C) at (4,0);
+      \coordinate (E) at (3,2);
+      \coordinate (F) at (5,1);
+      \path[obstacle] (1,-0.5) -- (2,1) -- (3,-0.5) -- (1,-0.5);
+      \draw[controlPoly] (D) -- (A) -- (B) -- (C) -- (F);
+      \draw[controlPoly] (B) -- (E) -- (C);
+
+      \filldraw[controlVert] (D) circle (2pt);
+      \filldraw[controlVert] (A) circle (2pt);
+      \filldraw[controlVert] (B) circle (2pt);
+      \filldraw[controlVert] (C) circle (2pt);
+      \filldraw[controlVert] (E) circle (2pt);
+      \filldraw[controlVert] (F) circle (2pt);
+
+      \node[above=0.5em] at (D) {$\ve{d}$};
+      \node[below=0.5em] at (A) {$\ve{a}$};
+      \node[above=0.5em] at (B) {$\ve{b}$};
+      \node[below=0.5em] at (C) {$\ve{c}$};
+      \node[above=0.5em] at (E) {$\ve{e}$};
+      \node[above=0.5em] at (F) {$\ve{f}$};
+    \end{tikzpicture}
   \end{center}
 \end{frame}
 
 \begin{frame}
   \frametitle{Complexity}
-  \begin{block}{Total (if obstacle area is not a function of the
-      number of obstacles)}
-    \alert{$\bigO(d^2|Ob|^2+d^3|Ob|)$}\pause
-  \end{block}
+  \begin{center}
+    \begin{tabular}{|l|c|}
+      \hline
+      Description&Cost\\
+      \hline
+      \hline
+      Creation of $G$&\eqCostGraph\\
+      Pruning of $G$&\eqCostPruning\\
+      Creation of $G_t$&\eqCostVt\\
+      Pruning of $G_t$&\eqCostColl\\
+      Routing in $G_t$& \eqCostDijkstraTriples\\
+      \hline
+      Total&\eqCostTotalOne\\
+      Total ($k$ constant)&\eqCostTotalOneK\\
+      \hline
+    \end{tabular}
+  \end{center}
   \begin{itemize}
-  \item The predominant factor is for checking the triples
-    collisions with obstacles\pause
+  \item Scene construction
     \begin{itemize}
-    \item if $d$ is constant \alert{$\bigO(|Ob|^2)$}\pause
+    \item \alert{$\bigO(|O|^2)$}\pause
     \end{itemize}
-  \item But if we focus only on routing (i.e. we construct the graph
-    only once)\pause
+  \item Routing
     \begin{itemize}
-    \item if $d$ is constant \alert{$\bigO(|Ob|\log|Ob|)$}\pause
-    \item (same of Dijkstra with fixed degree)
+    \item \alert{$\bigO(|O|\log|O|)$}\pause
+    \item (same of Dijkstra with constant degree)
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -334,13 +366,12 @@
   \frametitle{Second implementation}
   \begin{block}{Reason}
     \begin{itemize}
-    \item \alert{First} implementation interesting for complexity
-      analysis\pause
+    \item \alert{First} implementation interesting\pause
     \item[\xmark] but \alert{rejects} many paths
     \end{itemize}
   \end{block}\pause
   \begin{itemize}
-  \item \alert{Add} aligned control vertexes when an obstacle intersect a triple
+  \item \alert{Add} aligned control vertices when obstacle intersect triple
     \begin{center}
       \begin{tikzpicture}
         \path[obstacle] (1,0) -- (2,1) -- (3,0) -- (1,0);
@@ -357,8 +388,37 @@
         }
       \end{tikzpicture}
     \end{center}\pause
-  \item new vertexes calculated as linear \alert{combination} of other
-    vertexes using \alert{coefficients} from obstacle detection
+  \item new vertices \alert{easy} calculated after collision check
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Complexity}
+  \begin{center}
+    \begin{tabular}{|l|c|r|}
+      \hline
+      Description&Cost\\
+      \hline
+      \hline
+      Creation of $G$&\eqCostGraph\\
+      Pruning of $G$&\eqCostPruning\\
+      Routing in $G$&\eqCostDijkstraG\\
+      Clean path&\eqCostCleanPath\\
+      \hline
+      Total&\eqCostTotalTwo\\
+      Total ($k$ costant)&\eqCostTotalTwoK\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \begin{itemize}
+  \item Scene construction
+    \begin{itemize}
+    \item \alert{$\bigO(|O|^2)$}\pause
+    \end{itemize}
+  \item Routing
+    \begin{itemize}
+    \item \alert{$\bigO(|O|\log|O|+|P|\ |O|)$}
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -371,17 +431,17 @@
     \end{itemize}
   \end{block}\pause
   \begin{itemize}
-  \item[\xmark] If we simply \alert{increase} the B-Spline degree \alert{$\rightarrow$} convex hull is not
+  \item[\xmark] If \alert{increase} the B-Spline degree \alert{$\rightarrow$} convex hull not
     \alert{planar} anymore\pause
     \begin{itemize}
-    \item convex hull is formed of union of \alert{tetrahedra}\pause
+    \item convex hull formed of union of \alert{tetrahedra}\pause
     \end{itemize}
   \end{itemize}
   \begin{block}{Solution}
     \begin{itemize}
-    \item \alert{Add} aligned vertexes in control polygon\pause
+    \item \alert{Add} aligned vertices in control polygon\pause
       \begin{itemize}
-      \item and then \alert{increase} the degree
+      \item then \alert{increase} the degree
       \end{itemize}
     \end{itemize}
   \end{block}
@@ -390,7 +450,7 @@
 \begin{frame}
   \frametitle{Example: quadratic to quartic (k=3 $\rightarrow$ k=5)}
   \begin{itemize}
-  \item Add \alert{2} vertexes per edge
+  \item Add \alert{2} vertices per edge
   \end{itemize}\pause
   \begin{center}
     \begin{tikzpicture}[scale=1.5]
@@ -450,13 +510,12 @@
     \end{itemize}
   \end{block}\pause
   \begin{itemize}
-  \item After Dijkstra\pause
-  \item For each triple \alert{$(a,b,c)$} of
+  \item For each triple \alert{$(\ve{a},\ve{b},\ve{c})$} of
     consecutive points in path\pause
-  \item If no obstacles intersect the triangle\uncover<6->{ 
+  \item If no obstacles intersect the triangle\uncover<5->{ 
       \alert{$\rightarrow$} the triple is simplified to a single edge
-      \alert{$(a,c)$}}
-  \uncover<7->{\item[\hmark] After simplification, \alert{new} neighbouring triples need to
+      \alert{$(\ve{a},\ve{c})$}}
+  \uncover<6->{\item[\hmark] After simplification, \alert{new} neighbouring triples need to
     be obstacle-free}
   \end{itemize}
   \begin{center}
@@ -465,27 +524,31 @@
       \coordinate (b) at (2,2);
       \coordinate (c) at (4,0);
 
-      \only<-5>{
+      \only<-4>{
         \draw[controlPoly] (a) -- (b) -- (c);
       
         \filldraw[controlVert] (a) circle (2pt);
         \filldraw[controlVert] (b) circle (2pt);
         \filldraw[controlVert] (c) circle (2pt);
       }
-      \only<6->{
+      \only<5->{
         \draw[controlPoly] (a) -- (c);
       
         \filldraw[controlVert] (a) circle (2pt);
         \filldraw[controlVertHigh] (b) circle (2pt);
         \filldraw[controlVert] (c) circle (2pt);
       }
+
+      \node[left=0.5em] at (a) {$\ve{a}$};
+      \node[left=0.5em] at (b) {$\ve{b}$};
+      \node[right=0.5em] at (c) {$\ve{c}$};
     \end{tikzpicture}
   \end{center}
  \end{frame}
 
 \begin{frame}
-  \frametitle{Optimization process}
-
+  \frametitle{Optimization method}
+  
 \end{frame}
 
 \begin{frame}

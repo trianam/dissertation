@@ -30,11 +30,34 @@
 \newcommand{\cmark}{\ding{52}}%{\ding{51}}
 \newcommand{\xmark}{\ding{56}}%{\ding{55}}
 \newcommand{\hmark}{\ding{42}}%{\ding{43}}
+\newcommand{\ve}[1]{\ensuremath{\boldsymbol{#1}}}
+\newcommand{\mE}{\ensuremath{\mathbb{E}}}
+\newcommand{\mR}{\ensuremath{\mathbb{R}}}
+
+\newcommand{\obsSet}{\ensuremath{O}}
+
+\newcommand{\eqCostGraph}{\ensuremath{\bigO(|\obsSet|\log |\obsSet|)}}
+\newcommand{\eqCostPruning}{\ensuremath{\bigO(k|\obsSet|^2)}}
+\newcommand{\eqCostVt}{\ensuremath{\bigO(k^3|\obsSet|)}}
+\newcommand{\eqCostColl}{\ensuremath{\bigO(|\obsSet|^2 k^2)}}
+\newcommand{\eqCostDijkstraTriples}{\ensuremath{\bigO(k^3|\obsSet|+k^2|\obsSet|\log(k^2|\obsSet|)}}
+\newcommand{\eqCostTotalOne}{\ensuremath{\bigO(k^2|\obsSet|^2+k^3|\obsSet|)}}
+\newcommand{\eqCostTotalOneK}{\ensuremath{\bigO(|\obsSet|^2)}}
+\newcommand{\eqCostDijkstraG}{\ensuremath{\bigO(k|\obsSet|+|\obsSet|\log |\obsSet|)}}
+\newcommand{\eqCostCleanPath}{\ensuremath{\bigO(|P|\cdot|\obsSet|)=\bigO(|\obsSet|^2)}}
+\newcommand{\eqCostTotalTwo}{\ensuremath{\bigO(k|\obsSet|^2)}}
+\newcommand{\eqCostTotalTwoK}{\ensuremath{\bigO(|\obsSet|^2)}}
+
+\makeatletter
+\newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
+\newcommand{\pushleft}[1]{\ifmeasuring@#1\else\omit$\displaystyle#1$\hfill\fi\ignorespaces}
+\makeatother
+
 
 \def\transW{8mm}
 \def\transH{2mm}
 
-\tikzstyle{obstacle}=[fill=green, draw=black]
+\tikzstyle{obstacle}=[fill=yellow!50, draw=black]
 \tikzstyle{convexHull}=[fill=blue!30]
 \tikzstyle{convexHullBord}=[color=black, dash pattern=on 3pt off 3pt]
 \tikzstyle{controlPoly}=[color=black, line width=0.25mm]
