@@ -100,19 +100,19 @@
   \item \alert{$n+1$ basis} (of $S_{m,\tau}=P_{m,\tau}\cap C^{m-1}$)
     {\tiny
       \begin{align*}
-        \alert{N_{i,1}(t)} &=
+        \alert{N_{i,1}(u)} &=
                      \begin{cases}
                        1,\quad \mbox{if}\quad t_i\leq t<t_{i+1}\\
                        0,\quad \mbox{otherwise}\qquad\qquad\qquad i=0,\dots,n+m
                      \end{cases}\\
-        \alert{N_{i,r}(t)} &= \omega_{i,r-1}(t)\cdot \alert{N_{i,r-1}(t)}\ +\
-                     (1-\omega_{i+1,r-1}(t))\cdot \alert{N_{i+1,r-1}(t)}\\
+        \alert{N_{i,r}(u)} &= \omega_{i,r-1}(u)\cdot \alert{N_{i,r-1}(u)}\ +\
+                     (1-\omega_{i+1,r-1}(u))\cdot \alert{N_{i+1,r-1}(u)}\\
                    &\pushright i=0,\dots,n+m+1-3,\ r=2,\dots,m+1
       \end{align*}
     }
     {\tiny
       $$
-      \omega_{i,r}(t) = \begin{cases}
+      \omega_{i,r}(u) = \begin{cases}
         \frac{t-t_i}{t_{i+r}-t_i},&\mbox{if }t_i\neq t_{i+r}\\
         0, &\mbox{otherwise}
       \end{cases}
@@ -120,7 +120,7 @@
     }\pause
   \item B-spline $\ve{S}:[a,b]\subset\mR\rightarrow\mE^d$
     $$
-    \alert{\mathbf{S}(t)}=\sum_{i=0}^n\alert{\mathbf{v_i}}\cdot N_{i,k}(t)
+    \alert{\mathbf{S}(u)}=\sum_{i=0}^n\alert{\mathbf{v_i}}\cdot N_{i,k}(u)
     $$
   \end{itemize}
 \end{frame}
@@ -159,8 +159,12 @@
     \end{center}\pause
   \item Touches segment between \alert{$m$ aligned}
     vertices\pause
-  \item Lays in segment between \alert{$m+1$ aligned} vertices
+  \item Lays in segment between \alert{$m+1$ aligned} vertices\pause
   \end{itemize}
+  \begin{align*}
+    \kappa(u) &= \frac{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}{{\norm{\dot{\ve{S}}(u)}}^3}\\
+    \tau(u) &= \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}} = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}
+  \end{align*}
 \end{frame}
 
 \section{Background}
@@ -548,7 +552,20 @@
 
 \begin{frame}
   \frametitle{Optimization method}
-  
+  \begin{block}{Problem}
+    \begin{equation*}
+      \begin{aligned}
+        & \underset{P}{\text{minimize}}
+        & & \alpha\cdot \max_u[\kappa_{\ve{S}}(u)]+\beta\cdot
+        \max_u[\tau_{\ve{S}}(u)]+\gamma\cdot len(\ve{S}) \\
+        & \text{subject to}
+        & & \left|\ve{S}(u)\cap \bigcup_{i\in I}obstacle_i\right| = 0
+      \end{aligned}
+    \end{equation*}
+  \end{block}
+  \begin{equation*}
+    L_d(P,\lambda)=gain(P)+\lambda\cdot constraint(P)
+  \end{equation*}
 \end{frame}
 
 \begin{frame}
