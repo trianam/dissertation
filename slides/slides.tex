@@ -71,133 +71,25 @@
 \begin{frame}
   \frametitle{B-spline curves}
   \begin{center}
-    \includegraphics[width=0.9\textwidth, trim=110 30 50 50, clip]{img/bspline.eps}
+    \includegraphics[width=0.8\textwidth, trim=110 30 50 50, clip]{img/bspline.eps}
   \end{center}
   \pause
   \begin{itemize}
-  \item \alert{parametric} curves\pause
-  \item follow the shape of a \alert{control poligon}\pause
-  \item can interpolate the
+  \item Piecewise polynomial \alert{parametric} curves
+    $\ve{S}:[a,b]\rightarrow\mE^3$
+    $\alert{\mathbf{S}(u)}=\sum_{i=0}^n\alert{\mathbf{v_i}}\cdot
+    N_{i,m+1}(u)$\pause
+  \item Prescribed \alert{regularity}\pause
+  \item Follow the shape of a \alert{control poligon}\pause
+  \item Can interpolate the
     \alert{extremes} of control polygon
   \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{B-spline curves details}
-  \begin{itemize}
-  \item Degree \alert{$m$}\pause
-  \item Extended \alert{partition} (of parametric
-    space \alert{$[a,b]$})
-    $$
-    T=\{t_0,\dots,t_{m-1},\alert{t_{m}},\dots,\alert{t_{n+1}},t_{n+2},\dots,t_{n+m+1}\}
-    $$
-    {\tiny
-      $$
-      t_0\leq\dots\leq t_{m-1}\leq t_{m}\alert{(\equiv a)} <\dots<
-      t_{n+1}\alert{(\equiv b)} \leq t_{n+2}\leq\dots\leq t_{n+m+1}
-      $$
-    }\pause
-  \item \alert{$n+1$ basis} (of $S_{m,\tau}=P_{m,\tau}\cap C^{m-1}$)
-    {\tiny
-      \begin{align*}
-        \alert{N_{i,1}(u)} &=
-                     \begin{cases}
-                       1,\quad \mbox{if}\quad t_i\leq t<t_{i+1}\\
-                       0,\quad \mbox{otherwise}\qquad\qquad\qquad i=0,\dots,n+m
-                     \end{cases}\\
-        \alert{N_{i,r}(u)} &= \omega_{i,r-1}(u)\cdot \alert{N_{i,r-1}(u)}\ +\
-                     (1-\omega_{i+1,r-1}(u))\cdot \alert{N_{i+1,r-1}(u)}\\
-                   &\pushright i=0,\dots,n+m+1-3,\ r=2,\dots,m+1
-      \end{align*}
-    }
-    {\tiny
-      $$
-      \omega_{i,r}(u) = \begin{cases}
-        \frac{t-t_i}{t_{i+r}-t_i},&\mbox{if }t_i\neq t_{i+r}\\
-        0, &\mbox{otherwise}
-      \end{cases}
-      $$
-    }\pause
-  \item B-spline $\ve{S}:[a,b]\subset\mR\rightarrow\mE^d$
-    $$
-    \alert{\mathbf{S}(u)}=\sum_{i=0}^n\alert{\mathbf{v_i}}\cdot N_{i,k}(u)
-    $$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Useful properties of B-spline curves}
-  \begin{itemize}
-  \item \alert{Interpolates} extremes if $t_0=\dots =t_{m}$ and $t_{n+1}=\dots
-    =t_{n+m+1}$\pause
-  \item \alert{Continuity} $C^{m-1}$ between polynomials\pause
-  \item Contained in \alert{convex hulls} of 
-    \alert{$m+1$} consecutive vertices
-    \begin{center}
-      \begin{tikzpicture}
-        \coordinate (a) at (0,0);
-        \coordinate (b) at (0.5,1);
-        \coordinate (c) at (2,1.5);
-        \coordinate (d) at (4,1.5);
-        \coordinate (e) at (5.5,1);
-        \coordinate (f) at (6,0);
-        
-        \path[convexHull] (a) -- (b) -- (c) -- (a);
-        \path[convexHull] (b) -- (c) -- (d) -- (b);
-        \path[convexHull] (c) -- (d) -- (e) -- (c);
-        \path[convexHull] (d) -- (e) -- (f) -- (d);
-        
-        \draw[convexHullBord] (a) -- (c);
-        \draw[convexHullBord] (b) -- (d);
-        \draw[convexHullBord] (c) -- (e);
-        \draw[convexHullBord] (d) -- (f);
-        
-        \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e) -- (f);
-        \foreach \p in {a,b,c,d,e,f}
-        \filldraw[controlVert] (\p) circle (2pt);
-      \end{tikzpicture}
-    \end{center}\pause
-  \item Touches segment between \alert{$m$ aligned}
-    vertices\pause
-  \item Lays in segment between \alert{$m+1$ aligned} vertices\pause
-  \end{itemize}
-  \begin{align*}
-    \kappa(u) &= \frac{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}{{\norm{\dot{\ve{S}}(u)}}^3}\\
-    \tau(u) &= \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}} = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}
-  \end{align*}
 \end{frame}
 
 \section{Background}
 
 \begin{frame}
-  \frametitle{Background}
-  \begin{block}{Main problem}
-    \alert{Path planning} from a \alert{start} point to an \alert{end}
-    point in 3D space with obstacles using \alert{Voronoi} diagrams.
-  \end{block}\pause
-  \begin{enumerate}
-  \item Distribute \alert{points} in obstacles surfaces
-    \begin{itemize}
-    \item and bounding box\pause
-    \end{itemize}
-  \item \alert{Voronoi} diagram using those points\pause
-  \item Transform Voronoi diagram in \alert{graph}
-    \begin{itemize}
-    \item cells \alert{vertices} $\rightarrow$ \alert{nodes}
-    \item cells \alert{edges} $\rightarrow$ \alert{arcs} (infinite edges
-      ignored)\pause
-    \end{itemize}
-  \item \alert{Prune} arcs that cross obstacles\pause
-  \item Attach \alert{start} and \alert{end}\pause
-  \item Shortest path from start to end
-    \begin{itemize}
-    \item \alert{Dijkstra}'s algorithm
-    \end{itemize}
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Example}
+  \frametitle{Basic structure}
   \begin{center}
     \includegraphics[width=0.9\textwidth]<1>{img/scrEmpty.png}
     \includegraphics[width=0.9\textwidth]<2>{img/scrSites-a.png}
@@ -352,7 +244,7 @@
       Total ($k$ constant)&\eqCostTotalOneK\\
       \hline
     \end{tabular}
-  \end{center}
+  \end{center}\pause
   \begin{itemize}
   \item Scene construction
     \begin{itemize}
@@ -375,6 +267,7 @@
     \end{itemize}
   \end{block}\pause
   \begin{itemize}
+  \item Shortest path on \alert{$G$}\pause
   \item \alert{Add} aligned control vertices when obstacle intersect triple
     \begin{center}
       \begin{tikzpicture}
@@ -383,16 +276,16 @@
 
         \filldraw[controlVert] (0,0) circle (2pt);
         \filldraw[controlVert] (2,2) circle (2pt);
-        \filldraw[controlVert] (4,0) circle (2pt);\pause
+        \filldraw[controlVert] (4,0) circle (2pt);
 
-        \only<4->{
+        \only<5->{
           \draw[controlPolyTract] (1,1) -- (3,1);
           \filldraw[controlVertHigh] (1,1) circle (2pt);
           \filldraw[controlVertHigh] (3,1) circle (2pt);
         }
       \end{tikzpicture}
-    \end{center}\pause
-  \item new vertices \alert{easy} calculated after collision check
+    \end{center}
+  \item<6-> new vertices \alert{easy} calculated after collision check
   \end{itemize}
 \end{frame}
 
@@ -413,7 +306,7 @@
       Total ($k$ costant)&\eqCostTotalTwoK\\
       \hline
     \end{tabular}
-  \end{center}
+  \end{center}\pause
   \begin{itemize}
   \item Scene construction
     \begin{itemize}
@@ -452,7 +345,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Example: quadratic to quartic (k=3 $\rightarrow$ k=5)}
+  \frametitle{Example: quadratic to quartic (m=2 $\rightarrow$ m=4)}
   \begin{itemize}
   \item Add \alert{2} vertices per edge
   \end{itemize}\pause
@@ -561,11 +454,14 @@
         & \text{subject to}
         & & \left|\ve{S}(u)\cap \bigcup_{i\in I}obstacle_i\right| = 0
       \end{aligned}
-    \end{equation*}
+    \end{equation*}\pause
   \end{block}
-  \begin{equation*}
-    L_d(P,\lambda)=gain(P)+\lambda\cdot constraint(P)
-  \end{equation*}
+  \begin{itemize}
+  \item \alert{Relax} constraint: $L(P,\lambda)=gain(P)+\lambda\cdot constraint(P)$\pause
+  \item \alert{Saddle} point $L(P^*,\lambda)\leq L(\alert{P^*},
+    \alert{\lambda^*})\leq L(P,\lambda^*)$\pause
+  \item \alert{Simulated annealing} finds saddle point that minimize gain
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -588,17 +484,12 @@
     \end{itemize}
   \item Improve \alert{postprocessing}\pause
     \begin{itemize}
-    \item make a \alert{symmetric} algorithm (path from $a$ to $b$ $=$ path
-      from $b$ to $a$)\pause
+    \item make a \alert{symmetric} algorithm\pause
     \end{itemize}
-  \item Make \alert{optimization} process\pause
+  \item Make another \alert{optimization} process\pause
     \begin{itemize}
-    \item try to find the best path that satisfy some constraints\pause
-      \begin{itemize}
-      \item max \alert{curvature}\pause
-      \item max \alert{torsion}\pause
-      \item others \dots
-      \end{itemize}
+    \item output of other solutions as initial state\pause
+    \item moves in a restricted space
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -611,6 +502,121 @@
 	{\huge\calligra Questions?\pause{} Thank you!}
   \end{center}
 \end{frame}
+
+\appendix
+
+\begin{frame}
+  \frametitle{B-spline curves details}
+  \begin{itemize}
+  \item Degree \alert{$m$}\pause
+  \item Extended \alert{partition} (of parametric
+    space \alert{$[a,b]$})
+    $$
+    T=\{t_0,\dots,t_{m-1},\alert{t_{m}},\dots,\alert{t_{n+1}},t_{n+2},\dots,t_{n+m+1}\}
+    $$
+    {\tiny
+      $$
+      t_0\leq\dots\leq t_{m-1}\leq t_{m}\alert{(\equiv a)} <\dots<
+      t_{n+1}\alert{(\equiv b)} \leq t_{n+2}\leq\dots\leq t_{n+m+1}
+      $$
+    }\pause
+  \item \alert{$n+1$ basis} (of $S_{m,\tau}=P_{m,\tau}\cap C^{m-1}$)
+    {\tiny
+      \begin{align*}
+        \alert{N_{i,1}(u)} &=
+                     \begin{cases}
+                       1,\quad \mbox{if}\quad t_i\leq t<t_{i+1}\\
+                       0,\quad \mbox{otherwise}\qquad\qquad\qquad i=0,\dots,n+m
+                     \end{cases}\\
+        \alert{N_{i,r}(u)} &= \omega_{i,r-1}(u)\cdot \alert{N_{i,r-1}(u)}\ +\
+                     (1-\omega_{i+1,r-1}(u))\cdot \alert{N_{i+1,r-1}(u)}\\
+                   &\pushright i=0,\dots,n+m+1-3,\ r=2,\dots,m+1
+      \end{align*}
+    }
+    {\tiny
+      $$
+      \omega_{i,r}(u) = \begin{cases}
+        \frac{t-t_i}{t_{i+r}-t_i},&\mbox{if }t_i\neq t_{i+r}\\
+        0, &\mbox{otherwise}
+      \end{cases}
+      $$
+    }\pause
+  \item B-spline curve $\ve{S}:[a,b]\subset\mR\rightarrow\mE^d$
+    $$
+    \alert{\mathbf{S}(u)}=\sum_{i=0}^n\alert{\mathbf{v_i}}\cdot N_{i,m+1}(u)
+    $$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Useful properties of B-spline curves}
+  \begin{itemize}
+  \item \alert{Interpolates} extremes if $t_0=\dots =t_{m}$ and $t_{n+1}=\dots
+    =t_{n+m+1}$\pause
+  \item \alert{Continuity} $C^{m-1}$ between polynomials\pause
+  \item Contained in \alert{convex hulls} of 
+    \alert{$m+1$} consecutive vertices
+    \begin{center}
+      \begin{tikzpicture}
+        \coordinate (a) at (0,0);
+        \coordinate (b) at (0.5,1);
+        \coordinate (c) at (2,1.5);
+        \coordinate (d) at (4,1.5);
+        \coordinate (e) at (5.5,1);
+        \coordinate (f) at (6,0);
+        
+        \path[convexHull] (a) -- (b) -- (c) -- (a);
+        \path[convexHull] (b) -- (c) -- (d) -- (b);
+        \path[convexHull] (c) -- (d) -- (e) -- (c);
+        \path[convexHull] (d) -- (e) -- (f) -- (d);
+        
+        \draw[convexHullBord] (a) -- (c);
+        \draw[convexHullBord] (b) -- (d);
+        \draw[convexHullBord] (c) -- (e);
+        \draw[convexHullBord] (d) -- (f);
+        
+        \draw[controlPoly] (a) -- (b) -- (c) -- (d) -- (e) -- (f);
+        \foreach \p in {a,b,c,d,e,f}
+        \filldraw[controlVert] (\p) circle (2pt);
+      \end{tikzpicture}
+    \end{center}\pause
+  \item Touches segment between \alert{$m$ aligned}
+    vertices\pause
+  \item Lays in segment between \alert{$m+1$ aligned} vertices\pause
+  \end{itemize}
+  \begin{align*}
+    \kappa(u) &= \frac{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}{{\norm{\dot{\ve{S}}(u)}}^3}\\
+    \tau(u) &= \frac{\det\left[\dot{\ve{S}}(u),\ddot{\ve{S}}(u),\dddot{\ve{S}}(u)\right]}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}} = \frac{\left(\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)\right)\cdot\dddot{\ve{S}}(u)}{\norm{\dot{\ve{S}}(u)\wedge\ddot{\ve{S}}(u)}}
+  \end{align*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Background}
+  \begin{block}{Main problem}
+    \alert{Path planning} from a \alert{start} point to an \alert{end}
+    point in 3D space with obstacles using \alert{Voronoi} diagrams.
+  \end{block}\pause
+  \begin{enumerate}
+  \item Distribute \alert{points} in obstacles surfaces
+    \begin{itemize}
+    \item and bounding box\pause
+    \end{itemize}
+  \item \alert{Voronoi} diagram using those points\pause
+  \item Transform Voronoi diagram in \alert{graph}
+    \begin{itemize}
+    \item cells \alert{vertices} $\rightarrow$ \alert{nodes}
+    \item cells \alert{edges} $\rightarrow$ \alert{arcs} (infinite edges
+      ignored)\pause
+    \end{itemize}
+  \item \alert{Prune} arcs that cross obstacles\pause
+  \item Attach \alert{start} and \alert{end}\pause
+  \item Shortest path from start to end
+    \begin{itemize}
+    \item \alert{Dijkstra}'s algorithm
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
 \end{document}
 
 %%% Local Variables:
