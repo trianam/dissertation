@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{microtype}
+\usepackage{textcase}
+\usepackage{xspace}
+\usepackage{graphicx}
+
+\newcommand{\myTitle}{B-Spline methods for the design of smooth spatial
+  paths with obstacle avoidance\xspace}
+\newcommand{\mySubtitle}{Metodi B-spline per il disegno di percorsi
+  regolari in ambienti tridimensionali contenenti ostacoli}
+\newcommand{\mySubsubtitle}{Tesi di Laurea Magistrale in Informatica}
+\newcommand{\myDegree}{Corso di Laurea Magistrale in Informatica \xspace}
+\newcommand{\myName}{Stefano Martina\xspace}
+\newcommand{\myMail}{stefano.martina@stud.unifi.it}
+\newcommand{\myProf}{Alessandra Sestini\xspace}
+\newcommand{\mySupervisor}{Carlotta Giannelli\xspace}
+\newcommand{\myFaculty}{Scuola di Scienze Matematiche Fisiche e Naturali\xspace}
+\newcommand{\myDepartment}{
+	Department of mathematics and computer science\xspace}
+\newcommand{\myUni}{\protect{
+	Universit\`a degli Studi di Firenze}\xspace}
+\newcommand{\myLocation}{Firenze\xspace}
+\newcommand{\myAcademicYear}{2015/16\xspace}
+\newcommand{\myMonth}{Luglio\xspace}
+\newcommand{\myYear}{2016\xspace}
+
+%\DeclareRobustCommand{\spacedallcaps}[1]{\textssc{\MakeTextUppercase{#1}}}%
+%\DeclareRobustCommand{\spacedlowsmallcaps}[1]{\textssc{\MakeTextLowercase{#1}}}%
+\DeclareRobustCommand{\spacedallcaps}[1]{\textls[160]{\MakeTextUppercase{#1}}}%
+\DeclareRobustCommand{\spacedlowsmallcaps}[1]{\textls[80]{\scshape\MakeTextLowercase{#1}}}%
+
+
+\begin{document}
+	\thispagestyle{empty}
+	\begin{center}
+   	\large
+      \hfill
+      \vfill
+      \begingroup
+			\spacedallcaps{\myUni} \\ 
+			\myFaculty \\
+			\myDegree \\ 
+			\vspace{0.5cm}
+         \includegraphics[width=.2\textwidth]{logo/logoUnifi.eps}\\
+         \vspace{0.5cm}    
+         %Master's degree dissertation   
+      \endgroup 
+      \vfill 
+      \begingroup
+      	\spacedallcaps{\myTitle} \\ \bigskip
+      \endgroup
+      \begingroup
+      	\small\spacedallcaps{\mySubtitle} \\ \bigskip
+      \endgroup
+      \mySubsubtitle\\
+      \vfill
+      Relatore: {\itshape\myProf}\hfill Correlatore: {\itshape\mySupervisor}
+      \vfill  
+      Candidato: \spacedlowsmallcaps{\myName}
+      \vfill
+      {\itshape\myMonth \myYear}, Anno accademico {\itshape\myAcademicYear}
+      \vfill                      
+	\end{center}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
