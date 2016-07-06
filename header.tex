@@ -311,11 +311,11 @@ shadow, minimum width=\transH, minimum height=\transW]
   \begin{figure}
     \begin{center}
       \begin{tikzpicture}
-        \node [figureFrame] (image1) at (0,0) {\includegraphics[width=.9\textwidth]{#1}};
-        \node [figureFrame, below=of image1] (image2) {\includegraphics[width=.9\textwidth]{#2}};
-        \coordinate[below=2.5cm of image2] (puntello);
-        \node [figureFrame, left = 0.2cm of puntello] (image3) {\includegraphics[width=.45\textwidth]{#3}};
-        \node [figureFrame, right = 0.2cm of puntello] (image4) {\includegraphics[width=.45\textwidth]{#4}};
+        \node [figureFrame] (image1) at (0,0) {\includegraphics[width=.8\textwidth]{#1}};
+        \node [figureFrame, below=1mm of image1] (image2) {\includegraphics[width=.8\textwidth]{#2}};
+        %\coordinate[below=2.5cm of image2] (puntello);
+        \node [figureFrame, below = 1mm of image2] (image3) {\includegraphics[width=.8\textwidth]{#3}};
+        \node [figureFrame, below = 1mm of image3] (image4) {\includegraphics[width=.8\textwidth]{#4}};
         \IfNoValueTF{#7}
         {}
         {
