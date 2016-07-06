@@ -173,13 +173,26 @@ plane there is a property that if we have $n$ input sites
 that lay on a circumference, without any other site inside the
 circumference, then the center of the circumference is a vertex shared
 by $n$ cells (\cref{sec:voronoi} for details). The same property holds
-in the 3D case with respect to spheres. We can make the assumption
+in the 3D case with respect to spheres.
+
+We can make the assumption
 that no more than three sites can lay 
 on a circumference, hence, no vertex can have more than three neighbours,
 or the same with four vertices in sphere. This assumption is
 plausible because we use floating point numbers for the coordinates of
-the vertices of the obstacles, and it is unlikely that more than
-four points lay on a sphere. With this assumption $k$ is a constant,
+the vertices of the obstacles and it is unlikely that more than
+four points lay on a sphere.
+
+Moreover, the average numbers of faces in a \ac{VD}'s cell and,
+consequently, vertices
+in a face are
+bounded by a constant \cite{okabe}. Thus, we can make the assumption
+that we do not increase
+the maximum 
+graph degree by more than a constant when we make the graph
+denser by adding the faces' diagonals.
+
+With the previous two assumptions $k$ is a constant,
 and \cref{eq:numE} becomes
 \begin{equation*}
   |E|=\bigO(|V|)=\bigO(|\obsSet|).
