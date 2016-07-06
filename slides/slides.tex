@@ -324,7 +324,7 @@
   \begin{block}{Continuity}
     \begin{itemize}
     \item Using \alert{quadratic} B-Splines means \alert{$C^1$} continuity\pause
-    \item[\xmark] Not nice
+    \item[\xmark] Not enough
     \end{itemize}
   \end{block}\pause
   \begin{itemize}
@@ -482,11 +482,17 @@
     \item rapidly exploring random tree (RRT)\pause
     \item other \dots\pause
     \end{itemize}
+  \item Improve \alert{degree} increase\pause
+    \begin{itemize}
+    \item without \alert{aligned} vertices\pause
+    \item for instance like second solution with quadruple/quintuples
+      of vertices
+    \end{itemize}
   \item Improve \alert{postprocessing}\pause
     \begin{itemize}
     \item make a \alert{symmetric} algorithm\pause
     \end{itemize}
-  \item Make another \alert{optimization} process\pause
+  \item Another \alert{optimization} process\pause
     \begin{itemize}
     \item output of other solutions as initial state\pause
     \item moves in a restricted space
