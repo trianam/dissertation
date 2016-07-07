@@ -485,8 +485,8 @@
   \item Improve \alert{degree} increase\pause
     \begin{itemize}
     \item without \alert{aligned} vertices\pause
-    \item for instance like second solution with quadruple/quintuples
-      of vertices
+    \item like second solution but with quadruple/quintuples
+      of vertices\pause
     \end{itemize}
   \item Improve \alert{postprocessing}\pause
     \begin{itemize}
@@ -623,6 +623,57 @@
   \end{enumerate}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Intersection segment-triangle}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.5]
+      \coordinate (A1) at (0,0);
+      \coordinate (B1) at (4,5);
+      \coordinate (C1) at (8,1);
+
+      \coordinate (cut1) at (barycentric cs:A1=0.8,B1=0.,C1=0.2);
+      \coordinate (cut2) at (barycentric cs:A1=0.,B1=0.8,C1=0.2);
+
+      \coordinate (A2) at (2,5);    
+      \coordinate (B2) at (4.5,1.5);
+
+      \coordinate (X) at (intersection of cut1--cut2 and B2--A2);
+
+      \draw[poly] (A1) -- (C1) -- (B1) -- (A1);
+      \draw[poly] (A2) -- (X);
+      \draw[polyTract] (B2) -- (X);
+
+      \foreach \p in {A1,B1,C1,A2,B2}
+      \filldraw[vertex] (\p) circle (2pt);
+
+      \filldraw[intersection] (X) circle (2pt);
+
+      \node[below=0.5em] at (A1) {$\ve{a_1}$};
+      \node[above=0.5em] at (B1) {$\ve{b_1}$};
+      \node[below=0.5em] at (C1) {$\ve{c_1}$};
+      \node[above=0.5em] at (A2) {$\ve{a_2}$};
+      \node[right=0.5em] at (B2) {$\ve{b_2}$};
+      \node[right=0.2em] at (X) {$\ve{x}$};
+    \end{tikzpicture}
+  \end{center}
+  \tiny
+  \begin{equation*}
+    \begin{cases}
+      \alpha \ve{a_2} + \beta\ve{b_2}=\gamma\ve{a_1}+\delta\ve{b_1}+\zeta\ve{c_1} \\
+      \alpha + \beta = 1\\
+      \gamma + \delta +\zeta=1
+    \end{cases}
+  \end{equation*}
+  \begin{equation*}
+    \begin{cases}
+      \alpha \ge 0\\
+      \beta \ge 0\\
+      \gamma \ge 0\\
+      \delta \ge 0\\
+      \zeta \ge 0.
+    \end{cases}
+  \end{equation*}
+\end{frame}
 \end{document}
 
 %%% Local Variables:
