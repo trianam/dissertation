@@ -122,9 +122,9 @@
   \item \alert{Control polygon} obstacle-free by
     construction\pause
     \begin{itemize}
-    \item (pruned of arcs that cross obstacles)\pause
+    \item (because is pruned of arcs that cross obstacles)\pause
     \end{itemize}
-  \item \alert{Curve} not obstacle-free guaranteed\pause
+  \item \alert{Curve} may intersect an obstacle\pause
   \end{itemize}
   \begin{center}
     \begin{tikzpicture}
@@ -173,8 +173,9 @@
   \pause
   \begin{block}{Idea}
     \begin{itemize}
-    \item Use a \alert{quadratic} B-Spline to smooth path\pause
-    \item \alert{Keep} triangles in control polygon \alert{obstacle-free}
+    \item Use a \alert{quadratic} B-Spline to smooth the path\pause
+    \item \alert{Achieve} convex hulls \alert{free} from intersection
+      with obstacles
     \end{itemize}
   \end{block}
 \end{frame}
@@ -246,6 +247,8 @@
     \end{tabular}
   \end{center}\pause
   \begin{itemize}
+  \item \alert{$O$} set of obstacles\pause
+  \item \alert{$k$} maximum degree in $G$\pause
   \item Scene construction
     \begin{itemize}
     \item \alert{$\bigO(|O|^2)$}\pause
@@ -268,7 +271,8 @@
   \end{block}\pause
   \begin{itemize}
   \item Shortest path on \alert{$G$}\pause
-  \item \alert{Add} aligned control vertices when obstacle intersect triple
+  \item \alert{Add} aligned control vertices when an obstacle
+    intersects a triple
     \begin{center}
       \begin{tikzpicture}
         \path[obstacle] (1,0) -- (2,1) -- (3,0) -- (1,0);
@@ -300,7 +304,7 @@
       Creation of $G$&\eqCostGraph\\
       Pruning of $G$&\eqCostPruning\\
       Routing in $G$&\eqCostDijkstraG\\
-      Clean path&\eqCostCleanPath\\
+      Path cleaning&\eqCostCleanPath\\
       \hline
       Total&\eqCostTotalTwo\\
       Total ($k$ costant)&\eqCostTotalTwoK\\
@@ -308,6 +312,9 @@
     \end{tabular}
   \end{center}\pause
   \begin{itemize}
+  \item \alert{$O$} set of obstacles\pause
+  \item \alert{$P$} set of control vertices\pause
+  \item \alert{$k$} maximum degree in $G$\pause
   \item Scene construction
     \begin{itemize}
     \item \alert{$\bigO(|O|^2)$}\pause
@@ -328,7 +335,7 @@
     \end{itemize}
   \end{block}\pause
   \begin{itemize}
-  \item[\xmark] If \alert{increase} the B-Spline degree \alert{$\rightarrow$} convex hull not
+  \item[\xmark] If we \alert{increase} the B-Spline degree \alert{$\rightarrow$} convex hull not
     \alert{planar} anymore\pause
     \begin{itemize}
     \item convex hull formed of union of \alert{tetrahedra}\pause
@@ -460,12 +467,12 @@
   \item \alert{Relax} constraint: $L(P,\lambda)=gain(P)+\lambda\cdot constraint(P)$\pause
   \item \alert{Saddle} point $L(P^*,\lambda)\leq L(\alert{P^*},
     \alert{\lambda^*})\leq L(P,\lambda^*)$\pause
-  \item \alert{Simulated annealing} finds saddle point that minimize gain
+  \item \alert{Simulated annealing} finds saddle point that minimizes gain
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Used technologies}
+  \frametitle{Technologies}
   \begin{center}
     \visible<1->{\includegraphics[width=4cm]{img/python3.png}}\\[1cm]
     \visible<2->{\includegraphics[width=4cm]{img/scipy.png}}\\[1cm]
