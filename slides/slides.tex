@@ -481,10 +481,29 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Example}
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]<1>{img/test1.png}
+    \includegraphics[width=0.9\textwidth]<2>{img/test2.png}
+    \includegraphics[width=0.9\textwidth]<3>{img/test1b.png}
+    \includegraphics[width=0.9\textwidth]<4>{img/test2b.png}
+    \includegraphics[width=0.9\textwidth]<5>{img/test3.png}
+  \end{center}
+  \begin{itemize}
+  \only<1>{\item Method 1, no post processing}
+  \only<2>{\item Method 2, no post processing}
+  \only<3>{\item Method 1, with post processing}
+  \only<4>{\item Method 2, with post processing}
+  \only<5>{\item Method 3}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \frametitle{Future improvements}
   \begin{itemize}
   \item Change underlying \alert{structure}\pause
     \begin{itemize}
+    \item different \alert{attach point}\pause
     \item visibility graph\pause
     \item rapidly exploring random tree (RRT)\pause
     \item other \dots\pause
