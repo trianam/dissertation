@@ -406,7 +406,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Postprocessing}
+  \frametitle{Post Processing}
   \begin{block}{Purpose}
     \begin{itemize}
     \item \alert{Simplify} the control polygon\pause
@@ -467,16 +467,24 @@
   \item \alert{Relax} constraint: $L(P,\lambda)=gain(P)+\lambda\cdot constraint(P)$\pause
   \item \alert{Saddle} point $L(P^*,\lambda)\leq L(\alert{P^*},
     \alert{\lambda^*})\leq L(P,\lambda^*)$\pause
-  \item \alert{Simulated annealing} finds saddle point that minimizes gain
+  \item \alert{Simulated annealing} finds saddle point that minimizes $gain$\pause
   \end{itemize}
+  \begin{block}{Drawbacks}
+    \begin{itemize}
+    \item[\xmark] \alert{slower} respect to the other methods\pause
+    \item[\xmark] $gain$ and $constraint$ are calculated in a
+      \alert{discrete} way
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
   \frametitle{Technologies}
   \begin{center}
-    \visible<1->{\includegraphics[width=4cm]{img/python3.png}}\\[1cm]
-    \visible<2->{\includegraphics[width=4cm]{img/scipy.png}}\\[1cm]
-    \visible<3->{\includegraphics[width=4cm]{img/vtk.png}}
+    \visible<1->{\includegraphics[width=4cm]{img/python3.png}}\\[0.5cm]
+    \visible<2->{\includegraphics[width=4cm]{img/scipy.png}}\\[0.5cm]
+    \visible<3->{\huge \textbf{NetworkX}}\\[0.5cm]
+    \visible<4->{\includegraphics[width=4cm]{img/vtk.png}}
   \end{center}
 \end{frame}
 
@@ -514,7 +522,7 @@
     \item like second solution but with quadruple/quintuples
       of vertices\pause
     \end{itemize}
-  \item Improve \alert{postprocessing}\pause
+  \item Improve \alert{post processing}\pause
     \begin{itemize}
     \item make a \alert{symmetric} algorithm\pause
     \end{itemize}

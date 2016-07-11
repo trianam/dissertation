@@ -4,6 +4,8 @@
 \usepackage{microtype}
 \usepackage[T1]{fontenc}
 
+\newcommand{\bigO}{\ensuremath{\mathcal{O}}}
+
 \begin{document}
 \section*{Slide 1}
 Il mio progetto si inquadra nel path planning che consiste nel trovare
@@ -12,8 +14,8 @@ altro punto nello spazio, evitando intersezioni con degli
 ostacoli. Nel mio lavoro mi sono concentrato nello spazio
 tridimensionale, usando uno specifico tipo di curva: le curve B-spline.
 
-Cominciamo con un paio di concetti necessari per capire i metodi
-implementati.
+Per capire i metodi
+implementati è necessario affrontare prima due argomenti.
 
 \section*{Slide 2}
 I diagrammi di Voronoi sono ricavati a partire da un insieme di punti
@@ -38,7 +40,7 @@ Queste curve hanno una regolarità prescritta che dipende dal grado,
 seguono circa il percorso del poligono di controllo e con certi
 accorgimenti possono interpolare gli estremi del poligono di controllo.
 
-Adesso vediamo come si possono usare i diagrammi di Voronoi per
+i diagrammi di Voronoi possono essere usati per
 ottenere una struttura su cui identificare un percorso libero da
 ostacoli.
 
@@ -72,7 +74,7 @@ In questo modo però sorge un problema.
 
 \section*{Slide 6}
 Infatti il poligono di controllo è libero da ostacoli per costruzione,
-infatti abbiamo fatto il pruning di tutti gli archi che intersecano
+perché abbiamo fatto il pruning di tutti gli archi che intersecano
 gli ostacole. Però non è detto che la curva ottenuta sia anche essa
 libera da ostacoli, come si può vedere nel semplice esempio in due
 dimensioni.
@@ -164,20 +166,126 @@ soluzione precedente, dovuta al termine $|P|\ |O|$ per il controllo
 delle collisioni nel cammino trovato su $G$.
 
 \section*{Slide 12}
+L'uso di B-spline quadratiche ha l'inconveniente che globalmente la
+curva ha continuità $C^1$, ossia è continua fino alla derivata
+prima. In alcune applicazioni questo non è
+sufficiente, se ad esempio vogliamo usare la curva come supporto per il
+moto di un oggetto vogliamo continuità almeno fino alla derivata
+seconda.
+
+Se manteniamo il poligono di controllo invariato e aumentiamo il grado
+della curva si ha il problema che la proprietà di convex hull non vale
+più come prima, l'area in cui si può trovare la curva non è più unione
+di triangoli ma unione di tetraedri o comunque figure solide. In
+questo modo non possiamo più fare il controllo di collisione con i
+metodi descritti prima. La soluzione che ho trovato consiste
+nell'aggiungere vertici allineati nel poligono di controllo in modo da
+non dover modificare i metodi visti prima. Per descrivere il modo in
+cui vengono aggiunti questi nuovi vertici consideriamo un esempio.
 
 \section*{Slide 13}
+Il poligono di controllo iniziale è costituito dai vertici in verde, e
+l'area in cui si può trovare una B-spline quadratica è evidenziata in
+celeste. Se vogliamo aumentare il grado a 4 è necessario aggiungere
+due vertici per segmento. In questo modo e possibile aumentare il
+grado perché l'area in cui si può trovare una curva quartica è
+costituita dall'unione di convex hull di 5 vertici consecutivi, e in
+questo caso sono tutti triangoli contenuti nell'area precedente. Se
+precedentemente avevamo usato uno dei due metodi visti per garantire la non
+collisione della curva con gli ostacoli, a maggior ragione la curva
+quartica così ottenuta sarà libera da collisioni.
+
+Oltre all'incremento di grado, ho previsto anche una fase opzionale di
+post processing.
 
 \section*{Slide 14}
+Con lo scopo di semplificare il poligono di controllo eliminando i
+vertici inutili, e quindi evitando curve inutili nella B-spline.
+
+Questa fase consiste nel considerare tutte le triple di vertici
+consecutivi nel poligono di controllo, e, se il triangolo
+corrispondente non interseca nessun ostacolo, allora si semplifica la
+tripla eliminando il vertice centrale. Prima di fare questa
+semplificazione però, è necessario controllare che la modifica non
+influisca negativamente sulle triple adiacenti.
+
+Infine, oltre agli algoritmi visti, ho implementato anche una
+soluzione che consiste in un metodo di ottimizzazione stocastico.
 
 \section*{Slide 15}
+Il problema del path planning può essere visto come un problema di
+ottimizzazione vincolata, dove si deve minimizzare una grandezza di
+interesse al variare della
+posizione dei vertici di controllo, con il vincolo che la curva
+ottenuta sia libera da collisioni con gli ostacoli. La grandezza di
+interesse è una 
+combinazione di lunghezza della curva, picco di curvatura e picco di
+torsione.
+
+Per risolvere questo tipo di problemi si può usare la cosiddetta
+lagrangian relaxation, che consiste nel rilassare il vincolo
+aumentando la dimensione dello spazio degli stati, e creando una
+superficie così definita dove gain è la grandezza di interesse e
+constraint è di quanto la curva interseca gli ostacoli. Su tale
+superfice si trova il minimo
+desiderato tra i punti di sella usando un metodo di ottimizzazione
+come il simulated annealing.
+
+I drawback di questo metodo sono la lentezza di esecuzione e il fatto
+che sia il calcolo della quantità da minimizzare che del vincolo sono
+effettuati in modo discreto, quindi lasciando spazio ad errori in casi
+particolari.
+
+Per sviluppare gli algoritmi visti ho realizzato una applicazione
+object oriented.
 
 \section*{Slide 16}
+In python 3, usando la libreria SciPy per i calcoli vettoriali, di algebra
+lineare e il calcolo delle curve B-spline; la libreria NetworkX per la
+rappresentazione di grafi e le operazioni su essi; e VTK per
+l'interfaccia grafica.
+
+E ho usato l'applicazione per eseguire diversi test di cui evidenzio
 
 \section*{Slide 17}
+Una esecuzione del primo metodo senza post processing. Una esecuzione
+del secondo metodo sempre senza post processing in cui si nota che la
+curva segue un percorso che il primo metodo aveva scartato. Una
+esecuzione del primo metodo questa volta con il post processing di cui
+si può apprezzare l'efficacia in termini di semplificazione della
+curva. Una esecuzione del secondo metodo con il post processing. E
+infine una esecuzione del metodo di ottimizzazione stocastico dove si
+può apprezzare la minore lunghezza della curva.
+
+Alcuni possibili sviluppi futuri possono essere:
 
 \section*{Slide 18}
+Cambiare la struttura di base, ad esempio cambiando il modo in cui si
+attaccano i punti di partenza e arrivo per evitare ganci indesiderati,
+oppure usare un altro metodo invece di quello basato sui diagrammi di
+Voronoi, ad esempio usando il visibility graph o gli RRT o altri.
+
+Un altro miglioramento può riguardare l'aumento di grado, l'uso di
+vertici allineati infatti ha lo svantaggio di forzare la curva a fare
+dei salti di torsione, una soluzione può essere quella ad esempio di
+considerare una soluzione tipo il metodo 2 dove però si controllano
+non più i triangoli nel poligono di controllo, ma i poliedri di 4 o 5
+vertici consecutivi.
+
+È possibile anche migliorare la fase di post processing in quanto
+l'attuale ha lo svantaggio di non essere simmetrica. Se si trova una
+curva da un punto $a$ ad un punto $b$ in generale sarà diversa dalla
+curva trovata dal punto $b$ al punto $a$.
+
+È possibile anche concentrarsi su altri metodi di ottimizzazione, ad
+esempio usando come stato iniziale del sistema una soluzione
+ammissibile ottenuta con uno dei due 
+metodi proposti, e facendo evolvere il sistema solo in stati
+ammissibili.
 
 \section*{Slide 19}
+Con questo ho concluso, se ci sono domande, grazie.
+
 \end{document}
 
 %%% Local Variables:
