@@ -1,0 +1,124 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+
+\begin{document}
+\section*{Slide 1}
+Il mio progetto si inquadra nel path planning che consiste nel trovare
+una curva, con certe caratteristiche desiderate, da un punto ad un
+altro punto nello spazio, evitando intersezioni con degli
+ostacoli. Nel mio lavoro mi sono concentrato nello spazio
+tridimensionale, usando uno specifico tipo di curva: le curve B-spline.
+
+Cominciamo con un paio di concetti necessari per capire i metodi
+implementati.
+
+\section*{Slide 2}
+I diagrammi di Voronoi sono ricavati a partire da un insieme di punti
+di input
+nel piano (o nello spazio come nel mio progetto) chiamati
+siti. Successivamente viene
+creata una partizione dello spazio in regioni tale che ogni regione è
+costituita dall'insieme di punti più vicini ad un certo sito di input
+rispetto agli altri. L'insieme di queste regioni si chiama diagramma
+di Voronoi. Notare che alcune celle hanno superficie infinita.
+
+Un altro concetto importante è quello di curva B-spline.
+
+\section*{Slide 3}
+Esse sono curve parametriche polinomiali a tratti, definite in un
+certo dominio parametrico $[a,b]$, per un certo grado $m$, usando una
+specifica base detta base delle B-spline. Ogni curva è identificata da
+un insieme di punti detti vertici di controllo, i quali formano il
+poligono di controllo.
+
+Queste curve hanno una regolarità prescritta che dipende dal grado,
+seguono circa il percorso del poligono di controllo e con certi
+accorgimenti possono interpolare gli estremi del poligono di controllo.
+
+Adesso vediamo come si possono usare i diagrammi di Voronoi per
+ottenere una struttura su cui identificare un percorso libero da
+ostacoli.
+
+\section*{Slide 4}
+Partendo dalla scena vuota si distribuiscono uniformemente dei punti
+sulle superfici degli ostacoli, e anche sulla superficie di una
+bounding box che racchiude la scena. In seguito si usano tali punti
+come siti di input per ricavare il diagramma di Voronoi, e si
+interpreta questi come un grafo dove i nodi sono i vertici delle celle
+di Voronoi e gli archi sono i lati delle celle di Voronoi pesati con
+la lunghezza geometrica dei lati. I lati infiniti delle celle infinite
+vengono ignorati. Infine c'è una fase di pruning dove vengono
+eliminati tutti gli archi che attraversano un ostacolo. Si ottiene una
+struttura che abbraccia gli ostacoli come una specie di ragnatela, e
+su questa struttura è possibile attaccare con qualche regola i punti
+di partenza e di arrivo desiderati e poi usare un algoritmo di routing
+come quello di Dijkstra per trovare un cammino ammissibile tra questi
+due punti.
+
+Con questa operazione si ottiene un cammino che è costituito da una
+poligonale spezzata.
+
+\section*{Slide 5}
+Però è più interessante avere una curva smooth. L'idea è stata quella
+di usare una curva B-spline in modo tale che essa interpoli il punto
+di partenza e il punto di arrivo e che usi la poligonale spezzata come
+poligono di controllo. La scelta è ricaduta sulle B-spline in quanto
+sono uno standard affermato nel mondo del CAD.
+
+In questo modo però sorge un problema.
+
+\section*{Slide 6}
+Infatti il poligono di controllo è libero da ostacoli per costruzione,
+infatti abbiamo fatto il pruning di tutti gli archi che intersecano
+gli ostacole. Però non è detto che la curva ottenuta sia anche essa
+libera da ostacoli, come si può vedere nel semplice esempio in due
+dimensioni.
+
+Per risolvere questo problema ho quindi pensato ad una soluzione che
+sfrutta una proprietà delle B-spline.
+
+\section*{Slide 7}
+Una curva B-spline di grado $m$ è contenuta dentro l'unione dei convex
+hull formati da $m+1$ vertici di controllo consecutivi nel poligono di
+controllo. Ad esempio per una B-spline quadratica l'area in cui è
+contenuta la curva è costituita dall'unione di tutti i triangoli di
+vertici consecutivi sul poligono di controllo. Notare che questo vale
+anche nello spazio.
+
+Quindi per risolvere il problema della collisione della curva possiamo
+usare una B-spline quadratica e far si che l'area definita da questa
+regola sia libera da ostacoli. Per questo ultimo punto in particolare
+ho sviluppato due soluzioni.
+
+\section*{Slide 8}
+
+\section*{Slide 9}
+
+\section*{Slide 10}
+
+\section*{Slide 11}
+
+\section*{Slide 12}
+
+\section*{Slide 13}
+
+\section*{Slide 14}
+
+\section*{Slide 15}
+
+\section*{Slide 16}
+
+\section*{Slide 17}
+
+\section*{Slide 18}
+
+\section*{Slide 19}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
