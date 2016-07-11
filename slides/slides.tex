@@ -184,13 +184,13 @@
   \frametitle{First implementation}
   \begin{block}{Graph transformation (\alert{$G\rightarrow G_t$})}
     \begin{itemize}
-    \item Triples \alert{$(a,b,c)$} of neighboring nodes in $G$ become
+    \item Triples \alert{$(\ve{a},\ve{b},\ve{c})$} of neighboring nodes in $G$ become
       nodes in $G_t$\pause
     \item Arcs in $G_t$ between triples in the form
-      \alert{$(a,b,c)\rightarrow(b,c,d)$}\pause
+      \alert{$(\ve{a},\ve{b},\ve{c})\rightarrow(\ve{b},\ve{c},\ve{d})$}\pause
       \begin{itemize}
       \item weighted with the distance of the edge
-        \alert{$a\leftrightarrow b$} in $G$\pause
+        \alert{$\ve{a}\leftrightarrow \ve{b}$} in $G$\pause
       \end{itemize}
     \end{itemize}
   \end{block}
@@ -313,8 +313,8 @@
   \end{center}\pause
   \begin{itemize}
   \item \alert{$O$} set of obstacles\pause
-  \item \alert{$P$} set of control vertices\pause
   \item \alert{$k$} maximum degree in $G$\pause
+  \item \alert{$P$} set of control vertices\pause
   \item Scene construction
     \begin{itemize}
     \item \alert{$\bigO(|O|^2)$}\pause

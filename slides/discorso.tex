@@ -94,12 +94,74 @@ regola sia libera da ostacoli. Per questo ultimo punto in particolare
 ho sviluppato due soluzioni.
 
 \section*{Slide 8}
+La prima soluzione consiste nell'applicare una trasformazione al grafo
+ottenuto dal diagramma di Voronoi. Chiamando il grafo originale $G$ e
+il grafo trasformato $G_t$, si ha che ogni tripla $(a,b,c)$ di nodi
+adiacenti in
+$G$ costituisce un nodo di $G_t$, e c'è un arco tra due nodi in $G_t$
+se condividono un arco in $G$ ad esempio come nel caso di $(a,b,c)$ e
+$(b,c,d)$. Tale arco è pesato con la distanza tra i primi due nodi in
+$G$, nell'esempio $a$ e $b$. Notare che mentre $G$ non è direzionato,
+$G_t$ lo è, in generale se c'è un arco tra $(a,b,c)$ e $(b,c,d)$ non
+c'è un arco tra $(b,c,d)$ e $(a,b,c)$.
+
+Dopo vi è una fase di pruning dove si eliminano
+tutte i vertici di $G_t$ i cui triangoli corrispondenti intersecano un
+ostacolo. Infine viene calcolato il cammino minimo con Dijkstra in
+$G_t$, ricavando poi i nodi in $G$ di questo.
+
+Guardando l'esempio schematico si ha che $G$ è costituito dai nodi
+$d$, $a$, $b$, etc.. uniti come in figura. $G_t$ è costituito dalle
+triple $(d,a,b)$, $(b,a,d)$, $(a,b,c)$, etc.. e nella fase di pruning
+vengono eliminate le triple $(a,b,c)$ e $(c,b,a)$ perché intersecano
+l'ostacolo. Eseguendo Dijkstra da una tripla speciale di inizio
+collegata alle triple che contengono il nodo
+iniziale a una speciale di fine collegata a quelle che contengono
+il nodo finale si ottiene il cammino costituito dalle triple:
+$(d,a,b)$, $(a,b,e)$, $(b,e,c)$, $(e,c,f)$; da cui si può ricavare il
+cammino in $G$ costituito dai nodi: $d$, $a$, $b$, $e$, $c$, $f$.
+
+Applicando una B-spline quadratica ad un cammino ottenuto in questo
+modo abbiamo la garanzia che questa non intersechi nessun
+ostacolo. Ho calcolato anche la complessità di questo metodo,
 
 \section*{Slide 9}
+che possiamo vedere riassunta in questa tabella, dove $O$ è l'insieme
+degli ostacoli e $k$ è il grado massimo in $G$. Escludendo casi
+limite, ci sono delle regole dei diagrammi di Voronoi che permettono
+di considerare il grado massimo costante e quindi è possibile
+semplificare la complessità.
+
+Dalla tabella si evince che il costo maggiore si ha per le fasi di
+pruning, dovuto al controllo delle collisioni, inoltre è possibile
+dividere l'algoritmo in due parti: una fase di creazione della scena
+con complessità quadratica, e poi usare la stessa scena per calcolare
+curve diverse con una complessità ridotta a $\bigO(n\log n)$ che è la
+stessa di Dijkstra in un grafo con grado massimo costante.
 
 \section*{Slide 10}
+Questa implementazione è interessante da un punto di vista
+algoritmico, però ha il difetto di scartare diversi percorsi, con
+addirittura la possibilità di rendere $G_t$ non connesso. Quindi
+ho realizzato una seconda soluzione al problema in cui si calcola il
+cammino con Dijkstra direttamente in $G$. In seguito c'è una fase di
+controllo delle collisioni sul cammino trovato, e se una tripla del
+cammino interseca un ostacolo si aggiungono vertici allineati in modo
+da rendere tutti i triangoli, degenerati e no, liberi da
+collisioni. Inoltre le coordinate di questi vertici allineati sono
+facilmente ottenute una volta fatto il controllo di collisione. Anche
+di questa soluzione ho calcolato la complessità,
 
 \section*{Slide 11}
+riassunta in questa tabella. Oltre all'insieme di ostacoli e al grado
+massimo è presente l'insieme $P$ dei vertici del poligono di
+controllo, che nel caso pessimo ha dimensione pari a $\bigO(|O|)$.
+
+Anche per questo metodo è possibile considerare una fase di
+costruzione della scena con complessità quadratica, e una fase di
+esecuzione sulla scena con complessità maggiore rispetto alla
+soluzione precedente, dovuta al termine $|P|\ |O|$ per il controllo
+delle collisioni nel cammino trovato su $G$.
 
 \section*{Slide 12}
 
