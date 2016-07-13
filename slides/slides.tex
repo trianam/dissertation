@@ -353,9 +353,6 @@
 
 \begin{frame}
   \frametitle{Example: quadratic to quartic (m=2 $\rightarrow$ m=4)}
-  \begin{itemize}
-  \item Add \alert{2} vertices per edge
-  \end{itemize}\pause
   \begin{center}
     \begin{tikzpicture}[scale=1.5]
       \coordinate (a1) at (0,2);
@@ -370,14 +367,14 @@
       \coordinate (b5) at ($ (a3)!0.33!(a4) $);
       \coordinate (b6) at ($ (a4)!0.33!(a3) $);
       
-      \only<-3>{
+      \only<-2>{
         \path[convexHull] (a1) -- (a2) -- (a3) -- (a1);
         \path[convexHull] (a2) -- (a3) -- (a4) -- (a2);
       
         \draw[convexHullBord] (a1) -- (a3);
         \draw[convexHullBord] (a2) -- (a4);
       }
-      \only<4->{
+      \only<3->{
         \path[convexHull] (a1) -- (b1) -- (b2) -- (a2) -- (b3) -- (a1);
         \path[convexHull] (b1) -- (b2) -- (a2) -- (b3) -- (b4) -- (b1);
         \path[convexHull] (b2) -- (a2) -- (b3) -- (b4) -- (a3) -- (b2);
@@ -397,12 +394,15 @@
       \foreach \p in {a1,a2,a3,a4}
       \filldraw[controlVert] (\p) circle (2pt);
 
-      \only<3->{
+      \only<2->{
         \foreach \p in {b1,b2,b3,b4,b5,b6}
         \filldraw[controlVertHigh] (\p) circle (2pt);
       }
     \end{tikzpicture}
   \end{center}
+  \begin{itemize}
+  \item<2-> Add \alert{2} vertices per edge
+  \end{itemize}\pause
 \end{frame}
 
 \begin{frame}
