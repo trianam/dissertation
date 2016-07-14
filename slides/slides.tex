@@ -427,6 +427,8 @@
       \coordinate (a) at (0,0);
       \coordinate (b) at (2,2);
       \coordinate (c) at (4,0);
+      \coordinate (a1) at (-1,1);
+      \coordinate (c1) at (5,1);
 
       \only<-4>{
         \draw[controlPoly] (a) -- (b) -- (c);
@@ -440,6 +442,13 @@
       
         \filldraw[controlVert] (a) circle (2pt);
         \filldraw[controlVertHigh] (b) circle (2pt);
+        \filldraw[controlVert] (c) circle (2pt);
+      }
+      \only<6->{
+        \draw[controlPolyTract] (a1) -- (a);
+        \draw[controlPolyTract] (c) -- (c1);
+      
+        \filldraw[controlVert] (a) circle (2pt);
         \filldraw[controlVert] (c) circle (2pt);
       }
 
